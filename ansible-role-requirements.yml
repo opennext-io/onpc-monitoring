@@ -1,0 +1,4 @@
+- name: grafana
+  scm: git
+  src: git@github.com:ppetit/Stouts.grafana.git 
+  version: 3.1.1 
