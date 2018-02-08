@@ -1,0 +1,13 @@
+---
+influxdb-kapacitor_hosts:
+  monitoring1:
+    ip: 172.29.236.101
+  monitoring2:
+    ip: 172.29.236.102
+  monitoring3:
+    ip: 172.29.236.103
+grafana_hosts:
+  monitoring1:
+    ip: 172.29.236.101
+  monitoring2:
+    ip: 172.29.236.102
