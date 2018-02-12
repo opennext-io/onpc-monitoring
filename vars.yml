@@ -15,23 +15,33 @@
 
 
 # Grafana vars
+grafana_version: 3.1.1-*
+grafana_plugins_install: ['grafana-clock-panel']
+grafana_http_addr: {{ hostvars[inventory_hostname]['ansible_br_mgmt']['ipv4']['address'] }}
 grafana_port: 8089
 grafana_db_name: grafana
 grafana_db_user: grafana
-grafana_db_password: secrete
+grafana_db_password: {{ grafana_db_password_secret }}
 grafana_admin_password: SuperSecrete
 
 # InfluxDB vars
 influxdb_admin_port: 8083
 influxdb_port: 8086
 influxdb_db_name: telegraf
-influxdb_db_retention: 90d
+influxdb_db_retention: 32d
 influxdb_db_retention_policy: openstack
 influxdb_db_replication: 1
-influxdb_db_root_name: root
-influxdb_db_root_password: SuperSecrete
 influxdb_db_metric_user: openstack
-influxdb_db_metric_password: SuperDuperSecrete
+influxdb_db_metric_password: {{ influxdb_db_metric_password_secret }}
+influxdb_db_root_name_secret: root
+influxdb_db_root_password: {{ influxdb_db_root_password_secret }}
+
+# WAL dir could be set to use tempfs instead to reduce disk iops overhead
+influxdb_wal_dir: /var/lib/influxdb/wal
+influxdb_wal_logging_enabled: true
+influxdb_query_log_enabled: false
+influxdb_cache_max_memory_size: 679477248
+influxdb_cache_snapshot_memory_size: 28311552
 
 # Kapacitor Vars
 kapacitor_port: 9092

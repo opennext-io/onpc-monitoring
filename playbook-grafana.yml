@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy grafana
-  hosts: "cluster-metrics"
+  hosts: "grafana "
   gather_facts: true
   user: root
   pre_tasks:
@@ -40,24 +40,9 @@
       with_items:
         - "localhost"
         - "%"
-  tasks:
-    - name: Ensure https repos function
-      apt:
-        pkg: "apt-transport-https"
-        state: "latest"
-    - name: Add grafana apt-keys
-      apt_key:
-        url: "https://packagecloud.io/gpg.key"
-        state: "present"
-    - name: Add grafana repo
-      apt_repository:
-        repo: "deb https://packagecloud.io/grafana/stable/debian/ wheezy main"
-        state: "present"
-        update_cache: yes
-    - name: Install grafana
-      apt:
-        pkg: "grafana"
-        state: "latest"
+  roles:
+    - Stouts.grafana
+    
     - name: Drop grafana config file
       template:
         src: templates/grafana.ini.j2
