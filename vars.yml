@@ -1,5 +1,6 @@
 ---
 # Copyright 2016, Rackspace US, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,24 +15,44 @@
 # limitations under the License.
 
 
-# Grafana vars
-grafana_port: 8089
-grafana_db_name: grafana
-grafana_db_user: grafana
-grafana_db_password: secrete
-grafana_admin_password: SuperSecrete
+# Grafana server vars
+grafana_version: 3.1.1-*
+grafana_apt_repository: deb https://packagecloud.io/grafana/stable/debian/ jessie main
+grafana_plugins_install: ['grafana-clock-panel']
+grafana_http_addr: "{{ hostvars[inventory_hostname]['ansible_br_mgmt']['ipv4']['address'] | default('0.0.0.0') }}"
+grafana_http_port: 8089 
+# Grafana database vars
+grafana_type: mysql                       # Either "mysql", "postgres" or "sqlite3"
+grafana_host: "{{ galera_address|default('127.0.0.1') }}"
+grafana_name: grafana
+grafana_user: "{{ galera_root_user }}"
+grafana_password: "{{ galera_root_password }}"
+# Grafana security vars
+grafana_admin_user: admin
+grafana_admin_password: "{{ grafana_admin_password_secret }}"
+# Anonymous Auth
+grafana_anonymous_enabled: false
+grafana_anonymous_org_name: Main Org.
+grafana_anonymous_org_role: Viewer
 
 # InfluxDB vars
 influxdb_admin_port: 8083
 influxdb_port: 8086
 influxdb_db_name: telegraf
-influxdb_db_retention: 90d
+influxdb_db_retention: 32d
 influxdb_db_retention_policy: openstack
 influxdb_db_replication: 1
-influxdb_db_root_name: root
-influxdb_db_root_password: SuperSecrete
 influxdb_db_metric_user: openstack
-influxdb_db_metric_password: SuperDuperSecrete
+influxdb_db_metric_password: "{{ influxdb_db_metric_password_secret }}"
+influxdb_db_root_name_secret: root
+influxdb_db_root_password: "{{ influxdb_db_root_password_secret }}"
+
+# WAL dir could use tempfs instead to reduce disk iops overhead
+influxdb_wal_dir: /var/lib/influxdb/wal
+influxdb_wal_logging_enabled: true
+influxdb_query_log_enabled: false
+influxdb_cache_max_memory_size: 679477248
+influxdb_cache_snapshot_memory_size: 28311552
 
 # Kapacitor Vars
 kapacitor_port: 9092

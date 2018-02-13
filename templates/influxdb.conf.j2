@@ -14,11 +14,12 @@ reporting-disabled = false
 [data]
   enabled = true
   dir = "/var/lib/influxdb/data"
-  wal-dir = "/var/lib/influxdb/wal"
-  wal-logging-enabled = true
-  query-log-enabled = false
-  cache-max-memory-size = 679477248
-  cache-snapshot-memory-size = 28311552
+  wal-dir = "{{ influxdb_wal_dir }}"
+  wal-logging-enabled = {{ influxdb_wal_logging_enabled }}
+  query-log-enabled = {{ influxdb_query_log_enabled }}
+  cache-max-memory-size = {{ influxdb_cache_max_memory_sizev}}
+  cache-snapshot-memory-size = {{ influxdb_cache_snapshot_memory_size }}
+
   cache-snapshot-write-cold-duration = "1h0m0s"
   compact-full-write-cold-duration = "24h0m0s"
   max-points-per-block = 0

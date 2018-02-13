@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy grafana
-  hosts: "cluster-metrics"
+  hosts: "grafana "
   gather_facts: true
   user: root
   pre_tasks:
@@ -23,9 +23,11 @@
         login_user: "{{ galera_root_user }}"
         login_password: "{{ galera_root_password }}"
         login_host: "{{ galera_address|default('127.0.0.1') }}"
-        name: "{{ grafana_db_name }}"
+        name: "{{ grafana_name }}"
         state: "present"
       delegate_to: "{{ groups['galera_all'][0] }}"
+      tags:
+        - grafana_db
     - name: Grant access to the DB for the service
       mysql_user:
         login_user: "{{ galera_root_user }}"
@@ -40,34 +42,17 @@
       with_items:
         - "localhost"
         - "%"
-  tasks:
-    - name: Ensure https repos function
-      apt:
-        pkg: "apt-transport-https"
-        state: "latest"
-    - name: Add grafana apt-keys
-      apt_key:
-        url: "https://packagecloud.io/gpg.key"
-        state: "present"
-    - name: Add grafana repo
-      apt_repository:
-        repo: "deb https://packagecloud.io/grafana/stable/debian/ wheezy main"
-        state: "present"
-        update_cache: yes
-    - name: Install grafana
-      apt:
-        pkg: "grafana"
-        state: "latest"
-    - name: Drop grafana config file
-      template:
-        src: templates/grafana.ini.j2
-        dest: /etc/grafana/grafana.ini
-    - name: Install grafana plugins
-      shell: "grafana-cli plugins install grafana-clock-panel"
-    - name: Enable and start grafana
-      service:
-        name: "grafana-server"
-        enabled: true
-        state: restarted
+      tags:
+        - grafana_db
+  - name: Debug messages
+    debug:
+      - var: grafana_http_addr
+      - var: grafana_host
+      - var: grafana_user
+  
+  roles:
+    - Stouts.grafana
+    tags:
+      - grafana
   vars_files:
     - vars.yml
