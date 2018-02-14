@@ -60,6 +60,35 @@ kapacitor_port: 9092
 # Influxdb Relay vars
 influxdb_relay_port: 9096
 
+# Collectd vars
+collectd_version: 5.8
+collectd_service: systemd
+collectd_python_module_path: "{{ collectd_plugins_dir + '/python' }}"
+collectd_default_plugins: []
+collectd_plugins: [python]
+collectd_plugins_options:
+  ModulePath "{{ collectd_python_module_path }}""
+  LogTraces true
+  Interactive true
+  <% @modules.sort.each do |module_name,config| -%>
+    <Module "<%= module_name %>">
+  <%   config.sort.each do |key,value| -%>
+        <%- if value.is_a?(Hash) -%>
+            <%- value.sort.each do |original,new| -%>
+           <%= key -%> "<%= original -%>" "<%= new -%>"
+            <%- end -%>
+        <%- elsif value.is_a?(Array) -%>
+            <% value.sort.each do |x| -%>
+           <%= key -%> "<%= x -%>"
+            <% end -%>
+        <%- else -%>
+           <%= key -%> "<%= value -%>"
+        <%- end -%>
+<%   end -%>
+    </Module>
+<% end -%> 
+
+
 # Prometheus Client Outputs Plugin
 #outputs_prometheus_client: true
 #outputs_prometheus_client_listen: ":9126"

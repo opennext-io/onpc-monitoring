@@ -12,6 +12,9 @@ component_skel:
   kapacitor:
     belongs_to:
       - monitoring_all
+  collectd:
+    belongs_to:
+      - monitoring_all
 container_skel:
   monitoring_container:
     belongs_to:
@@ -21,8 +24,9 @@ container_skel:
       - influxdb_relay
       - kapacitor
       - grafana
+      - collectd
     properties:
-      container_fs_size: 200G
+      container_fs_size: 250G
 physical_skel:
   monitoring_containers:
     belongs_to:

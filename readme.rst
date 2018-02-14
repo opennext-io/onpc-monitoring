@@ -29,6 +29,15 @@ Copy the env.d files into place
     cp ./etc/env.d/* /etc/openstack_deploy/env.d/
     cp ./etc/conf.d/* /etc/openstack_deploy/conf.d/
 
+Copy the secrets file into place and generate the password values
+
+.. code-block:: bash
+
+    cd /opt/onpc-monitoring
+    cp monitoring_secrets.yml /etc/openstack_deploy/
+    cd /opt/openstack-ansible/scripts
+    sudo ./pw-token-gen.py --file /etc/openstack_deploy/monitoring_secrets.yml
+
 Import the ansible roles
 
 .. code-block:: bash

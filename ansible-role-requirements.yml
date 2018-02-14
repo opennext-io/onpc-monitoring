@@ -2,3 +2,7 @@
   scm: git
   src: git@github.com:opennext-io/Stouts.grafana.git 
   version: 3.1.1
+- name: collectd
+  scm: git
+  src: git@github.com:opennext-io/Stouts.collectd.git 
+  version: 2.2.3 

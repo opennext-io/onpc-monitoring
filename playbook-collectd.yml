@@ -1,5 +1,5 @@
 ---
-# Copyright 2016, Rackspace US, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy Telegraf
-  hosts: "all"
+- name: Deploy grafana
+  hosts: "collectd "
   gather_facts: true
   user: root
+  
   roles:
+    - collectd
+
   vars_files:
     - vars.yml
