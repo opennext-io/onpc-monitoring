@@ -14,21 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy grafana
+- name: Delete Grafana DB
   hosts: "grafana "
   gather_facts: true
   user: root
-  pre_tasks:
-    - name: Create DB for service
-      mysql_db:
-        login_user: "{{ galera_root_user }}"
-        login_password: "{{ galera_root_password }}"
-        login_host: "{{ galera_address|default('127.0.0.1') }}"
-        name: "{{ grafana_name }}"
-        state: "present"
-      delegate_to: "{{ groups['galera_all'][0] }}"
-      tags:
-        - grafana_db
+  tasks:
     - name: Grant access to the DB for the service
       mysql_user:
         login_user: "{{ galera_root_user }}"
@@ -37,17 +27,20 @@
         name: "{{ grafana_user }}"
         password: "{{ grafana_password }}"
         host: "{{ item }}"
-        state: "present"
+        state: "absent"
         priv: "{{ grafana_name }}.*:ALL"
       delegate_to: "{{ groups['galera_all'][0] }}"
       with_items:
         - "localhost"
         - "%"
-      tags:
-        - grafana_db
-  
-  roles:
-    - grafana
+    - name: Create DB for service
+      mysql_db:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ galera_address|default('127.0.0.1') }}"
+        name: "{{ grafana_name }}"
+        state: "absent"
+      delegate_to: "{{ groups['galera_all'][0] }}"
 
   vars_files:
     - vars.yml
