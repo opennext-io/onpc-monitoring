@@ -1,8 +1,8 @@
 ---
 monitoring_hosts:
-  monitoring1:
+  mon1:
     ip: 172.29.236.101
-  monitoring2:
+  mon2:
     ip: 172.29.236.102
-  monitoring3:
+  mon3:
     ip: 172.29.236.103

@@ -25,8 +25,8 @@ grafana_http_port: 8089
 grafana_type: mysql                       # Either "mysql", "postgres" or "sqlite3"
 grafana_host: "{{ galera_address|default('127.0.0.1') }}"
 grafana_name: grafana
-grafana_user: "{{ galera_root_user }}"
-grafana_password: "{{ galera_root_password }}"
+grafana_user: grafana
+grafana_password: "{{ grafana_password_secret }}"
 # Grafana security vars
 grafana_admin_user: admin
 grafana_admin_password: "{{ grafana_admin_password_secret }}"
