@@ -1,32 +1,42 @@
-Gather and visualize cluster wide metrics
-#########################################
-:date: 2016-09-01
-:tags: openstack, ansible
+OpenNext Private Cloud Monitoring Stack
+#######################################
+:date: 2018-01-13
+:tags: openstack, ansible, monitoring
 :category: \*openstack, \*nix
 
 
 About this repository
 ---------------------
 
-This set of playbooks will deploy InfluxDB, Telegraf, Grafana and Kapacitor for the purpose of collecting
-metrics on an OpenStack cluster.
+This set of playbooks will deploy InfluxDB, Telegraf, Grafana and Kapacitor for
+the purpose of monitoring an OpenStack environment.
 
 Process
 -------
 
-Clone the OPS repo
+Clone the ONPC Monitoring repo
 
 .. code-block:: bash
 
     cd /opt
-    git clone https://git.openstack.org/openstack/openstack-ansible-ops
+    git clone git@github.com:opennext-io/onpc-monitoring.git
 
 Copy the env.d files into place
 
 .. code-block:: bash
 
-    cd openstack-ansible-ops/cluster_metrics
-    cp etc/env.d/cluster_metrics.yml /etc/openstack_deploy/env.d/
+    cd /opt/onpc-monitoring
+    cp ./etc/env.d/* /etc/openstack_deploy/env.d/
+    cp ./etc/conf.d/* /etc/openstack_deploy/conf.d/
+
+Import the ansible roles
+
+.. code-block:: bash
+    
+    cd /opt/openstack-ansible/tests
+    openstack-ansible get-ansible-role-requirements.yml -i ./test-inventory.ini \
+        -e role_file=/opt/onpc-monitoring/ansible-role-requirements.yml -vvv
+
 
 Add the export to update the inventory file location
 
@@ -34,23 +44,24 @@ Add the export to update the inventory file location
 
     export ANSIBLE_INVENTORY=/opt/openstack-ansible/playbooks/inventory/dynamic_inventory.py
 
-If you are running the HA Proxy you should run the following playbook as well to enable the grafana port 8089
+If you are running the HA Proxy you should run the following playbook as well to enable
+the grafana port 8089
 
 .. code-block:: bash
 
-    openstack-ansible playbook-metrics-lb.yml
+    openstack-ansible /opt/openstack-ansible/playbooks/playbook-metrics-lb.yml
 
 Create the containers
 
 .. code-block:: bash
 
-    openstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml -e container_group=cluster-metrics
+    oopenstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml -e container_group=monitoring_container
 
 Install InfluxDB
 
 .. code-block:: bash
 
-    openstack-ansible playbook-influx-db.yml
+    openstack-ansible /opt/openstack-ansible/playbooks/playbook-influx-db.yml
 
 Install Influx Telegraf
 
