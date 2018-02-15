@@ -24,8 +24,8 @@ grafana_http_port: 8089
 # Grafana database vars
 grafana_type: mysql                       # Either "mysql", "postgres" or "sqlite3"
 grafana_host: "{{ galera_address|default('127.0.0.1') }}:3306"
-grafana_name: grafana_test
-grafana_user: grafana_test
+grafana_name: grafana
+grafana_user: grafana
 grafana_password: "{{ grafana_password_secret }}"
 # Grafana security vars
 grafana_admin_user: admin
@@ -61,34 +61,35 @@ kapacitor_port: 9092
 influxdb_relay_port: 9096
 
 # Collectd vars
+collectd_user: collectd
+collectd_password: "{{ collectd_password_secret }}"
+collectd_tenant: collectd
 collectd_version: 5.8
 collectd_service: systemd
 collectd_python_module_path: "{{ collectd_plugins_dir + '/python' }}"
 collectd_default_plugins: []
 collectd_plugins: [python]
 collectd_plugins_options:
-  ModulePath "{{ collectd_python_module_path }}""
-  LogTraces true
-  Interactive true
-  <% @modules.sort.each do |module_name,config| -%>
-    <Module "<%= module_name %>">
-  <%   config.sort.each do |key,value| -%>
-        <%- if value.is_a?(Hash) -%>
-            <%- value.sort.each do |original,new| -%>
-           <%= key -%> "<%= original -%>" "<%= new -%>"
-            <%- end -%>
-        <%- elsif value.is_a?(Array) -%>
-            <% value.sort.each do |x| -%>
-           <%= key -%> "<%= x -%>"
-            <% end -%>
-        <%- else -%>
-           <%= key -%> "<%= value -%>"
-        <%- end -%>
-<%   end -%>
-    </Module>
-<% end -%> 
-
-
+  python:
+    - ModulePath "{{ collectd_python_module_path }}"
+    - LogTraces true
+    - Interactive true
+collectd_python_modules: [openstack, openstack_checks]
+collectd_python_modules_options:
+    openstack:
+      - username "{{ collectd_user }}"
+      - password "{{ collectd_password }}"
+      - tenant "{{ collectd_tenant }}"
+      - keystone_url
+      - timeout 20
+      - max_retries 3
+    openstack_cheks:
+      - username "{{ collectd_user }}"
+      - password "{{ collectd_password }}"
+      - tenant "{{ collectd_tenant }}"
+      - keystone_url
+      - timeout 20
+      - max_retries 3
 # Prometheus Client Outputs Plugin
 #outputs_prometheus_client: true
 #outputs_prometheus_client_listen: ":9126"
