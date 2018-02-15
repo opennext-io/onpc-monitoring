@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy grafana
+- name: Deploy Collected and python plugins 
   hosts: "collectd "
   gather_facts: true
   user: root
-  
+ 
   roles:
     - collectd
 
