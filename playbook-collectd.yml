@@ -17,7 +17,7 @@
   hosts: "collectd "
   gather_facts: true
   user: root
-  
+ 
   roles:
     - collectd
 
