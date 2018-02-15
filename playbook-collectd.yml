@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy grafana
+- name: Deploy and configure Collectd
   hosts: "collectd "
   gather_facts: true
   user: root
