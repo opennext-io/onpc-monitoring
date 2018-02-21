@@ -61,35 +61,17 @@ kapacitor_port: 9092
 influxdb_relay_port: 9096
 
 # Collectd vars
+collectd_use_ppa: no
 collectd_user: collectd
 collectd_password: "{{ collectd_password_secret }}"
 collectd_tenant: collectd
 collectd_version: 5.8.0
 collectd_service: systemd
+collectd_config_dir: "{{ '/etc/collectd/collectd.conf.d' if collectd_use_ppa else collectd_plugins_prefix }}"
+collectd_plugins_dir: "{{ '/usr/lib/collectd' if collectd_use_ppa else collectd_prefix + '/lib/collectd' }}"
 collectd_python_module_path: "{{ collectd_plugins_dir + '/python' }}"
 collectd_default_plugins: []
-collectd_plugins: [python]
-collectd_plugins_options:
-  python:
-    - ModulePath "{{ collectd_python_module_path }}"
-    - LogTraces true
-    - Interactive true
-collectd_python_modules: [openstack, openstack_checks]
-collectd_python_modules_options:
-  openstack:
-    - username "{{ collectd_user }}"
-    - password "{{ collectd_password }}"
-    - tenant "{{ collectd_tenant }}"
-    - keystone_url
-    - timeout 20
-    - max_retries 3
-  openstack_checks:
-    - username "{{ collectd_user }}"
-    - password "{{ collectd_password }}"
-    - tenant "{{ collectd_tenant }}"
-    - keystone_url
-    - timeout 20
-    - max_retries 3
+
 # Prometheus Client Outputs Plugin
 #outputs_prometheus_client: true
 #outputs_prometheus_client_listen: ":9126"

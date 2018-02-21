@@ -21,5 +21,14 @@
   roles:
     - collectd
 
+  post_tasks:
+    - name: collectd-configure | Configure python plugins
+      template: src=python.conf.j2 dest={{collectd_config_dir} validate='{{collectd_sbin_path}}/collectd -t -C %s'
+      notify: collectd restart
+      tags: [collectd, collectd-configure]
+
+    - name: collectd restart
+      service: name=collectd state=restarted
+      
   vars_files:
     - vars.yml
