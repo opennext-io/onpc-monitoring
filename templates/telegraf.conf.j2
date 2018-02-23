@@ -150,3 +150,23 @@
   ## Use SSL but skip chain & host verification
   insecure_skip_verify = true
 {% endif %}
+
+{% if inventory_hostname in groups['collectd'] or if inventory_hostname in groups['nova_compute'] %}
+[[inputs.socket_listener]]
+  service_address = "udp://127.0.0.1:25826"
+  name_prefix = "collectd_"
+
+  ## Data format to consume.
+  ## Each data format has its own unique set of configuration options, read
+  ## more about them here:
+  ## https://github.com/influxdata/telegraf/blob/master/docs/DATA_FORMATS_INPUT.md
+  data_format = "collectd"
+
+  ## Authentication file for cryptographic security levels
+  # collectd_auth_file = "/etc/collectd/auth_file"
+  ## One of none (default), sign, or encrypt
+  # collectd_security_level = "encrypt"
+  ## Path of to TypesDB specifications
+  #collectd_typesdb = ["/usr/share/collectd/types.db"]
+  collectd_typesdb = "{{ collectd_types_db_path }}"
+  {% endif %}

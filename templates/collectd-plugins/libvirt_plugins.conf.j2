@@ -4,7 +4,7 @@
 # Plugin to check the availability of libvirt.
 # The hypervisor connection URI default is 'qemu:///system'
 
-{% if 'nova_compute' in group_names %}
+{% if inventory_hostname in groups['nova_compute']
 <LoadPlugin python>
   Globals true
 </LoadPlugin>

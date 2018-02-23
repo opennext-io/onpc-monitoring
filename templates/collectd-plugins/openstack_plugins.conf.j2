@@ -15,7 +15,7 @@
 
   <Module "check_openstack_api">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
     Timeout "5"
@@ -29,7 +29,7 @@
     ExpectedCode "influxdb" "204"
     MaxRetries "3"
     Timeout "1"
-    Url "influxdb" "http://192.168.0.5:8086/ping"
+    Url "influxdb" "{{ influxdb_service_internalurl }}"
   </Module>
 
   Import "compute_stats"
@@ -37,71 +37,71 @@
   <Module "compute_stats">
     CpuAllocationRatio "8.0"
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
     Timeout "5"
-    Username "nova"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
  Import "openstack_cinder"
 
   <Module "openstack_cinder">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    MaxRetries "2"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
-    Timeout "20"
-    Username "nova"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    MaxRetries "3"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
+    Timeout "5"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
   Import "openstack_glance"
 
   <Module "openstack_glance">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    MaxRetries "2"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
-    Timeout "20"
-    Username "nova"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    MaxRetries "3"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
+    Timeout "5"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
   Import "openstack_keystone"
 
   <Module "openstack_keystone">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    MaxRetries "2"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
-    Timeout "20"
-    Username "nova"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    MaxRetries "3"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
+    Timeout "5"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
   Import "openstack_neutron"
 
   <Module "openstack_neutron">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    MaxRetries "2"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
-    Timeout "20"
-    Username "nova"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    MaxRetries "3"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
+    Timeout "5"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
  Import "openstack_nova"
 
   <Module "openstack_nova">
     DependsOnResource "internal_lb_vip_address"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    MaxRetries "2"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
-    Timeout "20"
-    Username "nova"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    MaxRetries "3"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
+    Timeout "5"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
 </Plugin>
