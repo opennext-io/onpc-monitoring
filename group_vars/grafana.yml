@@ -1,0 +1,19 @@
+# Grafana server vars
+grafana_version: 3.1.1-*
+grafana_apt_repository: deb https://packagecloud.io/grafana/stable/debian/ jessie main
+grafana_plugins_install: ['grafana-clock-panel']
+grafana_http_addr: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
+grafana_http_port: 8089 
+# Grafana database vars
+grafana_type: mysql                       # Either "mysql", "postgres" or "sqlite3"
+grafana_host: "{{ galera_address|default('127.0.0.1') }}:3306"
+grafana_name: grafana
+grafana_user: grafana
+grafana_password: "{{ grafana_password_secret }}"
+# Grafana security vars
+grafana_admin_user: admin
+grafana_admin_password: "{{ grafana_admin_password_secret }}"
+# Anonymous Auth
+grafana_anonymous_enabled: false
+grafana_anonymous_org_name: Main Org.
+grafana_anonymous_org_role: Viewer

@@ -4,6 +4,7 @@
 # Plugin to check the availability of libvirt.
 # The hypervisor connection URI default is 'qemu:///system'
 
+{% if 'nova_compute' in group_names %}
 <LoadPlugin python>
   Globals true
 </LoadPlugin>
@@ -13,9 +14,21 @@
   LogTraces false
   Interactive false
 
-  Import "check_openstack_api"
+  Import "collectd_libvirt_check"
 
   <Module "check_openstack_api">
     Connection "qemu:///system"
   </Module>
 </Plugin>
+
+<LoadPlugin libvirt>
+  Globals false
+</LoadPlugin>
+
+<Plugin libvirt>
+  Connection "qemu:///system"
+  RefreshInterval 60
+  HostnameFormat "uuid"
+</Plugin>
+
+{% endif %}

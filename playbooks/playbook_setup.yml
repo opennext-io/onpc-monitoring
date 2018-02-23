@@ -1,0 +1,51 @@
+---
+# Copyright 2014, Rackspace US, Inc.
+# Copyright 2018, OpenNext SAS
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# Create an admin user
+
+- name: Ensure monitoring user
+  keystone:
+    command: "ensure_user"
+    endpoint: "{{ keystone_service_adminurl }}"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    user_name: "{{ monitoring_user_name }}"
+    tenant_name: "{{ monitoring_tenant_name }}"
+    password: "{{ monitoring_user_password }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  tags: [monitoring-setup]
+
+# Add a role to the user
+- name: Ensure monitoring user to admin role
+  keystone:
+    command: "ensure_user_role"
+    endpoint: "{{ keystone_service_adminurl }}"
+    login_user: "{{ keystone_admin_user_name }}"
+    login_password: "{{ keystone_auth_admin_password }}"
+    login_project_name: "{{ keystone_admin_tenant_name }}"
+    user_name: "{{ monitoring_user_name }}"
+    tenant_name: "{{ monitoring_tenant_name }}"
+    role_name: "{{ monitoring_user_role_name }}"
+    insecure: "{{ keystone_service_adminuri_insecure }}"
+  register: add_service
+  until: add_service|success
+  retries: 5
+  delay: 10
+  tags: [monitoring-setup]
+

@@ -1,0 +1,8 @@
+# Collectd vars
+collectd_use_ppa: no
+collectd_user: collectd
+collectd_password: "{{ collectd_password_secret }}"
+collectd_tenant: collectd
+collectd_version: 5.8.0
+collectd_service: systemd
+collectd_default_plugins: []

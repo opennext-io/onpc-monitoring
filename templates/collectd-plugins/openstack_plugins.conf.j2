@@ -2,7 +2,6 @@
 # Do NOT modify this file by hand!
 
 # Python plugins
-
 <LoadPlugin python>
   Globals true
 </LoadPlugin>
@@ -15,40 +14,40 @@
   Import "check_openstack_api"
 
   <Module "check_openstack_api">
-    DependsOnResource "vip__management"
-    KeystoneUrl "http://192.168.0.3:5000/v2.0"
-    Password "CW19V9nhoDB2VWhDHyWVIR1Q"
-    Tenant "services"
+    DependsOnResource "internal_lb_vip_address"
+    KeystoneUrl "{{ keystone_service_internaluri }}/v2"
+    Password "{{ monitoring_user_password }}"
+    Tenant "{{ monitoring_tenant_name }}"
     Timeout "5"
-    Username "nova"
+    Username "{{ monitoring_user_name }}"
   </Module>
 
   Import "http_check"
 
   <Module "http_check">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     ExpectedCode "influxdb" "204"
     MaxRetries "3"
     Timeout "1"
     Url "influxdb" "http://192.168.0.5:8086/ping"
   </Module>
 
-  Import "hypervisor_stats"
+  Import "compute_stats"
 
-  <Module "hypervisor_stats">
+  <Module "compute_stats">
     CpuAllocationRatio "8.0"
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
     Tenant "services"
     Timeout "5"
     Username "nova"
   </Module>
-  
+
  Import "openstack_cinder"
 
   <Module "openstack_cinder">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     MaxRetries "2"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
@@ -60,7 +59,7 @@
   Import "openstack_glance"
 
   <Module "openstack_glance">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     MaxRetries "2"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
@@ -72,7 +71,7 @@
   Import "openstack_keystone"
 
   <Module "openstack_keystone">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     MaxRetries "2"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
@@ -84,7 +83,7 @@
   Import "openstack_neutron"
 
   <Module "openstack_neutron">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     MaxRetries "2"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
@@ -96,7 +95,7 @@
  Import "openstack_nova"
 
   <Module "openstack_nova">
-    DependsOnResource "vip__management"
+    DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "http://192.168.0.3:5000/v2.0"
     MaxRetries "2"
     Password "CW19V9nhoDB2VWhDHyWVIR1Q"
@@ -104,6 +103,5 @@
     Timeout "20"
     Username "nova"
   </Module>
-
 
 </Plugin>

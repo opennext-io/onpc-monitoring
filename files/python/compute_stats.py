@@ -18,7 +18,7 @@ import collectd
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'hypervisor_stats'
+PLUGIN_NAME = 'compute_stats'
 INTERVAL = openstack.INTERVAL
 
 
@@ -78,8 +78,8 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
 
         total_stats = {v: 0 for v in self.VALUE_MAP.values()}
         total_stats['free_vcpus'] = 0
-        hypervisor_stats = r.json().get('hypervisors', [])
-        for stats in hypervisor_stats:
+        compute_stats = r.json().get('hypervisors', [])
+        for stats in compute_stats:
             # remove domain name and keep only the hostname portion
             host = stats['hypervisor_hostname'].split('.')[0]
             for k, v in self.VALUE_MAP.iteritems():
