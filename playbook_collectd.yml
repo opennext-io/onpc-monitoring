@@ -28,15 +28,15 @@
       template:
         src: collectd_plugins/openstack_plugins.conf.j2
         dest: "{{ collectd_plugins_prefix }}"
-        validate: "{{collectd_sbin_path}}/collectd -t -C %s" 
+        validate: '{{ collectd_sbin_path }}/collectd -t -C %s' 
       template:
         src: collectd_plugins/libvirt_plugins.conf.j2
-        dest: "{{collectd_plugins_prefix}}"
-        validate: "{{collectd_sbin_path}}/collectd -t -C %s"
+        dest: "{{ collectd_plugins_prefix }}"
+        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       template: collectd_network.conf.j2
         src: collectd_network.conf.j2
-        dest: "{{collectd_plugins_prefix}}"
-        validate: "{{collectd_sbin_path}}/collectd -t -C %s"
+        dest: "{{ collectd_plugins_prefix }}"
+        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       copy:
         src: files/python_files
         dest: "{{ collectd_plugins_dir }}"
