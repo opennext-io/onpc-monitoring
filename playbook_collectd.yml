@@ -26,26 +26,27 @@
     
     - name: Configure Collectd plugin
       template:
-        src: collectd-plugins/openstack_plugins.conf.j2
+        src: collectd_plugins/openstack_plugins.conf.j2
         dest: "{{ collectd_plugins_prefix }}"
-        validate: '{{collectd_sbin_path}}/collectd -t -C %s' 
+        validate: "{{collectd_sbin_path}}/collectd -t -C %s" 
       template:
-        src: collectd-plugins/libvirt_plugins.conf.j2
+        src: collectd_plugins/libvirt_plugins.conf.j2
         dest: "{{collectd_plugins_prefix}}"
-        validate: '{{collectd_sbin_path}}/collectd -t -C %s'
-      template:
-        src: collectd-plugins/collectd_network.conf.j2
+        validate: "{{collectd_sbin_path}}/collectd -t -C %s"
+      template: collectd_network.conf.j2
+        src: collectd_network.conf.j2
         dest: "{{collectd_plugins_prefix}}"
-        validate: '{{collectd_sbin_path}}/collectd -t -C %s'
+        validate: "{{collectd_sbin_path}}/collectd -t -C %s"
       copy:
         src: files/python_files
         dest: "{{ collectd_plugins_dir }}"
       notify: collectd restart
 
-      tags: [collectd, collectd-plugins-config]  
+      tags: [collectd, collectd-plugins]  
     
-  - name: collectd restart
-    service: name=collectd state=restarted
+      - name: collectd restart
+      service: name=collectd state=restarted
   
   vars_files:
-    - group_vars/collectd.yml
+    - vars/main.yml
+    - vars/collectd.yml
