@@ -34,9 +34,8 @@ Copy the secrets file into place and generate the password values
 .. code-block:: bash
 
     cd /opt/onpc-monitoring
-    cp monitoring_secrets.yml /etc/openstack_deploy/
-    cd /opt/openstack-ansible/scripts
-    sudo ./pw-token-gen.py --file /etc/openstack_deploy/monitoring_secrets.yml
+    cp user_monitoring_secrets.yml /etc/openstack_deploy/
+    sudo /opt/openstack-ansible/scripts/pw-token-gen.py --file /etc/openstack_deploy/user_monitoring_secrets.yml
 
 Import the ansible roles
 

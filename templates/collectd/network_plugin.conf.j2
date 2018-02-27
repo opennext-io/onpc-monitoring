@@ -3,8 +3,8 @@
 
 # Plugin to send collectd stats to Telegraf
 
+LoadPlugin "network"
+
 <Plugin "network">
-  <Server "127.0.0.1">
-    SecurityLevel "None"
-  </Server>
+  Server "127.0.0.1" "25826"
 </Plugin>
