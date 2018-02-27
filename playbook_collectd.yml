@@ -28,17 +28,11 @@
         src: templates/collectd/openstack_plugins.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_plugins.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
-<<<<<<< HEAD
-      template:
-        src: collectd_network.conf.j2
-        dest: "{{ collectd_plugins_prefix }}"
-=======
       notify: collectd restart
     - name: Configure Libvirt Collectd plugin
       template:
         src: templates/collectd/libvirt_plugins.conf.j2
         dest: "{{ collectd_plugins_prefix }}/libvirt_plugins.conf"
->>>>>>> 298ed06c00e35b6571fa0d0d096bf7ef985bbcb2
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
     - name: Configure Network Collectd plugin
@@ -55,10 +49,7 @@
 
       tags: [collectd, collectd-plugins]  
     
-<<<<<<< HEAD
-=======
   handlers:
->>>>>>> 298ed06c00e35b6571fa0d0d096bf7ef985bbcb2
     - name: collectd restart
       service: name=collectd state=restarted
   
