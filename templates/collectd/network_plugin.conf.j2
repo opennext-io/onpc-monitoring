@@ -4,8 +4,8 @@
 # Plugin to check the availability of libvirt.
 # The hypervisor connection URI default is 'qemu:///system'
 
+LoadPlugin "network"
+
 <Plugin "network">
-  <Server "127.0.0.1">
-    SecurityLevel "None"
-  </Server>
+  Server "127.0.0.1" "25826"
 </Plugin>
