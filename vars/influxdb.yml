@@ -20,4 +20,4 @@ influxdb_cache_snapshot_memory_size: 28311552
 
 # Influxdb Relay vars
 influxdb_relay_port: 9096
-influxdb_service_internalurl: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}
+influxdb_service_internalurl: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}"

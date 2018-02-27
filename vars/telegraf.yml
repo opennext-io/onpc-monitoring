@@ -1,2 +1,8 @@
 # Telegraf Vars
 influx_telegraf_targets: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
+
+## HAProxy variables for telegraf
+haproxy_stats_enabled: True
+haproxy_stats_bind_address: 127.0.0.1
+haproxy_stats_port: 1936
+haproxy_username: admin

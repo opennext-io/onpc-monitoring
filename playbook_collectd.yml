@@ -13,9 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Install Collectd for OpenStack monitoring
-  hosts: ["collectd", "{{ nova_compute_hosts }}"]
-  debug: var="{{ hosts }}"
+- name: Install and configure Collectd
+  hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
   user: root
  
@@ -24,29 +23,37 @@
 
   post_tasks:
     
-    - name: Configure Collectd plugin
+    - name: Configure OpenStack Collectd plugins
       template:
-        src: collectd_plugins/openstack_plugins.conf.j2
-        dest: "{{ collectd_plugins_prefix }}"
-        validate: '{{ collectd_sbin_path }}/collectd -t -C %s' 
+        src: templates/collectd/openstack_plugins.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/openstack_plugins.conf"
+        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
+      notify: collectd restart
+    - name: Configure Libvirt Collectd plugin
       template:
-        src: collectd_plugins/libvirt_plugins.conf.j2
-        dest: "{{ collectd_plugins_prefix }}"
+        src: templates/collectd/libvirt_plugins.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/libvirt_plugins.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
-      template: collectd_network.conf.j2
-        src: collectd_network.conf.j2
-        dest: "{{ collectd_plugins_prefix }}"
-        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
+      notify: collectd restart
+    - name: Configure Network Collectd plugin
+      template:
+        src: templates/collectd/telegraf_plugin.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/telegraf_plugin.conf"
+        validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
+      notify: collectd restart
+    - name: Copy python modules
       copy:
-        src: files/python_files
+        src: files/collectd-modules
         dest: "{{ collectd_plugins_dir }}"
       notify: collectd restart
 
       tags: [collectd, collectd-plugins]  
     
-      - name: collectd restart
+  handlers:
+    - name: collectd restart
       service: name=collectd state=restarted
   
   vars_files:
     - vars/main.yml
     - vars/collectd.yml
+    - vars/influxdb.yml
