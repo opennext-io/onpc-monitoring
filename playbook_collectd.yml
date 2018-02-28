@@ -25,8 +25,8 @@
     
     - name: Configure OpenStack Collectd plugins
       template:
-        src: templates/collectd/openstack_plugins.conf.j2
-        dest: "{{ collectd_plugins_prefix }}/openstack_plugins.conf"
+        src: templates/collectd/openstack_plugin.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/openstack_plugin.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
     - name: Configure Libvirt Collectd plugin

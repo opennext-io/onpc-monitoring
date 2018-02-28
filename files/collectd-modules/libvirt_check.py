@@ -35,6 +35,7 @@ class LibvirtCheckPlugin(base.Base):
         for node in conf.children:
             if node.key == 'Uri':
                 self.uri = node.values[0]
+        self.logger.info("%s module initialized with URI %s", (self.plugin, self.uri))    
 
     def read_callback(self):
         try:

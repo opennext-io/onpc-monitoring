@@ -151,7 +151,7 @@
   insecure_skip_verify = true
 {% endif %}
 
-{% if inventory_hostname in groups['collectd'] or if inventory_hostname in groups['nova_compute'] %}
+{% (if inventory_hostname in groups['collectd'] or if inventory_hostname in groups['nova_compute']) and (nova_virt_type | default('qemu') in ['kvm', 'qemu']) %}
 [[inputs.socket_listener]]
   service_address = "udp://127.0.0.1:25826"
   name_prefix = "collectd_"
