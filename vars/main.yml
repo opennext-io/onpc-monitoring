@@ -18,9 +18,6 @@ monitoring_user_name: "monito"
 monitoring_tenant_name: "service"
 monitoring_user_role_name: "admin"
 
-nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+monitoring_influxdb_name: "telegraf"
 
-# Prometheus Client Outputs Plugin
-#outputs_prometheus_client: true
-#outputs_prometheus_client_listen: ":9126"
-#outputs_prometheus_client_expiration_interval: "60s"
+nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
