@@ -1,4 +1,17 @@
 # Telegraf Vars
+telegraf_agent_version: latest
+{% if inventory_hostname in groups['all_containers'] %}
+  telegraf_agent_hostname = "{{ ansible_hostname }}"
+{% else %}
+  telegraf_agent_hostname = "{{ inventory_hostname }}"
+{% endif %}
+
+telegraf_agent_interval: 10
+telegraf_agent_debug: False
+telegraf_agent_round_interval: True
+telegraf_agent_flush_interval: 10
+telegraf_agent_flush_jitter: 0
+
 influx_telegraf_targets: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
 
 ## HAProxy variables for telegraf
