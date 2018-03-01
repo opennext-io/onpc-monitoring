@@ -18,7 +18,6 @@ import dateutil.parser
 import dateutil.tz
 import requests
 import simplejson as json
-import traceback
 
 import collectd_base as base
 
@@ -34,6 +33,10 @@ class KeystoneException(Exception):
     pass
 
 
+class PluginConfigurationException(Exception):
+    pass
+
+
 class OSClient(object):
     """ Base class for querying the OpenStack API endpoints.
 
@@ -41,13 +44,14 @@ class OSClient(object):
     """
     EXPIRATION_TOKEN_DELTA = datetime.timedelta(0, 30)
 
-    def __init__(self, username, password, tenant, keystone_url, timeout,
-                 logger, max_retries):
+    def __init__(self, username, password, tenant, keystone_url, region,
+                 timeout, logger, max_retries):
         self.logger = logger
         self.username = username
         self.password = password
         self.tenant_name = tenant
         self.keystone_url = keystone_url
+        self.region = region
         self.service_catalog = []
         self.tenant_id = None
         self.timeout = timeout
@@ -104,19 +108,37 @@ class OSClient(object):
             data['access']['token']['expires']) - self.EXPIRATION_TOKEN_DELTA
         self.service_catalog = []
         for item in data['access']['serviceCatalog']:
-            endpoint = item['endpoints'][0]
+            endpoint = False
+            if self.region:
+                for e in item['endpoints']:
+                    if self.region == e['region']:
+                        endpoint = e
+                if not endpoint:
+                    continue
+            else:
+                # If no region is defined, I guess we'll just keep the old
+                # behavior of picking the first one.
+                endpoint = item['endpoints'][0]
+
+            if 'internalURL' not in endpoint and 'publicURL' not in endpoint:
+                self.logger.warning(
+                    "Skipping service '{}' with no valid URL".format(
+                        endpoint["name"]
+                    )
+                )
+                continue
+
             self.service_catalog.append({
                 'name': item['name'],
                 'region': endpoint['region'],
-                'service_type': item['type'],
-                'url': endpoint['internalURL'],
-                'admin_url': endpoint['adminURL'],
+                'url': endpoint.get('internalURL', endpoint.get('publicURL')),
             })
 
         self.logger.debug("Got token '%s'" % self.token)
         return self.token
 
-    def make_request(self, verb, url, data=None, token_required=True):
+    def make_request(self, verb, url, data=None, token_required=True,
+                     params=None):
         kwargs = {
             'url': url,
             'timeout': self.timeout,
@@ -131,6 +153,9 @@ class OSClient(object):
 
         if data is not None:
             kwargs['data'] = data
+
+        if params is not None:
+            kwargs['params'] = params
 
         func = getattr(self.session, verb.lower())
 
@@ -158,17 +183,26 @@ class CollectdPlugin(base.Base):
         # 200 nodes environments with 600 VMs. See #1554502 for details.
         self.timeout = 20
         self.max_retries = 2
+        self.username = None
+        self.password = None
+        self.tenant_name = None
+        self.keystone_url = None
+        self.region = None
         self.os_client = None
         self.extra_config = {}
+        self._threads = {}
+        self.pagination_limit = None
+        self.polling_interval = 60
+        self._last_run = None
+        self.changes_since = False
 
     def _build_url(self, service, resource):
         s = (self.get_service(service) or {})
-        # the adminURL must be used to access resources with Keystone API v2
-        if service == 'keystone' and \
-                (resource in ['tenants', 'users'] or 'OS-KS' in resource):
-            url = s.get('admin_url')
-        else:
-            url = s.get('url')
+        url = s.get('url')
+        # v3 API must be used in order to obtain tenants in multi-domain envs
+        if service == 'keystone' and (resource in ['projects',
+                                                   'users', 'roles']):
+            url = url.replace('v2.0', 'v3')
 
         if url:
             if url[-1] != '/':
@@ -189,7 +223,8 @@ class CollectdPlugin(base.Base):
         {
           'host': 'node.example.com',
           'service': 'nova-compute',
-          'state': 'up'
+          'state': 'up',
+          'zone': 'az1'
         }
 
         where 'state' can be 'up', 'down' or 'disabled'
@@ -225,11 +260,13 @@ class CollectdPlugin(base.Base):
                     data = {'host': val['host'], 'service': val['binary']}
 
                     if service == 'neutron':
+                        data['zone'] = val['availability_zone']
                         if not val['admin_state_up']:
                             data['state'] = 'disabled'
                         else:
                             data['state'] = 'up' if val['alive'] else 'down'
                     else:
+                        data['zone'] = val['zone']
                         if val['status'] == 'disabled':
                             data['state'] = 'disabled'
                         elif val['state'] == 'up' or val['state'] == 'down':
@@ -242,12 +279,12 @@ class CollectdPlugin(base.Base):
 
                     yield data
 
-    def get(self, service, resource):
+    def get(self, service, resource, params=None):
         url = self._build_url(service, resource)
         if not url:
             return
-        self.logger.info("GET '%s'" % url)
-        return self.os_client.make_request('get', url)
+        self.logger.info('GET({}) {}'.format(url, params))
+        return self.os_client.make_request('get', url, params=params)
 
     @property
     def service_catalog(self):
@@ -265,75 +302,134 @@ class CollectdPlugin(base.Base):
         super(CollectdPlugin, self).config_callback(config)
         for node in config.children:
             if node.key == 'Username':
-                username = node.values[0]
+                self.username = node.values[0]
             elif node.key == 'Password':
-                password = node.values[0]
+                self.password = node.values[0]
             elif node.key == 'Tenant':
-                tenant_name = node.values[0]
+                self.tenant_name = node.values[0]
             elif node.key == 'KeystoneUrl':
-                keystone_url = node.values[0]
-        self.os_client = OSClient(username, password, tenant_name,
-                                  keystone_url, self.timeout, self.logger,
+                self.keystone_url = node.values[0]
+            elif node.key == 'Region':
+                self.region = node.values[0]
+            elif node.key == 'PaginationLimit':
+                self.pagination_limit = int(node.values[0])
+            elif node.key == 'PollingInterval':
+                self.polling_interval = int(node.values[0])
+
+        if self.username is None:
+            raise PluginConfigurationException('Username parameter is missing')
+        if self.password is None:
+            raise PluginConfigurationException('Password parameter is missing')
+        if self.tenant_name is None:
+            raise PluginConfigurationException('Tenant parameter is missing')
+        if self.keystone_url is None:
+            raise PluginConfigurationException('KeystoneUrl parameter is missing')
+
+        self.os_client = OSClient(self.username, self.password,
+                                  self.tenant_name, self.keystone_url,
+                                  self.region, self.timeout, self.logger,
                                   self.max_retries)
 
-    def read_callback(self):
-        """ Wrapper method
-
-            This method calls the actual method which performs
-            collection.
-        """
-
-        try:
-            self.collect()
-        except Exception as e:
-            msg = '{}: fail to get metrics: {}: {}'.format(
-                self.service_name or self.plugin, e, traceback.format_exc())
-            self.logger.error(msg)
-
-    def collect(self):
-        """ Read metrics and dispatch values
-
-            This method should be overriden by the derived classes.
-        """
-
-        raise 'collect() method needs to be overriden!'
-
     def get_objects(self, project, object_name, api_version='',
-                    params='all_tenants=1'):
+                    params=None, detail=False, since=False):
         """ Return a list of OpenStack objects
-
-            See get_objects_details()
-        """
-        return self._get_objects(project, object_name, api_version, params,
-                                 False)
-
-    def get_objects_details(self, project, object_name, api_version='',
-                            params='all_tenants=1'):
-        """ Return a list of details about OpenStack objects
 
             The API version is not always included in the URL endpoint
             registered in Keystone (eg Glance). In this case, use the
             api_version parameter to specify which version should be used.
-        """
-        return self._get_objects(project, object_name, api_version, params,
-                                 True)
 
-    def _get_objects(self, project, object_name, api_version, params, detail):
+        """
+        self.changes_since = since
+        if params is None:
+            params = {}
+
         if api_version:
             resource = '%s/%s' % (api_version, object_name)
         else:
             resource = '%s' % (object_name)
+
         if detail:
-            resource = '%s/detail' % (resource)
-        if params:
-            resource = '%s?%s' % (resource, params)
-        # TODO(scroiset): use pagination to handle large collection
-        r = self.get(project, resource)
-        if not r or object_name not in r.json():
-            self.logger.warning('Could not find %s %s' % (project,
-                                                          object_name))
+            resource = '{}/detail'.format(resource)
+
+        opts = {}
+        if self.pagination_limit:
+            opts['limit'] = self.pagination_limit
+
+        opts.update(params)
+
+        def openstack_api_poller():
+            _objects = []
+            _opts = {}
+            _opts.update(opts)
+
+            if self.changes_since and self._last_run:
+                _opts['changes-since'] = self._last_run.isoformat()
+
+            # Keep track of the initial request time
+            last_run = datetime.datetime.now(tz=dateutil.tz.tzutc())
+            has_failure = False
+
+            while True:
+                r = self.get(project, resource, params=_opts)
+                if not r or object_name not in r.json():
+                    has_failure = True
+                    if r is None:
+                        err = ''
+                    else:
+                        err = r.text
+                    self.collectd.warning('Could not find {}: {} {}'.format(
+                        project, object_name, err
+                    ))
+                    # Avoid to provide incomplete data by reseting current
+                    # set.
+                    _objects = []
+                    break
+
+                resp = r.json()
+                bulk_objs = resp.get(object_name)
+                if not bulk_objs:
+                    # emtpy list
+                    break
+
+                _objects.extend(bulk_objs)
+
+                if self.pagination_limit is None:
+                    break
+
+                links = resp.get('{}_links'.format(object_name), [])
+                # Glance has not <object>_links section but a 'next' item
+                has_next = len(
+                    [i for i in links if i.get('rel') == 'next']) > 0 or \
+                    resp.get('next')
+
+                if has_next:
+                    _opts['marker'] = bulk_objs[-1]['id']
+                else:
+                    # all data has been read
+                    break
+
+            if not has_failure:
+                self._last_run = last_run
+
+            return _objects
+
+        poller_id = '{}:{}'.format(project, resource)
+        if poller_id not in self._threads:
+            t = base.AsyncPoller(self.collectd,
+                                 openstack_api_poller,
+                                 self.polling_interval,
+                                 poller_id, self.changes_since)
+            t.start()
+            self._threads[poller_id] = t
+
+        t = self._threads[poller_id]
+        if not t.is_alive():
+            self.logger.warning("Unexpected end of the thread {}".format(
+                t.name))
+            del self._threads[poller_id]
             return []
-        return r.json().get(object_name)
+
+        return t.results
 
     def count_objects_group_by(self,
                                list_object,
@@ -351,3 +447,10 @@ class CollectdPlugin(base.Base):
                 # Ignore when count_func() doesn't return a number
                 pass
         return counts
+
+    def shutdown_callback(self):
+        for tid, t in self._threads.items():
+            if t.is_alive():
+                self.logger.info('Waiting for {} thread to finish'.format(tid))
+                t.stop()
+                t.join()

@@ -14,11 +14,14 @@
 # limitations under the License.
 #
 # Collectd plugin for getting statistics from Keystone
-import collectd
+if __name__ == '__main__':
+    import collectd_fake as collectd
+else:
+    import collectd
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'keystone'
+PLUGIN_NAME = 'openstack_keystone'
 INTERVAL = openstack.INTERVAL
 
 
@@ -29,21 +32,30 @@ class KeystoneStatsPlugin(openstack.CollectdPlugin):
         number of roles
     """
 
-    def collect(self):
+    def __init__(self, *args, **kwargs):
+        super(KeystoneStatsPlugin, self).__init__(*args, **kwargs)
+        self.plugin = PLUGIN_NAME
+        self.interval = INTERVAL
+
+    def itermetrics(self):
 
         def groupby(d):
             return 'enabled' if d.get('enabled') else 'disabled'
 
         # tenants
-        r = self.get('keystone', 'tenants')
+        r = self.get('keystone', 'projects')
         if not r:
             self.logger.warning('Could not find Keystone tenants')
             return
-        tenants_details = r.json().get('tenants', [])
+        tenants_details = r.json().get('projects', [])
         status = self.count_objects_group_by(tenants_details,
                                              group_by_func=groupby)
         for s, nb in status.iteritems():
-            self.dispatch_value('tenants', nb, meta={'state': s})
+            yield {
+                'plugin_instance': 'tenants',
+                'values': nb,
+                'meta': {'state': s, 'discard_hostname': True},
+            }
 
         # users
         r = self.get('keystone', 'users')
@@ -54,29 +66,26 @@ class KeystoneStatsPlugin(openstack.CollectdPlugin):
         status = self.count_objects_group_by(users_details,
                                              group_by_func=groupby)
         for s, nb in status.iteritems():
-            self.dispatch_value('users', nb, meta={'state': s})
+            yield {
+                'plugin_instance': 'users',
+                'values': nb,
+                'meta': {'state': s, 'discard_hostname': True},
+            }
 
         # roles
-        r = self.get('keystone', 'OS-KSADM/roles')
+        r = self.get('keystone', 'roles')
         if not r:
             self.logger.warning('Could not find Keystone roles')
             return
         roles = r.json().get('roles', [])
-        self.dispatch_value('roles', len(roles))
+        yield {
+            'plugin_instance': 'roles',
+            'values': len(roles),
+            'meta': {'discard_hostname': True},
+        }
 
-    def dispatch_value(self, name, value, meta=None):
-        v = collectd.Values(
-            plugin=PLUGIN_NAME,  # metric source
-            type='gauge',
-            type_instance=name,
-            interval=INTERVAL,
-            # w/a for https://github.com/collectd/collectd/issues/716
-            meta=meta or {'0': True},
-            values=[value]
-        )
-        v.dispatch()
-
-plugin = KeystoneStatsPlugin(collectd, PLUGIN_NAME)
+plugin = KeystoneStatsPlugin(collectd, PLUGIN_NAME,
+                             disable_check_metric=True)
 
 
 def config_callback(conf):
@@ -90,6 +99,10 @@ def notification_callback(notification):
 def read_callback():
     plugin.conditional_read_callback()
 
-collectd.register_config(config_callback)
-collectd.register_notification(notification_callback)
-collectd.register_read(read_callback, INTERVAL)
+if __name__ == '__main__':
+    collectd.load_configuration(plugin)
+    plugin.read_callback()
+else:
+    collectd.register_config(config_callback)
+    collectd.register_notification(notification_callback)
+    collectd.register_read(read_callback, INTERVAL)

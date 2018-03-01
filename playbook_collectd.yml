@@ -17,12 +17,12 @@
   hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
   user: root
- 
+
   roles:
     - collectd
 
   post_tasks:
-    
+    # Best is to use post tasks to install non default collectd plugins
     - name: Configure OpenStack Collectd plugins
       template:
         src: templates/collectd/openstack_plugin.conf.j2
@@ -35,13 +35,19 @@
         dest: "{{ collectd_plugins_prefix }}/libvirt_plugins.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
+    - name: Configure Libvirt Check plugin
+      template:
+        src: templates/collectd/libvirt_check_plugins.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/libvirt_check_plugins.conf"
+        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
+      notify: collectd restart
     - name: Configure Network Collectd plugin
       template:
-        src: templates/collectd/telegraf_plugin.conf.j2
-        dest: "{{ collectd_plugins_prefix }}/telegraf_plugin.conf"
+        src: templates/collectd/network_plugin.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/network_plugin.conf"
         validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
       notify: collectd restart
-    - name: Copy python modules
+    - name: Copy all python modules
       copy:
         src: files/collectd-modules
         dest: "{{ collectd_plugins_dir }}"
@@ -53,6 +59,9 @@
     - name: collectd restart
       service: name=collectd state=restarted
   
+  vars:
+    - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+
   vars_files:
     - vars/main.yml
     - vars/collectd.yml

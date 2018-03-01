@@ -17,7 +17,5 @@
 monitoring_user_name: "monito"
 monitoring_tenant_name: "service"
 monitoring_user_role_name: "admin"
-
 monitoring_influxdb_name: "telegraf"
-
-nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+monitoring_prometheus_enabled: false

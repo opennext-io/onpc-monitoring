@@ -14,12 +14,19 @@
 # limitations under the License.
 #
 # Collectd plugin for getting resource statistics from Glance
-import collectd
+if __name__ == '__main__':
+    import collectd_fake as collectd
+else:
+    import collectd
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'glance'
+PLUGIN_NAME = 'openstack_glance'
 INTERVAL = openstack.INTERVAL
+image_types = ('snapshots', 'images')
+visibilities = ('public', 'private', 'community', 'shared')
+statuses = ('active', 'queued', 'saving', 'killed', 'deleted',
+            'deactivated', 'pending_delete')
 
 
 class GlanceStatsPlugin(openstack.CollectdPlugin):
@@ -29,60 +36,82 @@ class GlanceStatsPlugin(openstack.CollectdPlugin):
         total size of images usable and in error state
     """
 
-    def collect(self):
+    def __init__(self, *args, **kwargs):
+        super(GlanceStatsPlugin, self).__init__(*args, **kwargs)
+        self.plugin = PLUGIN_NAME
+        self.interval = INTERVAL
+        self.pagination_limit = 25
+
+    @staticmethod
+    def gen_metric(name, nb, visibility, state):
+        return {
+            'plugin_instance': name,
+            'values': nb,
+            'meta': {
+                'visibility': visibility,
+                'state': state,
+                'discard_hostname': True,
+            }
+        }
+
+    def itermetrics(self):
 
         def is_snap(d):
-            return d.get('properties', {}).get('image_type') == 'snapshot'
+            return d.get('image_type') == 'snapshot'
 
         def groupby(d):
-            p = 'public' if d.get('is_public', True) else 'private'
+            p = d['visibility']
             status = d.get('status', 'unknown').lower()
             if is_snap(d):
                 return 'snapshots.%s.%s' % (p, status)
             return 'images.%s.%s' % (p, status)
 
-        images_details = self.get_objects_details('glance', 'images',
-                                                  api_version='v1',
-                                                  params='is_public=None')
-        status = self.count_objects_group_by(images_details,
-                                             group_by_func=groupby)
-        for s, nb in status.iteritems():
-            (name, visibility, status) = s.split('.')
-            self.dispatch_value(name, nb, meta={'visibility': visibility,
-                                                'status': status})
+        images_details = self.get_objects('glance', 'images',
+                                          api_version='v2',
+                                          params={},
+                                          detail=False)
+        img_status = self.count_objects_group_by(images_details,
+                                                 group_by_func=groupby)
+        for name in image_types:
+            for visibility in visibilities:
+                for status in statuses:
+                    nb = img_status.get('{}.{}.{}'.format(name,
+                                                          visibility,
+                                                          status),
+                                        0)
+                    yield GlanceStatsPlugin.gen_metric(name,
+                                                       nb,
+                                                       visibility,
+                                                       status)
 
         # sizes
         def count_size_bytes(d):
             return d.get('size', 0)
 
         def groupby_size(d):
-            p = 'public' if d.get('is_public', True) else 'private'
+            p = d['visibility']
             status = d.get('status', 'unknown').lower()
             if is_snap(d):
                 return 'snapshots_size.%s.%s' % (p, status)
             return 'images_size.%s.%s' % (p, status)
 
-        sizes = self.count_objects_group_by(images_details,
-                                            group_by_func=groupby_size,
-                                            count_func=count_size_bytes)
-        for s, nb in sizes.iteritems():
-            (name, visibility, status) = s.split('.')
-            self.dispatch_value(name, nb, meta={'visibility': visibility,
-                                                'status': status})
+        img_sizes = self.count_objects_group_by(images_details,
+                                                group_by_func=groupby_size,
+                                                count_func=count_size_bytes)
+        for name in image_types:
+            for visibility in visibilities:
+                for status in statuses:
+                    nb = img_sizes.get('{}_size.{}.{}'.format(name,
+                                                              visibility,
+                                                              status),
+                                       0)
+                    yield GlanceStatsPlugin.gen_metric('{}_size'.format(name),
+                                                       nb,
+                                                       visibility,
+                                                       status)
 
-    def dispatch_value(self, name, value, meta=None):
-        v = collectd.Values(
-            plugin=PLUGIN_NAME,  # metric source
-            type='gauge',
-            type_instance=name,
-            interval=INTERVAL,
-            # w/a for https://github.com/collectd/collectd/issues/716
-            meta=meta or {'0': True},
-            values=[value]
-        )
-        v.dispatch()
 
-plugin = GlanceStatsPlugin(collectd, PLUGIN_NAME)
+plugin = GlanceStatsPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)
 
 
 def config_callback(conf):
@@ -96,6 +125,16 @@ def notification_callback(notification):
 def read_callback():
     plugin.conditional_read_callback()
 
-collectd.register_config(config_callback)
-collectd.register_notification(notification_callback)
-collectd.register_read(read_callback, INTERVAL)
+
+if __name__ == '__main__':
+    import time
+    collectd.load_configuration(plugin)
+    plugin.read_callback()
+    collectd.info('Sleeping for {}s'.format(INTERVAL))
+    time.sleep(INTERVAL)
+    plugin.read_callback()
+    plugin.shutdown_callback()
+else:
+    collectd.register_config(config_callback)
+    collectd.register_notification(notification_callback)
+    collectd.register_read(read_callback, INTERVAL)

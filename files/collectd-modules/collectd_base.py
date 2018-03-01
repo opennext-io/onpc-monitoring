@@ -17,9 +17,12 @@ from functools import wraps
 import json
 import signal
 import subprocess
+import threading
 import time
 import traceback
 
+
+TIMEOUT_BIN = '/usr/bin/timeout'
 
 INTERVAL = 10
 
@@ -48,7 +51,8 @@ class Base(object):
 
     MAX_IDENTIFIER_LENGTH = 63
 
-    def __init__(self, collectd, service_name=None, local_check=True):
+    def __init__(self, collectd, service_name=None, local_check=True,
+                 disable_check_metric=False):
         self.debug = False
         self.timeout = 5
         self.max_retries = 3
@@ -61,12 +65,13 @@ class Base(object):
         self.do_collect_data = True
 
         self.service_name = service_name
-        self.local_check = True
+        self.local_check = local_check
+        self.disable_check_metric = disable_check_metric
 
     def config_callback(self, conf):
         for node in conf.children:
             if node.key == "Debug":
-                if node.values[0] in ['True', 'true']:
+                if node.values[0].lower() == 'true':
                     self.debug = True
             elif node.key == "Timeout":
                 self.timeout = int(node.values[0])
@@ -74,6 +79,9 @@ class Base(object):
                 self.max_retries = int(node.values[0])
             elif node.key == 'DependsOnResource':
                 self.depends_on_resource = node.values[0]
+            elif node.key == 'DisableCheckMetric':
+                if node.values[0].lower() == 'true':
+                    self.disable_check_metric = True
 
     @read_callback_wrapper
     def conditional_read_callback(self):
@@ -94,11 +102,17 @@ class Base(object):
         else:
             self.dispatch_check_metric(self.OK)
 
-    def dispatch_check_metric(self, check, failure=None):
+    def dispatch_check_metric(self, value, failure=None):
+        """Send a check metric reporting whether or not the plugin succeeded
+
+        """
+        if self.disable_check_metric:
+            return
+
         metric = {
             'meta': {'service_check': self.service_name or self.plugin,
                      'local_check': self.local_check},
-            'values': check,
+            'values': value,
         }
 
         if failure is not None:
@@ -110,9 +124,10 @@ class Base(object):
         """Iterate over the collected metrics
 
         This class must be implemented by the subclass and should yield dict
-        objects that represent the collected values. Each dict has 6 keys:
+        objects that represent the collected values. Each dict has 7 keys:
             - 'values', a scalar number or a list of numbers if the type
             defines several datasources.
+            - 'plugin' (optional)
             - 'type_instance' (optional)
             - 'plugin_instance' (optional)
             - 'type' (optional, default='gauge')
@@ -127,7 +142,7 @@ class Base(object):
                 'meta':   {'tagA': 'valA'}}
             {'type': 'dropped_bytes', 'values': [1,2]}
         """
-        raise NotImplemented("Must be implemented by the subclass!")
+        raise NotImplementedError("Must be implemented by the subclass!")
 
     def dispatch_metric(self, metric):
         values = metric['values']
@@ -141,11 +156,12 @@ class Base(object):
                 (self.plugin, type_instance[:24], len(type_instance),
                  self.MAX_IDENTIFIER_LENGTH))
 
+        plugin_instance = metric.get('plugin_instance') or self.plugin_instance
         v = self.collectd.Values(
-            plugin=self.plugin,
+            plugin=metric.get('plugin') or self.plugin,
             host=metric.get('hostname', ''),
             type=metric.get('type', 'gauge'),
-            plugin_instance=self.plugin_instance,
+            plugin_instance=plugin_instance,
             type_instance=type_instance,
             values=values,
             # w/a for https://github.com/collectd/collectd/issues/716
@@ -153,7 +169,8 @@ class Base(object):
         )
         v.dispatch()
 
-    def execute(self, cmd, shell=True, cwd=None, log_error=True):
+    def execute(self, cmd, shell=True, cwd=None, log_error=True,
+                signal='TERM'):
         """Executes a program with arguments.
 
         Args:
@@ -165,6 +182,8 @@ class Base(object):
             (default=None).
             log_error: whether to log an error when the command returned a
             non-zero status code (default=True).
+            signal: the signal used to kill the command if the timeout occurs
+            (default TERM).
 
         Returns:
             A tuple containing the return code, the standard output and the
@@ -175,9 +194,12 @@ class Base(object):
             (-1, None, None) if the program couldn't be executed at all.
         """
         start_time = time.time()
+        full_cmd = [TIMEOUT_BIN, '-k', '1', '-s', signal, str(self.timeout)]
+        full_cmd.extend(cmd)
+
         try:
             proc = subprocess.Popen(
-                cmd,
+                full_cmd,
                 cwd=cwd,
                 shell=shell,
                 stdout=subprocess.PIPE,
@@ -187,18 +209,30 @@ class Base(object):
             stdout = stdout.rstrip('\n')
         except Exception as e:
             self.logger.error("Cannot execute command '%s': %s : %s" %
-                              (cmd, str(e), traceback.format_exc()))
+                              (full_cmd, str(e), traceback.format_exc()))
             return (-1, None, None)
 
         returncode = proc.returncode
 
-        if returncode != 0 and log_error:
-            self.logger.error("Command '%s' failed (return code %d): %s" %
-                              (cmd, returncode, stderr))
+        if returncode != 0:
+            # timeout command returns usually 124 (TERM) or 137 (KILL) when the
+            # timeout occurs.
+            # But for some reason, python subprocess rewrites the return
+            # code with the (negative) signal sent when the the signal is not
+            # catched by the process.
+            if returncode == 124 or returncode < 0:
+                stderr = 'timeout {}s'.format(self.timeout)
+                msg = "Command '{}' timeout {}s".format(cmd, self.timeout)
+            else:
+                msg = "Command '{}' failed (return code {}): {}".format(
+                    cmd, returncode, stderr)
+
+            if log_error:
+                self.logger.error(msg)
         if self.debug:
             elapsedtime = time.time() - start_time
             self.logger.info("Command '%s' returned %s in %0.3fs" %
-                             (cmd, returncode, elapsedtime))
+                             (full_cmd, returncode, elapsedtime))
 
         return (returncode, stdout, stderr)
 
@@ -256,6 +290,9 @@ class Base(object):
                                    (self.__class__.__name__, do_collect_data))
             self.do_collect_data = do_collect_data
 
+    def shutdown_callback(self):
+        pass
+
 
 class CephBase(Base):
 
@@ -270,3 +307,71 @@ class CephBase(Base):
             if node.key == "Cluster":
                 self.cluster = node.values[0]
         self.plugin_instance = self.cluster
+
+
+class AsyncPoller(threading.Thread):
+    """Execute an independant thread to execute a function periodically
+
+       Args:
+           collectd: used for logging
+           polling_function: a function to execute periodically
+           interval: the interval in second
+           name: (optional) the name of the thread
+           reset_on_read: (default False) if True, all results returned by the
+                          polling_function() are accumulated until they are
+                          read.
+    """
+
+    def __init__(self, collectd, polling_function, interval, name=None,
+                 reset_on_read=False):
+        super(AsyncPoller, self).__init__(name=name)
+        self.collectd = collectd
+        self.polling_function = polling_function
+        self.interval = interval
+        self._results = []
+        self._reset_on_read = reset_on_read
+        self._stop_flag = threading.Event()
+
+    def run(self):
+        self.collectd.info('Starting thread {}'.format(self.name))
+        while self.should_run:
+            try:
+                started_at = time.time()
+
+                self.results = self.polling_function()
+                tosleep = self.interval - (time.time() - started_at)
+                if tosleep > 0:
+                    self.collectd.debug('Sleeping for {}s'.format(tosleep))
+                    time.sleep(tosleep)
+                else:
+                    self.collectd.warning(
+                        'Polling task lasted longer than {}s for {}'.format(
+                            self.interval, self.name
+                        )
+                    )
+
+            except Exception as e:
+                self.results = []
+                self.collectd.error('{} fails: {}'.format(self.name, e))
+                time.sleep(10)
+
+    @property
+    def results(self):
+        r = self._results
+        if self._reset_on_read:
+            self._results = []
+        return r
+
+    @results.setter
+    def results(self, value):
+        if self._reset_on_read:
+            self._results.extend(value)
+        else:
+            self._results = value
+
+    def stop(self):
+        self._stop_flag.set()
+
+    @property
+    def should_run(self):
+        return not self._stop_flag.isSet()

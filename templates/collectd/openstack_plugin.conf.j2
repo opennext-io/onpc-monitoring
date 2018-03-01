@@ -22,19 +22,9 @@
     Username "{{ monitoring_user_name }}"
   </Module>
 
-  Import "http_check"
+  Import "openstack_compute_stats"
 
-  <Module "http_check">
-    DependsOnResource "internal_lb_vip_address"
-    ExpectedCode "influxdb" "204"
-    MaxRetries "3"
-    Timeout "1"
-    Url "influxdb" "{{ influxdb_service_internalurl }}"
-  </Module>
-
-  Import "compute_stats"
-
-  <Module "compute_stats">
+  <Module "openstack_compute_stats">
     CpuAllocationRatio "8.0"
     DependsOnResource "internal_lb_vip_address"
     KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"

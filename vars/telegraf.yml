@@ -1,3 +1,17 @@
+---
+# Copyright 2018, OpenNext SAS
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Global tags
 telegraf_global_tags:
@@ -23,38 +37,86 @@ telegraf_agent_output:
       - precision: "s"
       - write_consistency: "any"
       - timeout: "5s"
-
-# Prometheus Client Outputs Plugin
-# outputs_prometheus_client_listen: ":9126"
-# outputs_prometheus_client_expiration_interval: "60s"
-# - type: prometheus_client
-#   config:
-#     - listen: "{{ outputs_prometheus_client_listen | default(':9126') }}"
-#     - expiration_interval: "{{ outputs_prometheus_client_expiration_interval | default('60s') }}"
+  {%- if monitoring_prometheus_enabled | bool)  %}
+  - type: prometheus_client
+    config:
+      - listen: "{{ outputs_prometheus_client_listen | default(':9126') }}"
+      - expiration_interval: "{{ outputs_prometheus_client_expiration_interval | default('60s') }}"
+  {%- endif %}
 
 {% if inventory_hostname in groups['all_containers'] %}
+telegraf_plugins_default:
+  - plugin: cpu
+    config:
+      - percpu: false
+  - plugin: io
+  - plugin: mem
+  - plugin: system
+  - plugin: netstat
+  - plugin: net
+  - plugin: diskio
+{% else %}
 telegraf_plugins_default:
   - plugin: processes
   - plugin: cpu
     config:
-      - percpu = true
+      - percpu: true
+      - totalcpu: true
   - conntrack:
     config:
       - files: ["ip_conntrack_count","ip_conntrack_max", "nf_conntrack_count","nf_conntrack_max"]
       - dirs: ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]    
   - plugin: disk
+    config:
+      ignore_fs: ["tmpfs", "devtmpfs"]
+      - mount_points: ["/","/var/lib/machines","/var/lib/nova/instances","/srv/swift[1-9]"]
+  - plugin: diskio
   - plugin: io
   - plugin: mem
   - plugin: system
   - plugin: swap
   - plugin: netstat
   - plugin: net
-{% else %}
-
+    config:
+      - interfaces: ["eth*","enp0s*","lo","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0" ]
+  - plugin: bond
+  - plugin: kernel
 {% endif %}
 
-## HAProxy variables for telegraf
-haproxy_stats_enabled: True
-haproxy_stats_bind_address: 127.0.0.1
-haproxy_stats_port: 1936
-haproxy_username: admin
+telegraf_plugins_extra:
+  {%- (if inventory_hostname in groups['collectd'] or if inventory_hostname in groups['nova_compute'])
+         and (nova_virt_type | default('qemu') in ['kvm', 'qemu']) %}
+  - socket_listener:
+    config:
+      - service_address: "udp://127.0.0.1:25826"
+      - name_prefix: "collectd_"
+      - data_format: "collectd"
+      - collectd_typesdb: "{{ collectd_types_db_path }}"
+  {%- endif %}
+  {%- if inventory_hostname in groups['haproxy'] and (haproxy_stats_enabled | bool) %}
+  - haproxy:
+    config:
+      - servers: ["https://{{haproxy_username}}:{{ haproxy_stats_password }}@{{ haproxy_stats_bind_address }}:{{ haproxy_stats_port }}/haproxy?stats"]
+      - insecure_skip_verify: true
+  {%- endif %}
+  {%- if inventory_hostname in groups['swift-proxy_containers'] %}
+  - statsd:
+    config:
+      - service_address: ":8125"
+      - metric_separator: "."
+      - templates: [
+          "*.swift.proxy-server.*.*.*.* host.measurement.measurement.measurement.method.returncode.field*",
+          "*.swift.proxy-server.*.policy.*.*.*.* host.measurement.measurement.measurement.measurement.measurement.method.returncode.field*",
+        ]
+  {%- endif %}
+  {%- if inventory_hostname in groups['memcached'] %}
+  - memcached:
+    config:
+      - servers: ["localhost:11211"]
+  {%- endif %}
+  {%- if inventory_hostname in groups['galera'] %}
+  - mysql:
+    config:
+      - servers: ["{{ galera_root_user }}:{{ galera_root_password }}@tcp(127.0.0.1:3306)/"]
+      - table_schema_databases: []
+  {%- endif %}

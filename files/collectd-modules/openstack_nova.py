@@ -14,84 +14,77 @@
 # limitations under the License.
 #
 # Collectd plugin for getting statistics from Nova
-import collectd
-from collections import Counter
-from collections import defaultdict
-import re
+if __name__ == '__main__':
+    import collectd_fake as collectd
+else:
+    import collectd
 
 import collectd_openstack as openstack
+from itertools import groupby
 
-PLUGIN_NAME = 'nova'
+
+PLUGIN_NAME = 'openstack_nova'
 INTERVAL = openstack.INTERVAL
+server_statuses = ('active', 'building', 'deleted', 'error',
+                   'hard_reboot', 'migrating', 'password',
+                   'paused', 'reboot', 'rebuild', 'rescued',
+                   'resized', 'revert_resize', 'soft_deleted',
+                   'stopped', 'suspended', 'unknown', 'verify_resize')
 
 
-class NovaStatsPlugin(openstack.CollectdPlugin):
-    """ Class to report the statistics on Nova service.
+class NovaInstanceStatsPlugin(openstack.CollectdPlugin):
+    """ Class to report the statistics on Nova instances.
 
-        status per service and number of instances broken down by state
+        Number of instances broken down by state
     """
+    def __init__(self, *args, **kwargs):
+        super(NovaInstanceStatsPlugin, self).__init__(*args, **kwargs)
+        self.plugin = PLUGIN_NAME
+        self.interval = INTERVAL
+        self.pagination_limit = 500
+        self._cache = {}
 
-    states = {'up': 0, 'down': 1, 'disabled': 2}
-    nova_re = re.compile('^nova-')
+    @staticmethod
+    def gen_metric(name, nb, state):
+        return {
+            'plugin_instance': name,
+            'values': nb,
+            'meta': {
+                'state': state,
+                'discard_hostname': True,
+            }
+        }
 
-    def collect(self):
+    def itermetrics(self):
+        server_details = self.get_objects('nova', 'servers',
+                                          params={'all_tenants': 1},
+                                          detail=True, since=True)
 
-        # Get information of the state per service
-        # State can be: 'up', 'down' or 'disabled'
-        aggregated_workers = defaultdict(Counter)
+        for server in server_details:
+            _id = server.get('id')
+            status = server.get('status', 'unknown').lower()
+            if status == 'deleted':
+                try:
+                    self.logger.debug(
+                        'remove deleted instance {} from cache'.format(_id))
+                    del self._cache[_id]
+                except KeyError:
+                    self.logger.warning(
+                        'cannot find instance in cache {}'.format(_id))
+            else:
+                self._cache[_id] = status
 
-        for worker in self.iter_workers('nova'):
-            host = worker['host'].split('.')[0]
-            service = self.nova_re.sub('', worker['service'])
-            state = worker['state']
+        servers = sorted(self._cache.values())
+        servers_status = {s: list(g) for s, g in groupby(servers)}
+        for status in server_statuses:
+            nb = len(servers_status.get(status, []))
+            yield NovaInstanceStatsPlugin.gen_metric('instances',
+                                                     nb,
+                                                     status)
 
-            aggregated_workers[service][state] += 1
-            self.dispatch_value('nova_service', '',
-                                self.states[state],
-                                {'host': host,
-                                 'service': service,
-                                 'state': state})
 
-        for service in set(aggregated_workers.keys()).union(
-                ('compute', 'scheduler', 'conductor', 'cert', 'consoleauth')):
-
-            total = sum(aggregated_workers[service].values())
-
-            for state in self.states:
-                prct = 0
-                if total > 0:
-                    prct = (100.0 * aggregated_workers[service][state]) / total
-
-                self.dispatch_value('nova_services_percent', '',
-                                    prct,
-                                    {'state': state, 'service': service})
-
-                self.dispatch_value('nova_services', '',
-                                    aggregated_workers[service][state],
-                                    {'state': state, 'service': service})
-        servers_details = self.get_objects_details('nova', 'servers')
-
-        def groupby(d):
-            return d.get('status', 'unknown').lower()
-        status = self.count_objects_group_by(servers_details,
-                                             group_by_func=groupby)
-        for s, nb in status.iteritems():
-            self.dispatch_value('instances', s, nb)
-
-    def dispatch_value(self, plugin_instance, name, value, meta=None):
-        v = collectd.Values(
-            plugin=PLUGIN_NAME,  # metric source
-            plugin_instance=plugin_instance,
-            type='gauge',
-            type_instance=name,
-            interval=INTERVAL,
-            # w/a for https://github.com/collectd/collectd/issues/716
-            meta=meta or {'0': True},
-            values=[value]
-        )
-        v.dispatch()
-
-plugin = NovaStatsPlugin(collectd, PLUGIN_NAME)
+plugin = NovaInstanceStatsPlugin(collectd, PLUGIN_NAME,
+                                 disable_check_metric=True)
 
 
 def config_callback(conf):
@@ -105,6 +98,16 @@ def notification_callback(notification):
 def read_callback():
     plugin.conditional_read_callback()
 
-collectd.register_config(config_callback)
-collectd.register_notification(notification_callback)
-collectd.register_read(read_callback, INTERVAL)
+
+if __name__ == '__main__':
+    import time
+    collectd.load_configuration(plugin)
+    plugin.read_callback()
+    collectd.info('Sleeping for {}s'.format(INTERVAL))
+    time.sleep(INTERVAL)
+    plugin.read_callback()
+    plugin.shutdown_callback()
+else:
+    collectd.register_config(config_callback)
+    collectd.register_notification(notification_callback)
+    collectd.register_read(read_callback, INTERVAL)

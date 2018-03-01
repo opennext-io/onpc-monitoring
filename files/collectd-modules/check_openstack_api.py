@@ -49,6 +49,13 @@ class APICheckPlugin(openstack.CollectdPlugin):
             'path': 'healthcheck', 'expect': [200], 'name': 'swift-s3-api'},
     }
 
+    def __init__(self, *args, **kwargs):
+        super(APICheckPlugin, self).__init__(*args, **kwargs)
+        self.plugin = PLUGIN_NAME
+        self.interval = INTERVAL
+        self.timeout = 2
+        self.max_retries = 1
+
     def _service_url(self, endpoint, path):
         url = urlparse(endpoint)
         u = '%s://%s' % (url.scheme, url.netloc)
@@ -94,24 +101,21 @@ class APICheckPlugin(openstack.CollectdPlugin):
                 'region': service['region']
             }
 
-    def collect(self):
+    def itermetrics(self):
         for item in self.check_api():
-            if item['status'] == self.UNKNOWN:
+            if item['status'] != self.UNKNOWN:
                 # skip if status is UNKNOWN
-                continue
-
-            value = collectd.Values(
-                plugin=PLUGIN_NAME,
-                plugin_instance=item['service'],
-                type='gauge',
-                interval=INTERVAL,
-                values=[item['status']],
-                meta={'region': item['region']}
-            )
-            value.dispatch()
+                yield {
+                    'values': item['status'],
+                    'meta': {
+                        'region': item['region'],
+                        'service': item['service'],
+                        'discard_hostname': True,
+                    },
+                }
 
 
-plugin = APICheckPlugin(collectd, PLUGIN_NAME)
+plugin = APICheckPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)
 
 
 def config_callback(conf):
