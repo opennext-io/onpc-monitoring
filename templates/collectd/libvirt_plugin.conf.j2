@@ -2,7 +2,10 @@
 # Do NOT modify this file by hand!
 
 
-{% if inventory_hostname in groups['nova_compute'] and (nova_virt_type | default('qemu') in ['kvm', 'qemu']) %}
+{%- if inventory_hostname in groups['collectd'] or
+      (inventory_hostname in groups['nova_compute'] and
+      (nova_virt_type | default('qemu') in ['kvm', 'qemu'])) %}
+
 # Plugin to check the availability of libvirt.
 # The hypervisor connection URI default is 'qemu:///system'
 <LoadPlugin virt>
@@ -17,4 +20,4 @@
   Instances {{ collectd_readthreads }}
   ExtraStats "cpu_util" "disk" "disk_err" "vcpupin"
 </Plugin>
-{% endif %}
+{%- endif %}
