@@ -8,9 +8,6 @@
 
 # Plugin to check the availability of libvirt.
 # The hypervisor connection URI default is 'qemu:///system'
-<LoadPlugin python>
-  Globals true
-</LoadPlugin>
 
 <Plugin "python">
   ModulePath "{{ collectd_plugins_dir }}/collectd-modules"
@@ -20,7 +17,7 @@
   Import "libvirt_check"
 
   <Module "libvirt_check">
-    Connection "qemu:///system"
+    Uri "qemu:///system"
   </Module>
 </Plugin>
 {%- endif %}
