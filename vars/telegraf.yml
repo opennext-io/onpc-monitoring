@@ -84,8 +84,9 @@ telegraf_plugins_default:
 {% endif %}
 
 telegraf_plugins_extra:
-  {%- (if inventory_hostname in groups['collectd'] or if inventory_hostname in groups['nova_compute'])
-         and (nova_virt_type | default('qemu') in ['kvm', 'qemu']) %}
+  {%- (if inventory_hostname in groups['collectd'] or
+         (if inventory_hostname in groups['nova_compute'])
+         and (nova_virt_type | default('qemu') in ['kvm', 'qemu'])) %}
   - socket_listener:
     config:
       - service_address: "udp://127.0.0.1:25826"
@@ -112,11 +113,29 @@ telegraf_plugins_extra:
   {%- if inventory_hostname in groups['memcached'] %}
   - memcached:
     config:
-      - servers: ["localhost:11211"]
+      - servers: ["127.0.0.1:11211"]
   {%- endif %}
   {%- if inventory_hostname in groups['galera'] %}
   - mysql:
     config:
       - servers: ["{{ galera_root_user }}:{{ galera_root_password }}@tcp(127.0.0.1:3306)/"]
       - table_schema_databases: []
+  {%- endif %}
+  {%- if inventory_hostname in groups['influxdb'] %}
+  - influxdb:
+    config:
+      - urls: ["http://127.0.0.1:8086/debug/vars"]
+      - timeout: "5s"
+  {%- endif %}
+  {%- if inventory_hostname in groups['rabbitmq'] %}
+  - procstat:
+    config:
+      - systemd_unit: "rabbitmq-server.service"
+      - prefix: "rabbitmq"
+  - rabbitmq:
+    config:
+      - url: "http://127.0.0.1:15672"
+      - username: "guest"
+      - password: "guest"
+      - prefix: "test_foo"
   {%- endif %}

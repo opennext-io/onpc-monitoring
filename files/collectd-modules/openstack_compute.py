@@ -14,11 +14,14 @@
 # limitations under the License.
 #
 # Collectd plugin for getting hypervisor statistics from Nova
-import collectd
+if __name__ == '__main__':
+    import collectd_fake as collectd
+else:
+    import collectd
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'compute_stats'
+PLUGIN_NAME = 'openstack_compute'
 INTERVAL = openstack.INTERVAL
 
 
@@ -27,12 +30,23 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
     VALUE_MAP = {
         'current_workload': 'running_tasks',
         'running_vms': 'running_instances',
-        'local_gb_used': 'used_disk_GB',
-        'free_disk_gb': 'free_disk_GB',
-        'memory_mb_used': 'used_ram_MB',
-        'free_ram_mb': 'free_ram_MB',
+        'local_gb_used': 'used_disk',
+        'free_disk_gb': 'free_disk',
+        'memory_mb_used': 'used_ram',
+        'free_ram_mb': 'free_ram',
         'vcpus_used': 'used_vcpus',
     }
+    UNIT_MAP = {
+        'local_gb_used': 'GB',
+        'free_disk_gb': 'GB',
+        'memory_mb_used': 'MB',
+        'free_ram_mb': 'MB',
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(HypervisorStatsPlugin, self).__init__(*args, **kwargs)
+        self.plugin = PLUGIN_NAME
+        self.interval = INTERVAL
 
     def config_callback(self, config):
         super(HypervisorStatsPlugin, self).config_callback(config)
@@ -42,19 +56,13 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
         if 'cpu_ratio' not in self.extra_config:
             self.logger.warning('CpuAllocationRatio parameter not set')
 
-    def dispatch_value(self, name, value, meta=None):
-        v = collectd.Values(
-            plugin=PLUGIN_NAME,
-            type='gauge',
-            type_instance=name,
-            interval=INTERVAL,
-            # w/a for https://github.com/collectd/collectd/issues/716
-            meta=meta or {'0': True},
-            values=[value]
-        )
-        v.dispatch()
+    @classmethod
+    def initialize_metrics(self):
+        metrics = {v: 0 for v in self.VALUE_MAP.values()}
+        metrics['free_vcpus'] = 0
+        return metrics
 
-    def collect(self):
+    def itermetrics(self):
         nova_aggregates = {}
         r = self.get('nova', 'os-aggregates')
         if not r:
@@ -64,72 +72,87 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
             for agg in aggregates_list:
                 nova_aggregates[agg['name']] = {
                     'id': agg['id'],
-                    'hosts': agg['hosts'],
-                    'metrics': {'free_vcpus': 0},
+                    'hosts': [h.split('.')[0] for h in agg['hosts']],
+                    'metrics': self.initialize_metrics()
                 }
-                nova_aggregates[agg['name']]['metrics'].update(
-                    {v: 0 for v in self.VALUE_MAP.values()}
-                )
 
         r = self.get('nova', 'os-hypervisors/detail')
         if not r:
             self.logger.warning("Could not get hypervisor statistics")
             return
 
-        total_stats = {v: 0 for v in self.VALUE_MAP.values()}
-        total_stats['free_vcpus'] = 0
-        compute_stats = r.json().get('hypervisors', [])
-        for stats in compute_stats:
+        total_stats = self.initialize_metrics()
+        hypervisor_stats = r.json().get('hypervisors', [])
+        for stats in hypervisor_stats:
             # remove domain name and keep only the hostname portion
             host = stats['hypervisor_hostname'].split('.')[0]
             for k, v in self.VALUE_MAP.iteritems():
                 m_val = stats.get(k, 0)
-                self.dispatch_value(v, m_val, {'host': host})
+                meta = {'hostname': host}
+                if k in self.UNIT_MAP:
+                    meta['unit'] = self.UNIT_MAP[k]
+                yield {
+                    'plugin_instance': v,
+                    'values': m_val,
+                    'meta': meta
+                }
                 total_stats[v] += m_val
                 for agg in nova_aggregates.keys():
                     agg_hosts = nova_aggregates[agg]['hosts']
-                    if stats['hypervisor_hostname'] in agg_hosts:
+                    if host in agg_hosts:
                         nova_aggregates[agg]['metrics'][v] += m_val
             if 'cpu_ratio' in self.extra_config:
                 m_vcpus = stats.get('vcpus', 0)
                 m_vcpus_used = stats.get('vcpus_used', 0)
                 free = (int(self.extra_config['cpu_ratio'] *
                         m_vcpus)) - m_vcpus_used
-                self.dispatch_value('free_vcpus', free, {'host': host})
+                yield {
+                    'plugin_instance': 'free_vcpus',
+                    'values': free,
+                    'meta': {'hostname': host},
+                }
                 total_stats['free_vcpus'] += free
                 for agg in nova_aggregates.keys():
                     agg_hosts = nova_aggregates[agg]['hosts']
-                    if stats['hypervisor_hostname'] in agg_hosts:
+                    if host in agg_hosts:
                         free = ((int(self.extra_config['cpu_ratio'] *
                                      m_vcpus)) -
                                 m_vcpus_used)
                         nova_aggregates[agg]['metrics']['free_vcpus'] += free
 
-        # Dispatch the aggregate metrics
+        # Dispatch metrics for every aggregate
         for agg in nova_aggregates.keys():
             agg_id = nova_aggregates[agg]['id']
             agg_total_free_ram = (
-                nova_aggregates[agg]['metrics']['free_ram_MB'] +
-                nova_aggregates[agg]['metrics']['used_ram_MB']
+                nova_aggregates[agg]['metrics']['free_ram'] +
+                nova_aggregates[agg]['metrics']['used_ram']
             )
-            # Only emit metric when value is > 0
-            # If this is not the case, (for instance when no host
-            # in aggregate), this requires the corresponding alarms to
-            # have a 'skip' no_data_policy, so as not to be triggered
+            # Only emit metric when the value is > 0 to avoid division by zero
             if agg_total_free_ram > 0:
                 nova_aggregates[agg]['metrics']['free_ram_percent'] = round(
-                    (100.0 * nova_aggregates[agg]['metrics']['free_ram_MB']) /
+                    (100.0 * nova_aggregates[agg]['metrics']['free_ram']) /
                     agg_total_free_ram,
                     2)
             for k, v in nova_aggregates[agg]['metrics'].iteritems():
-                self.dispatch_value('aggregate_{}'.format(k), v,
-                                    {'aggregate': agg,
-                                     'aggregate_id': agg_id})
+                yield {
+                    'plugin_instance': 'aggregate_{}'.format(k),
+                    'values': v,
+                    'meta': {
+                        'aggregate': agg,
+                        'aggregate_id': agg_id,
+                        'meta': {'discard_hostname': True}
+                    }
+                }
         # Dispatch the global metrics
         for k, v in total_stats.iteritems():
-            self.dispatch_value('total_{}'.format(k), v)
+            yield {
+                'type_instance': 'total_{}'.format(k),
+                'values': v,
+                'meta': {'discard_hostname': True}
+            }
 
-plugin = HypervisorStatsPlugin(collectd, PLUGIN_NAME)
+plugin = HypervisorStatsPlugin(collectd, PLUGIN_NAME,
+                               disable_check_metric=True)
 
 
 def config_callback(conf):
@@ -143,6 +166,10 @@ def notification_callback(notification):
 def read_callback():
     plugin.conditional_read_callback()
 
-collectd.register_config(config_callback)
-collectd.register_notification(notification_callback)
-collectd.register_read(read_callback, INTERVAL)
+if __name__ == '__main__':
+    collectd.load_configuration(plugin)
+    plugin.read_callback()
+else:
+    collectd.register_config(config_callback)
+    collectd.register_notification(notification_callback)
+    collectd.register_read(read_callback, INTERVAL)

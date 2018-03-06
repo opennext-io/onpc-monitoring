@@ -24,7 +24,7 @@ import re
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'openstack_neutron'
+PLUGIN_NAME = 'openstack_neutron_agents'
 INTERVAL = openstack.INTERVAL
 
 
