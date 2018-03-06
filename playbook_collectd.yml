@@ -23,79 +23,79 @@
 
   post_tasks:
     # Best is to use post tasks to install non default collectd plugins
-    - name: Configure Collectd python plugin
+    - name: collectd-configure | Add support for python plugin
       template:
-        src: templates/collectd/collectd_python_plugins.conf.j2
+        src: templates/collectd/collectd_python_plugin.conf.j2
         dest: "{{ collectd_plugins_prefix }}/collectd_python_plugins.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Check APIs plugins
+    - name: collectd-configure | Setup OpenStack Check APIs plugin
       template:
         src: templates/collectd/openstack_check_apis.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_check_apis.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Compute Stats plugin
+    - name: collectd-configure | Setup OpenStack Compute Stats plugin
       template:
         src: templates/collectd/openstack_compute.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_compute.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Cinder Stats plugin
+    - name: collectd-configure | Setup OpenStack Cinder Stats plugin
       template:
         src: templates/collectd/openstack_cinder.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_cinder.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Glance Stats plugin
+    - name: collectd-configure | Setup OpenStack Glance Stats plugin
       template:
         src: templates/collectd/openstack_glance.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_glance.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Keystone Stats plugin
+    - name: collectd-configure | Setup OpenStack Keystone Stats plugin
       template:
         src: templates/collectd/openstack_keystone.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_keystone.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Keystone Stats plugin
+    - name: collectd-configure | Setup OpenStack Neutron Stats plugin
       template:
         src: templates/collectd/openstack_neutron.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_neutron.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure OpenStack Nova Stats plugin
+    - name: collectd-configure | Setup OpenStack Nova Stats plugin
       template:
         src: templates/collectd/openstack_nova.conf.j2
         dest: "{{ collectd_plugins_prefix }}/openstack_nova.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure Libvirt Collectd plugin
+    - name: collectd-configure | Setup Libvirt plugin
       template:
-        src: templates/collectd/libvirt_plugins.conf.j2
-        dest: "{{ collectd_plugins_prefix }}/libvirt_plugins.conf"
+        src: templates/collectd/libvirt_plugin.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/libvirt_plugin.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure Libvirt Check plugin
+    - name: collectd-configure | Setup Libvirt Check plugin
       template:
-        src: templates/collectd/libvirt_check_plugins.conf.j2
-        dest: "{{ collectd_plugins_prefix }}/libvirt_check_plugins.conf"
+        src: templates/collectd/libvirt_check_plugin.conf.j2
+        dest: "{{ collectd_plugins_prefix }}/libvirt_check_plugin.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       notify: collectd restart
-    - name: Configure Network Collectd plugin
+    - name: collectd-configure | Setup Network plugin
       template:
         src: templates/collectd/network_plugin.conf.j2
         dest: "{{ collectd_plugins_prefix }}/network_plugin.conf"
         validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
       notify: collectd restart
-    - name: Copy all python modules
+    - name: collectd-configure | Get python modules
       copy:
         src: files/collectd-modules
         dest: "{{ collectd_plugins_dir }}"
       notify: collectd restart
 
-      tags: [collectd, collectd-plugins]  
+      tags: [collectd, collectd-configure]  
     
   handlers:
     - name: collectd restart
