@@ -13,8 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # Create an admin user
-- name: Create monitoring user and tenant
-  hosts: localhost
+
+- name: Install required python pip packages
+  hosts: collectd 
+  user: root
+  tasks:
+    - name: Install python pip
+      package:
+        name: python-pip 
+        state: latest
+    - name: Install required pip packages
+      pip: 
+        name: "{{ item }}"
+        state: "latest"
+      register: install_packages
+      until: install_packages|success
+      retries: 5
+      delay: 2
+      with_items:
+        - python_dateutil 
+- name: Create monitoring user 
+  hosts: utility
   user: root
   tasks:
     - name: Ensure monitoring user
@@ -22,7 +41,7 @@
         command: "ensure_user"
         endpoint: "{{ keystone_service_adminurl }}"
         login_user: "{{ keystone_admin_user_name }}"
-	login_password: "{{ keystone_auth_admin_password }}"
+        login_password: "{{ keystone_auth_admin_password }}"
         login_project_name: "{{ keystone_admin_tenant_name }}"
         user_name: "{{ monitoring_user_name }}"
         tenant_name: "{{ monitoring_tenant_name }}"
