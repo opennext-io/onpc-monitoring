@@ -1,5 +1,5 @@
 ---
-# Copyright 2016, Rackspace US, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,10 +37,10 @@
         - rabbitmq
         - swift
         - system
-      notify: telegraf restart
+      notify: Telegraf restart
   
   handlers:
-    - name: telegraf restart
+    - name: Telegraf restart
       service: name=telegraf state=restarted
 
   vars_files:

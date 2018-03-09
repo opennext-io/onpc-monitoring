@@ -21,13 +21,14 @@ Clone the ONPC Monitoring repo
     cd /opt
     git clone git@github.com:opennext-io/onpc-monitoring.git
 
-Copy the env.d files into place
+Copy the env.d files and global configuration variables into place
 
 .. code-block:: bash
 
     cd /opt/onpc-monitoring
     cp ./etc/env.d/* /etc/openstack_deploy/env.d/
     cp ./etc/conf.d/* /etc/openstack_deploy/conf.d/
+    cp ./etc/user_monitoring.yml /etc/openstack_deploy
 
 Copy the secrets file into place and generate the password values
 
