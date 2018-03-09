@@ -22,7 +22,15 @@
     - collectd
 
   post_tasks:
-    # Use post tasks to install plugins
+    # Copy all python modules in place
+    - name: collectd-configure | Copy python modules
+      copy:
+        src: files/collectd-modules
+        dest: "{{ collectd_plugins_dir }}"
+      notify: collectd restart
+      tags: [collectd, collectd-configure]
+      
+    # Configure collectd with all the plugins
     - name: collectd-configure | {{ item }}
       template:
         src: templates/collectd/{{ item }}.conf.j2
@@ -40,14 +48,7 @@
         - libvirt_plugin
         - libvirt_check_plugin
         - network_plugin
-      notify: Collectd restart
-    - name: collectd-configure | Copy python modules
-      copy:
-        src: files/collectd-modules
-        dest: "{{ collectd_plugins_dir }}"
-      notify: collectd restart
-
-      tags: [collectd, collectd-configure]  
+      notify: Collectd restart  
     
   handlers:
     - name: Collectd restart
