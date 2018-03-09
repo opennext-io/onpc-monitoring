@@ -47,3 +47,4 @@
     - vars/main.yml
     - vars/telegraf.yml
     - vars/influxdb.yml
+    - vars/collectd.yml

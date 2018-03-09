@@ -53,24 +53,30 @@ Add the export to update the inventory file location
 
     export ANSIBLE_INVENTORY=/opt/openstack-ansible/playbooks/inventory/dynamic_inventory.py
 
-If you are running the HA Proxy you should run the following playbook as well to enable
-the grafana port 8089
+Create the monitoring user and install various the dependencies
 
 .. code-block:: bash
 
-    openstack-ansible /opt/openstack-ansible/playbooks/playbook-metrics-lb.yml
+    openstack-ansible /opt/onpc-monitoring/playbook_setup.yml
+
+If you are running HAProxy for load balacing you need run the following playbook as well to enable
+the monitoring services backend and frontend
+
+.. code-block:: bash
+
+    openstack-ansible /opt/onpc-monitoring/playbook_haproxy.yml
 
 Create the containers
 
 .. code-block:: bash
 
-    oopenstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml -e container_group=monitoring_container
+    openstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml -e container_group=monitoring_container
 
 Install InfluxDB
 
 .. code-block:: bash
 
-    openstack-ansible /opt/openstack-ansible/playbooks/playbook-influx-db.yml
+    openstack-ansible /opt/onpc-monitoring/playbook_influxdb.yml
 
 Install Influx Telegraf
 
@@ -79,7 +85,7 @@ variable in the ``user_variables.yml`` file as a list containing all targets tha
 
 .. code-block:: bash
 
-    openstack-ansible playbook-influx-telegraf.yml --forks 100
+    openstack-ansible /opt/onpc-monitoring/playbook_telegraf.yml --forks 50
 
 Install grafana
 
@@ -88,7 +94,7 @@ If you're proxy'ing grafana you will need to provide the full ``root_path`` when
 
 .. code-block:: bash
 
-    openstack-ansible playbook-grafana.yml -e galera_root_user=root -e galera_address='127.0.0.1'
+    openstack-ansible /opt/onpc-monitoring/playbook-grafana.yml -e galera_root_user=root -e galera_address='127.0.0.1'
 
 Once that last playbook is completed you will have a functioning InfluxDB, Telegraf, and Grafana metric collection system
 active and collecting metrics. Grafana will need some setup, however functional dashboards have been provided in the

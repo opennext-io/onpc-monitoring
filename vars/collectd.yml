@@ -6,3 +6,5 @@ collectd_tenant: collectd
 collectd_version: 5.8.0
 collectd_service: systemd
 collectd_default_plugins: []
+collectd_prefix: /opt/collectd      # The place where Collectd will be installed
+collectd_types_db_path: "{{ '/usr/share/collectd/types.db' if collectd_use_ppa else collectd_prefix + '/share/collectd/types.db' }}"
