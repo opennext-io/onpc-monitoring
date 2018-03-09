@@ -28,8 +28,10 @@ telegraf_interfaces_filter: ["eth*","enp0s*","lo","br-vxlan","br-vlan","br-stora
 telegraf_mount_points_filter: ["/","/var/lib/machines","/var/lib/nova/instances","/srv/swift[1-9]"]
 # TODO: make this dynamic
 telegraf_disks_filter: ["sda","sdb","sdc"]
-telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf'"
+telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"
 telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
+telegraf_influxdb_targets:
+      - "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
 
 # Telegraf global tags
 telegraf_global_tags:
@@ -41,7 +43,7 @@ telegraf_global_tags:
 telegraf_agent_output:
   - type: influxdb
     config:
-      - urls: ["{{ influxdb_telegraf_targets | map('quote') | join(',') }}"]
+      - urls: ["{{ telegraf_influxdb_targets | map('quote') | join(',') }}"]
       - database: "{{ telegraf_db_name }}"
       - precision: "s"
       - write_consistency: "any"
