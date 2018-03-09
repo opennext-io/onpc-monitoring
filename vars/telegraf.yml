@@ -42,7 +42,7 @@ telegraf_agent_output:
   - type: influxdb
     config:
       - urls: ["{{ influxdb_telegraf_targets | map('quote') | join(',') }}"]
-      - database: {{ monitoring_influxdb_name }}
+      - database: "{{ telegraf_db_name }}"
       - precision: "s"
       - write_consistency: "any"
       - timeout: "5s"
