@@ -13,12 +13,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy Telegraf
+- name: Install and configure Telegraf
   hosts: "all"
   gather_facts: true
   user: root
+
   roles:
     - telegraf
-vars_files:
-  - vars/main.yml
-  - vars/telegraf.yml
+  
+  post_tasks:
+    # Use post tasks to install plugins
+    - name: telegraf-configure | {{ item }}
+      template:
+        src: templates/telegraf/{{ item }}.conf.j2
+        dest: "{{ telegraf_plugins_prefix }}/{{ item }}.conf"
+      with_items:
+        - galera
+        - haproxy
+        - influxdb
+        - listener
+        - memcached
+        - prometheus
+        - rabbitmq
+        - swift
+        - system
+      notify: telegraf restart
+  
+  handler:
+    - name: telegraf restart
+      service: name=telegraf state=restarted
+    
+  vars_files:
+    - vars/main.yml
+    - vars/telegraf.yml

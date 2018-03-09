@@ -22,7 +22,7 @@
     - collectd
 
   post_tasks:
-    # Best is to use post tasks to install non default collectd plugins
+    # Use post tasks to install plugins
     - name: collectd-configure | Setup python plugin
       template:
         src: templates/collectd/collectd_python_plugin.conf.j2

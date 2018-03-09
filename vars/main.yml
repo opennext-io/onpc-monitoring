@@ -18,4 +18,3 @@ monitoring_user_name: "monito"
 monitoring_tenant_name: "service"
 monitoring_user_role_name: "admin"
 monitoring_influxdb_name: "telegraf"
-monitoring_prometheus_enabled: false
