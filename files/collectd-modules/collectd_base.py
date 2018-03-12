@@ -24,7 +24,7 @@ import traceback
 
 TIMEOUT_BIN = '/usr/bin/timeout'
 
-INTERVAL = 10
+# INTERVAL = 60
 
 
 class CheckException(Exception):

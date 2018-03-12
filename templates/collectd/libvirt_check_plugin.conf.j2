@@ -2,7 +2,7 @@
 # Do NOT modify this file by hand!
 
 
-{%- inventory_hostname in groups['nova_compute'] and
+{%- if inventory_hostname in groups['nova_compute'] and
       nova_virt_type | default('qemu') in ['kvm', 'qemu'] %}
 
 # Plugin to check the availability of libvirt.
@@ -17,6 +17,8 @@
 
   <Module "libvirt_check">
     Uri "qemu:///system"
+    PollingInterval 60
+    Region "{{ service.region }}"
   </Module>
 </Plugin>
 {%- endif %}

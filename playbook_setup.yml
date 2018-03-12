@@ -31,7 +31,9 @@
       retries: 5
       delay: 2
       with_items:
-        - python_dateutil 
+        - python_dateutil
+        - requests
+        - simplejson
 - name: Create monitoring user 
   hosts: utility
   user: root

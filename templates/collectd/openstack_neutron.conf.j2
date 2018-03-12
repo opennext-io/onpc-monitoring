@@ -31,6 +31,8 @@
     Tenant "{{ monitoring_tenant_name }}"
     Timeout "5"
     Username "{{ monitoring_user_name }}"
+    PollingInterval 60
+    Region "{{ service.region }}"
   </Module>
 </Plugin>
 {%- endif %}

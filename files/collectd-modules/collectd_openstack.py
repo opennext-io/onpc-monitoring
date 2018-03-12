@@ -26,7 +26,7 @@ from collections import defaultdict
 # By default, query OpenStack API endpoints every 50 seconds. We choose a value
 # less than the default group by interval (which is 60 seconds) to avoid gaps
 # in the Grafana graphs.
-INTERVAL = 50
+INTERVAL = 60
 
 
 class KeystoneException(Exception):
@@ -192,7 +192,7 @@ class CollectdPlugin(base.Base):
         self.extra_config = {}
         self._threads = {}
         self.pagination_limit = None
-        self.polling_interval = 60
+        self.polling_interval = INTERVAL
         self._last_run = None
         self.changes_since = False
 
