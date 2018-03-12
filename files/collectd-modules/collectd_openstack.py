@@ -208,6 +208,7 @@ class CollectdPlugin(base.Base):
             if url[-1] != '/':
                 url += '/'
             url = "%s%s" % (url, resource)
+            self.logger.debug("Url construct for service request %s = %s" % (service, url))
         else:
             self.logger.error("Service '%s' not found in catalog" % service)
         return url
