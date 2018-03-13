@@ -31,11 +31,11 @@
       tags: [collectd, collectd-configure]
       
     # Configure collectd with all the plugins
-    - name: collectd-configure | {{ item }}
+    - name: collectd-configure | Plugins configuration
       template:
-        src: templates/collectd/{{ item }}.conf.j2
+        src: "templates/collectd/{{ item }}.conf.j2"
         dest: "{{ collectd_plugins_prefix }}/{{ item }}.conf"
-        validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
+        validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
       with_items:
         - openstack_plugins
         - libvirt_plugin
