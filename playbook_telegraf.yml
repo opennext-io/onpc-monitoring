@@ -28,6 +28,7 @@
         src: "templates/telegraf/{{ item }}.conf.j2"
         dest: "{{ telegraf_plugins_prefix }}/{{ item }}.conf"
       with_items:
+        - outputs
         - galera
         - haproxy
         - influxdb

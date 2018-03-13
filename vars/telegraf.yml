@@ -40,17 +40,5 @@ telegraf_global_tags:
   - tag_name: region
     tag_value: "{{ service_region }}"
 
-telegraf_agent_output:
-  - type: influxdb
-    config:
-      - urls: "[{{ telegraf_influxdb_targets | map('quote') | join(',') }}]"
-      - database: "{{ telegraf_db_name }}"
-      - precision: "s"
-      - write_consistency: "any"
-      - timeout: "5s"
-#  - type: file
-#    config:
-#      - files: ["stdout", "/tmp/metrics.out"]
-#      - data_format: "json"
-#      - json_timestamp_units: "1ms"
+telegraf_agent_output: []
 telegraf_plugins_default: []
