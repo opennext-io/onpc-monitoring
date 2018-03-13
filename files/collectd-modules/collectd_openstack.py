@@ -158,6 +158,8 @@ class OSClient(object):
             kwargs['params'] = params
 
         func = getattr(self.session, verb.lower())
+        
+        self.logger.debug("Request = %s" % kwargs)
 
         try:
             r = func(**kwargs)
@@ -166,8 +168,9 @@ class OSClient(object):
                               (kwargs['url'], e))
             return
 
-        self.logger.info("%s responded with status code %d" %
-                         (kwargs['url'], r.status_code))
+        self.logger.debug("Response with status code %d = %s" %
+                         (r.status_code, r.content))
+
         if r.status_code == 401:
             # Clear token in case it is revoked or invalid
             self.clear_token()
@@ -199,11 +202,9 @@ class CollectdPlugin(base.Base):
     def _build_url(self, service, resource):
         s = (self.get_service(service) or {})
         url = s.get('url')
-        # v3 API must be used in order to obtain tenants in multi-domain envs
-        if service == 'keystone' and (resource in ['projects',
-                                                   'users', 'roles']):
-            url = url.replace('v2.0', 'v3')
-
+        # V3 API must be used in order to obtain keystone data in multi-domain envs
+        if service == 'keystone' and (resource in ['projects', 'users', 'roles']):
+            url += '/v3/')
         if url:
             if url[-1] != '/':
                 url += '/'

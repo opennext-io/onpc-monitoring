@@ -19,13 +19,12 @@ import os
 
 
 log_level = logging.INFO
-if os.getenv('COLLECTD_DEBUG', '') == '1':
+if os.getenv('COLLECTD_DEBUG', '') == 'True':
     log_level = logging.DEBUG
 logging.basicConfig(
     level=log_level,
     format='%(asctime)s [%(threadName)s] %(levelname)s: %(message)s'
 )
-
 
 class Values(object):
 

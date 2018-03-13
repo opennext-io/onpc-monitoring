@@ -37,16 +37,8 @@
         dest: "{{ collectd_plugins_prefix }}/{{ item }}.conf"
         validate: '{{ collectd_sbin_path }}/collectd -t -C %s'
       with_items:
-        - collectd_python_plugin
-        - openstack_check_apis
-        - openstack_compute
-        - openstack_cinder
-        - openstack_glance
-        - openstack_keystone
-        - openstack_neutron
-        - openstack_nova
+        - openstack_plugins
         - libvirt_plugin
-        - libvirt_check_plugin
         - network_plugin
       notify: Collectd restart  
     
