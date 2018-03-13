@@ -7,12 +7,12 @@
 [[inputs.netstat]]
 [[inputs.mem]]
 
-{%- if inventory_hostname in groups['all_containers'] %}
+{% if inventory_hostname in groups['all_containers'] %}
 [[inputs.cpu]]
   percpu = false
 [[inputs.diskio]]
 [[inputs.net]]
-{%- else %}
+{% else %}
 [[inputs.cpu]]
   percpu = true
   totalcpu = true
@@ -31,4 +31,4 @@
 [[inputs.kernel]]
 [[inputs.swap]]
 [[inputs.bond]]
-{%- endif %}
+{% endif %}
