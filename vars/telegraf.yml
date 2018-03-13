@@ -43,7 +43,7 @@ telegraf_global_tags:
 telegraf_agent_output:
   - type: influxdb
     config:
-      - urls: ["{{ telegraf_influxdb_targets | map('quote') | join(',') }}"]
+      - urls: "[{{ telegraf_influxdb_targets | map('quote') | join(',') }}]"
       - database: "{{ telegraf_db_name }}"
       - precision: "s"
       - write_consistency: "any"
