@@ -204,7 +204,7 @@ class CollectdPlugin(base.Base):
         url = s.get('url')
         # V3 API must be used in order to obtain keystone data in multi-domain envs
         if service == 'keystone' and (resource in ['projects', 'users', 'roles']):
-            url += '/v3/')
+            url += '/v3/'
         if url:
             if url[-1] != '/':
                 url += '/'
