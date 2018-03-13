@@ -15,7 +15,7 @@
   LogTraces false
   Interactive false
 
-  {%- if inventory_hostname in groups['collectd'] %}
+{%- if inventory_hostname in groups['collectd'] %}
 
   Import "openstack_check_apis"
 
@@ -121,7 +121,7 @@
     Region "{{ service_region }}"
   </Module>
 
-  {%- else %}
+{%- else %}
 
   Import "openstack_compute"
 
@@ -144,6 +144,6 @@
     Region "{{ service_region }}"
   </Module>
   
-  {%- endif %}
+{%- endif %}
 </Plugin>  
 {%- endif %}
