@@ -8,7 +8,7 @@ influxdb_db_retention_policy: openstack
 influxdb_db_replication: 1
 influxdb_db_metric_user: openstack
 influxdb_db_metric_password: "{{ influxdb_db_metric_password_secret }}"
-influxdb_db_root_name_secret: root
+influxdb_db_root_name: root
 influxdb_db_root_password: "{{ influxdb_db_root_password_secret }}"
 
 # WAL dir could use tempfs instead to reduce disk iops overhead
@@ -17,7 +17,3 @@ influxdb_wal_logging_enabled: true
 influxdb_query_log_enabled: false
 influxdb_cache_max_memory_size: 679477248
 influxdb_cache_snapshot_memory_size: 28311552
-
-# Influxdb Relay vars
-influxdb_relay_port: 9096
-influxdb_service_internalurl: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}"
