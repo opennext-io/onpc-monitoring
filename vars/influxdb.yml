@@ -13,10 +13,10 @@ influxdb_db_root_name: root
 influxdb_db_root_password: "{{ influxdb_db_root_password_secret }}"
 
 # WAL dir could use tempfs instead to reduce disk iops overhead
-influxdb_prefx: /var/lib/influxdb
-influxdb_meta_dir: "{{ influxdb_prefix }}"/meta
-influxdb_wal_dir: "{{ influxdb_prefix }}"/wal
-influxdb_data_dir: "{{ influxdb_prefix }}"/data
+influxdb_prefix: /var/lib/influxdb
+influxdb_meta_dir: "{{ influxdb_prefix }}/meta"
+influxdb_wal_dir: "{{ influxdb_prefix }}/wal"
+influxdb_data_dir: "{{ influxdb_prefix }}/data"
 influxdb_wal_logging_enabled: false
 influxdb_query_logging_enabled: false
 influxdb_http_logging_enabled: true
