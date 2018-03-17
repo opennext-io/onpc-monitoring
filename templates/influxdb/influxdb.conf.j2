@@ -58,11 +58,11 @@ bind-address = "127.0.0.1:8088"
   store-database = "_internal"
   store-interval = "10s"
 
-[admin]
-  enabled = true
-  bind-address = ":{{ influxdb_admin_port }}"
-  https-enabled = false
-  https-certificate = "/etc/ssl/influxdb.pem"
+#[admin]
+#  enabled = true
+#  bind-address = ":{{ influxdb_admin_port }}"
+#  https-enabled = false
+#  https-certificate = "/etc/ssl/influxdb.pem"
 
 [http]
   enabled = true
@@ -93,7 +93,6 @@ bind-address = "127.0.0.1:8088"
   ca-certs = ""
   write-concurrency = 40
   write-buffer-size = 1000
-
 
 [[graphite]]
   enabled = false
