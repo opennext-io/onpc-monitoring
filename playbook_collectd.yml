@@ -40,7 +40,8 @@
         - openstack_plugins
         - libvirt_plugin
         - network_plugin
-      notify: Collectd restart  
+      notify: Collectd restart
+      tags: [collectd, collectd-configure]
     
   handlers:
     - name: Collectd restart

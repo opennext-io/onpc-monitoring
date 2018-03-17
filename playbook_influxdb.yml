@@ -27,40 +27,48 @@
         container_config:
           - "lxc.mount.entry=/openstack/{{ inventory_hostname }} var/lib/influxdb none bind 0 0"
       delegate_to: "{{ physical_host }}"
+      tags: [influxdb, influxdb-install]
     - name: Add influxdata apt-keys
       apt_key:
         url: "https://repos.influxdata.com/influxdb.key"
         state: "present"
+      tags: [influxdb, influxdb-install]
     - name: Add influxdata repo
       apt_repository:
         repo: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
         state: "present"
         update_cache: yes
+      tags: [influxdb, influxdb-install]
     - name: Install influxdb
       apt:
         pkg: "influxdb"
         state: "latest"
+      tags: [influxdb, influxdb-install]
     - name: Drop influxdb config file
       template:
         src: templates/influxdb/influxdb.conf.j2
         dest: /etc/influxdb/influxdb.conf
+      tags: [influxdb, influxdb-configure]
     - name: Enable and restart influxdb
       service:
         name: "influxdb"
         enabled: true
         state: restarted
+      tags: [influxdb, influxdb-configure]
     - name: Wait for influxdb to be ready
       wait_for:
         host: "{{ hostvars[item]['ansible_host'] }}"
         port: "{{ influxdb_port }}"
         delay: 1
       with_items: "{{ groups['influxdb'] }}"
+      tags: [influxdb, influxdb-configure]
     - name: Check whether the metrics DB exists or not
       shell: >
         influx -username {{ influxdb_db_root_name }}
         -password {{ influxdb_db_root_password }}
         -execute 'SHOW DATABASES' -format=json
       register: result
+      tags: [influxdb, influxdb-configure]
     - debug:
         var: result
     - name: Create metrics DB
@@ -73,6 +81,7 @@
         - "CREATE RETENTION POLICY {{ influxdb_db_retention_policy }} ON {{ influxdb_db_name }} DURATION {{ influxdb_db_retention }} REPLICATION {{ influxdb_db_replication }}"
         - "CREATE USER {{ influxdb_db_metric_user }} WITH PASSWORD '{{ influxdb_db_metric_password }}'"
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
+      tags: [influxdb, influxdb-configure]
 
   vars_files:
     - vars/main.yml
