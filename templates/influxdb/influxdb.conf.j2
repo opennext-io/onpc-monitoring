@@ -14,16 +14,16 @@ bind-address = "127.0.0.1:8088"
   # Where the metadata/raft database is stored
   dir = "{{ influxdb_meta_dir }}"
   retention-autocreate = true
-  logging-enabled = {{ influxdb_meta_log_enabled }}
+  logging-enabled = false
 
 [data]
-  # enabled = true
+  enabled = true
   dir = "{{ influxdb_data_dir }}"
   index-version = "inmem"
   wal-dir = "{{ influxdb_wal_dir }}"
-  wal-logging-enabled = {{ influxdb_wal_logging_enabled }}
+  wal-logging-enabled = false
   wal-fsync-delay = "0s"
-  query-log-enabled = {{ influxdb_query_logging_enabled }}
+  query-log-enabled = false
   cache-max-memory-size = {{ influxdb_cache_max_memory_size }}
   cache-snapshot-memory-size = {{ influxdb_cache_snapshot_memory_size }}
   cache-snapshot-write-cold-duration = "10m"
@@ -69,7 +69,7 @@ bind-address = "127.0.0.1:8088"
   bind-address = ":{{ influxdb_port }}"
   auth-enabled = false
   realm = "InfluxDB"
-  log-enabled = {{ influxdb_http_logging_enabled }}
+  log-enabled = true
   write-tracing = false
   pprof-enabled = true
   https-enabled = false

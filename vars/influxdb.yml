@@ -17,9 +17,5 @@ influxdb_prefix: /var/lib/influxdb
 influxdb_meta_dir: "{{ influxdb_prefix }}/meta"
 influxdb_wal_dir: "{{ influxdb_prefix }}/wal"
 influxdb_data_dir: "{{ influxdb_prefix }}/data"
-influxdb_wal_logging_enabled: false
-influxdb_query_logging_enabled: false
-influxdb_http_logging_enabled: true
-influxdb_meta_log_enabled: true
 influxdb_cache_max_memory_size: 1073741824
 influxdb_cache_snapshot_memory_size: 26214400
