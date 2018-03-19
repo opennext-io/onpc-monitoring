@@ -1,5 +1,5 @@
 # Grafana server vars
-grafana_version: 3.1.1-*
+grafana_version: latest
 grafana_apt_repository: deb https://packagecloud.io/grafana/stable/debian/ jessie main
 grafana_plugins_install: ['grafana-clock-panel']
 grafana_http_addr: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
