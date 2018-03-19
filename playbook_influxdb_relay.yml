@@ -35,9 +35,12 @@
       tags: [influxdb_relay, influxdb-relay_install]
     - name: Install GOLang
       script: files/influxdb_relay/deploy_go.sh
+      changed_when: false
       tags: [influxdb_relay, influxdb-relay_install]
     - name: Download and install influx-relay
       script: files/influxdb_relay/deploy_influxdbrelay.sh
+      changed_when: false
+      tags: [influxdb_relay, influxdb-relay_install]
     - name: Drop influx relay toml file
       template:
         src: templates/influxdb/relay.toml.j2
@@ -51,7 +54,7 @@
       tags: [influxdb_relay, influxdb-relay_configure]
     - name: Drop Influx Relay service file
       template:
-        src: templates/influxdbrelay.service.j2
+        src: templates/influxdb/influxdbrelay.service.j2
         dest: /etc/systemd/system/influxdbrelay.service
       when:  init_name == "systemd"
       tags: [influxdb_relay, influxdb-relay_configure]

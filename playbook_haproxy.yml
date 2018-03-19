@@ -24,7 +24,7 @@
             haproxy_service_name: influxdb_admin
             haproxy_backend_nodes: "{{ groups['influxdb'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: 8083
+            haproxy_port: "{{ influxdb_port }}"
             haproxy_balance_type: tcp
             haproxy_backend_options:
               - tcp-check
@@ -36,8 +36,8 @@
             haproxy_service_name: influxdb
             haproxy_backend_nodes: "{{ groups['influxdb'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: 8086
-            haproxy_backend_port: 8086
+            haproxy_port: "{{ influxdb_port }}"
+            haproxy_backend_port: "{{ influxdb_port }}"
             haproxy_balance_type: http
             haproxy_backend_options:
               - "httpchk HEAD /ping"
@@ -55,8 +55,8 @@
             haproxy_service_name: influxdb_relay
             haproxy_backend_nodes: "{{ groups['influxdb_relay'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: 8086
-            haproxy_backend_port: 9096
+            haproxy_port: "{{ influxdb_port }}"
+            haproxy_backend_port: "{{ influxdb_relay_port }}"
             haproxy_balance_type: http
             haproxy_backend_options:
               - tcp-check
@@ -74,7 +74,11 @@
             haproxy_service_name: grafana
             haproxy_backend_nodes: "{{ groups['grafana'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: 8089
+            haproxy_port: "{{ grafana_http_port }}"
             haproxy_balance_type: tcp
             haproxy_backend_options:
               - tcp-check
+  vars_files:
+    - vars/main.yml
+    - vars/influxdb.yml
+    - vars/grafana.yml

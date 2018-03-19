@@ -2,7 +2,7 @@
 
 reporting-disabled = false
 # RPC service bind address for backup and restore.
-bind-address = "127.0.0.1:8088"
+bind-address = ":{{ influxdb_admin_port }}"
 
 [logging]
   level = "{{ influxdb_log_level }}"
