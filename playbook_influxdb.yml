@@ -1,6 +1,6 @@
 ---
 # Copyright 2016, Rackspace US, Inc.
-# Copyright 2018, OpenNext SAS
+# Copyright 2018, OpenNect SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
         container_config:
           - "lxc.mount.entry=/openstack/{{ inventory_hostname }} var/lib/influxdb none bind 0 0"
       delegate_to: "{{ physical_host }}"
+      changed_when: false
       tags: [influxdb, influxdb-install]
     - name: Add influxdata apt-keys
       apt_key:
@@ -62,15 +63,14 @@
         delay: 1
       with_items: "{{ groups['influxdb'] }}"
       tags: [influxdb, influxdb-configure]
-    - name: Check whether the metrics DB exists or not
+    - name: Check whether the metrics DB already exists or not
       shell: >
         influx -username {{ influxdb_db_root_name }}
         -password {{ influxdb_db_root_password }}
         -execute 'SHOW DATABASES' -format=json
       register: result
+      changed_when: false
       tags: [influxdb, influxdb-configure]
-    - debug:
-        var: result
     - name: Create metrics DB
       shell: >
         influx -username {{ influxdb_db_root_name }}
@@ -81,6 +81,7 @@
         - "CREATE RETENTION POLICY {{ influxdb_db_retention_policy }} ON {{ influxdb_db_name }} DURATION {{ influxdb_db_retention }} REPLICATION {{ influxdb_db_replication }}"
         - "CREATE USER {{ influxdb_db_metric_user }} WITH PASSWORD '{{ influxdb_db_metric_password }}'"
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
+      when: result.stdout.find(influxdb_db_name) == -1
       tags: [influxdb, influxdb-configure]
 
   vars_files:
