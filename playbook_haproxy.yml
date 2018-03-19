@@ -1,6 +1,5 @@
 ---
 # Copyright 2016, Rackspace US, Inc.
-# Copyright (c) 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,4 +78,3 @@
             haproxy_balance_type: tcp
             haproxy_backend_options:
               - tcp-check
-

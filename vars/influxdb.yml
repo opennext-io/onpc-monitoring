@@ -3,8 +3,9 @@
 influxdb_log_level: "info"
 influxdb_admin_port: influxdb_log_level 
 influxdb_port: 8086
+influxdb_relay_port: 8096
 influxdb_db_name: telegraf
-influxdb_db_retention: 32d
+influxdb_db_retention: 30d
 influxdb_db_retention_policy: openstack
 influxdb_db_replication: 1
 influxdb_db_metric_user: openstack

@@ -1,0 +1,64 @@
+---
+# Copyright 2016, Rackspace US, Inc.
+# Copyright 2018, OpenNect SAS
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Deploy Influxdb Relay
+  hosts: "influxdb_relay"
+  gather_facts: true
+  user: root
+  tasks:
+    - name: Check init system
+      command: cat /proc/1/comm
+      changed_when: false
+      register: _init_name
+      tags: [influxdb_relay, influxdb-relay_install]
+    - name: Set the name of init system
+      set_fact:
+        init_name: "{{ _init_name.stdout }}"
+      tags: [influxdb_relay, influxdb-relay_install]
+    - name: Install git
+      apt:
+        pkg: "git"
+        state: "latest"
+      tags: [influxdb_relay, influxdb-relay_install]
+    - name: Install GOLang
+      script: files/influxdb_relay/deploy_go.sh
+      tags: [influxdb_relay, influxdb-relay_install]
+    - name: Download and install influx-relay
+      script: files/influxdb_relay/deploy_influxdbrelay.sh
+    - name: Drop influx relay toml file
+      template:
+        src: templates/influxdb/relay.toml.j2
+        dest: /opt/influxdb-relay/relay.toml
+      tags: [influxdb_relay, influxdb-relay_install]
+    - name: Drop Influx Relay upstart
+      template:
+        src: templates/influxdb/influxdbrelay.conf.j2
+        dest: /etc/init/influxdbrelay.conf
+      when: init_name == "init"
+      tags: [influxdb_relay, influxdb-relay_configure]
+    - name: Drop Influx Relay service file
+      template:
+        src: templates/influxdbrelay.service.j2
+        dest: /etc/systemd/system/influxdbrelay.service
+      when:  init_name == "systemd"
+      tags: [influxdb_relay, influxdb-relay_configure]
+    - name: Enable and restart influxdb
+      service:
+        name: "influxdbrelay"
+        state: restarted
+  vars_files:
+    - vars/main.yml
+    - vars/influxdb.yml
