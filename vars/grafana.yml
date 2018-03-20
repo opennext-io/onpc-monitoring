@@ -1,19 +1,29 @@
 # Grafana server vars
 grafana_version: latest
-grafana_apt_repository: deb https://packagecloud.io/grafana/stable/debian/ jessie main
-grafana_plugins_install: ['grafana-clock-panel']
-grafana_http_addr: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
-grafana_http_port: 8089 
+grafana_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
+grafana_address: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
+grafana_port: 8089 
 # Grafana database vars
-grafana_type: mysql                       # Either "mysql", "postgres" or "sqlite3"
-grafana_host: "{{ galera_address|default('127.0.0.1') }}:3306"
-grafana_name: grafana
-grafana_user: grafana
-grafana_password: "{{ grafana_password_secret }}"
+grafana_database:
+  type: mysql
+  host: "{{ galera_address|default('127.0.0.1') }}:3306"
+  name: grafana
+  user: grafana
+  password: "{{ grafana_password_secret }}"
+
 # Grafana security vars
-grafana_admin_user: admin
-grafana_admin_password: "{{ grafana_admin_password_secret }}"
-# Anonymous Auth
-grafana_anonymous_enabled: false
-grafana_anonymous_org_name: Main Org.
-grafana_anonymous_org_role: Viewer
+grafana_security:
+  admin_user: admin
+  admin_password: "{{ grafana_admin_password_secret }}"
+
+grafana_datasources: []
+  - name: "InfluxDB"
+    type: "influxdb"
+    access: "proxy"
+    url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
+    basicAuth: true
+    basicAuthUser: "admin"
+    basicAuthPassword: "password"
+    isDefault: true
+
+grafana_plugins: ['grafana-clock-panel']

@@ -48,4 +48,5 @@
     - grafana
 
   vars_files:
-    - group_vars/grafana.yml
+    - vars/grafana.yml
+    - vars/influxdb.yml
