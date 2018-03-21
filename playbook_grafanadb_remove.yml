@@ -1,5 +1,4 @@
 ---
-# Copyright 2016, Rackspace US, Inc.
 # Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,32 +14,24 @@
 # limitations under the License.
 
 - name: Delete Grafana DB
-  hosts: "grafana "
+  hosts: "galera"
   gather_facts: true
   user: root
   tasks:
-    - name: Grant access to the DB for the service
+    - name: Remove Grafana user 
       mysql_user:
         login_user: "{{ galera_root_user }}"
         login_password: "{{ galera_root_password }}"
         login_host: "{{ galera_address|default('127.0.0.1') }}"
-        name: "{{ grafana_user }}"
-        password: "{{ grafana_password }}"
-        host: "{{ item }}"
+        name: "{{ grafana_db_user }}"
         state: "absent"
-        priv: "{{ grafana_db_name }}.*:ALL"
-      delegate_to: "{{ groups['galera_all'][0] }}"
-      with_items:
-        - "localhost"
-        - "%"
-    - name: Create DB for service
+    - name: Delete Grafana DB
       mysql_db:
         login_user: "{{ galera_root_user }}"
         login_password: "{{ galera_root_password }}"
         login_host: "{{ galera_address|default('127.0.0.1') }}"
         name: "{{ grafana_db_name }}"
         state: "absent"
-      delegate_to: "{{ groups['galera_all'][0] }}"
 
   vars_files:
-    - vars.yml
+    - vars/grafana.yml
