@@ -28,10 +28,13 @@
       set_fact:
         init_name: "{{ _init_name.stdout }}"
       tags: [influxdb_relay, influxdb-relay_install]
-    - name: Install git
-      apt:
-        pkg: "git"
+    - name: Install dependencies 
+      package:
+        name: "{{ item }}" 
         state: "latest"
+      with_items:
+        - git
+        - wget
       tags: [influxdb_relay, influxdb-relay_install]
     - name: Install GOLang
       script: files/influxdb_relay/deploy_go.sh

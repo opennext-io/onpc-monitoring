@@ -20,8 +20,12 @@
   tasks:
     - name: Install python pip
       package:
-        name: python-pip 
+        name: "{{ item }}"
         state: latest
+      with_items:
+        - python-pip
+        - python-pkg-resources
+        - python-setuptools
     - name: Install required pip packages
       pip: 
         name: "{{ item }}"

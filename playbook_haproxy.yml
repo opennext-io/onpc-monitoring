@@ -74,7 +74,7 @@
             haproxy_service_name: grafana
             haproxy_backend_nodes: "{{ groups['grafana'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: "{{ grafana_http_port }}"
+            haproxy_port: "{{ grafana_port }}"
             haproxy_balance_type: tcp
             haproxy_backend_options:
               - tcp-check

@@ -34,7 +34,6 @@
         - influxdb
         - listener
         - memcached
-        - prometheus
         - rabbitmq
         - swift
         - system
