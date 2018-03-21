@@ -2,21 +2,24 @@
 grafana_version: latest
 grafana_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
 grafana_address: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
-grafana_port: 8089 
+grafana_port: 8089
+grafana_db_name: grafana
+grafana_db_user: grafana
+
 # Grafana database vars
 grafana_database:
   type: mysql
   host: "{{ galera_address|default('127.0.0.1') }}:3306"
-  name: grafana
-  user: grafana
-  password: "{{ grafana_password_secret }}"
+  name: "{{ grafana_db_name }}"
+  user: "{{ grafana_db_user }}"
+  password: "{{ grafana_db_password_secret }}"
 
 # Grafana security vars
 grafana_security:
   admin_user: admin
   admin_password: "{{ grafana_admin_password_secret }}"
 
-grafana_datasources: []
+grafana_datasources:
   - name: "InfluxDB"
     type: "influxdb"
     access: "proxy"
