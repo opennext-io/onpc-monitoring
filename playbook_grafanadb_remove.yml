@@ -28,7 +28,7 @@
         password: "{{ grafana_password }}"
         host: "{{ item }}"
         state: "absent"
-        priv: "{{ grafana_name }}.*:ALL"
+        priv: "{{ grafana_db_name }}.*:ALL"
       delegate_to: "{{ groups['galera_all'][0] }}"
       with_items:
         - "localhost"
@@ -38,7 +38,7 @@
         login_user: "{{ galera_root_user }}"
         login_password: "{{ galera_root_password }}"
         login_host: "{{ galera_address|default('127.0.0.1') }}"
-        name: "{{ grafana_name }}"
+        name: "{{ grafana_db_name }}"
         state: "absent"
       delegate_to: "{{ groups['galera_all'][0] }}"
 

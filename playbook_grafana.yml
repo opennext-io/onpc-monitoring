@@ -34,10 +34,10 @@
         login_password: "{{ galera_root_password }}"
         login_host: "{{ galera_address|default('127.0.0.1') }}"
         name: "{{ grafana_db_user }}"
-        password: "{{ grafana_db_user_password }}"
+        password: "{{ grafana_db_password_secret }}"
         host: "{{ item }}"
         state: "present"
-        priv: "{{ grafana_name }}.*:ALL"
+        priv: "{{ grafana_db_name }}.*:ALL"
       delegate_to: "{{ groups['galera_all'][0] }}"
       with_items:
         - "localhost"
