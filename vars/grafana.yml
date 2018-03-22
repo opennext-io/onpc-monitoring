@@ -20,13 +20,14 @@ grafana_security:
   admin_password: "{{ grafana_admin_password_secret }}"
 
 grafana_datasources:
-  - name: "InfluxDB"
-    type: "influxdb"
+  - name: "InfluxDB "
+    type: "InfluxDB"
+    database: "{{ influxdb_db_name }}"
     access: "proxy"
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
     basicAuth: true
-    basicAuthUser: "admin"
-    basicAuthPassword: "password"
+    basicAuthUser: "{{ influxdb_db_metric_user }}"
+    basicAuthPassword: "{{influxdb_db_metric_password }}"
     isDefault: true
 
 grafana_plugins: ['grafana-clock-panel']
