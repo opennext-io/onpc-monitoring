@@ -24,8 +24,8 @@ telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['a
 telegraf_db_name: "telegraf"
 telegraf_prometheus_enabled: false
 # TODO: make this dynamic
-telegraf_interfaces_filter: ["eth*","enp0s*","lo","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]
-telegraf_mount_points_filter: ["/","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
+telegraf_interfaces_filter: ["eth*","ens*", "enp*","lo","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]
+telegraf_mount_points_filter: ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
 # TODO: make this dynamic
 telegraf_disks_filter: ["sda","sdb","sdc"]
 telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"

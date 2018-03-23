@@ -53,7 +53,7 @@
   "gnetId": 1177,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1521802021377,
+  "iteration": 1521826340980,
   "links": [],
   "panels": [
     {
@@ -275,8 +275,8 @@
           "measurement": "mysql",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(value) FROM \"mysql_value\" WHERE \"instance\" = 'status' AND \"type\" = 'counter' AND  \"type_instance\" = 'Queries' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time(10s) fill(null)",
-          "rawQuery": false,
+          "query": "SELECT last(\"queries\") FROM \"mysql\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -5254,5 +5254,5 @@
   "timezone": "browser",
   "title": "Service - MySQL Metrics",
   "uid": "XvX7eKziz",
-  "version": 3
+  "version": 4
 }
