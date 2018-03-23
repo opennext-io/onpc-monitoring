@@ -22,12 +22,12 @@
   files = ["ip_conntrack_count","ip_conntrack_max","nf_conntrack_count","nf_conntrack_max"]
   dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]    
 [[inputs.net]]
-  interfaces = ["{{ telegraf_interfaces_filter }}"]
+  interfaces = "{{ telegraf_interfaces_filter }}"
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
-  mount_points = ["{{ telegraf_mount_points_filter }}"]
+  mount_points = "{{ telegraf_mount_points_filter }}"
 [[inputs.diskio]]
-  devices = ["{{ telegraf_disks_filter }}"]
+  devices = "{{ telegraf_disks_filter }}"
 [[inputs.kernel]]
 [[inputs.swap]]
 [[inputs.bond]]

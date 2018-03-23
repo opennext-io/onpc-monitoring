@@ -1,5 +1,0 @@
-# Fake env used to test the python module in fake mode
-export COLLECTD_TENANT_NAME=service
-export COLLECTD_DEBUG=True
-export COLLECTD_USERNAME=monito
-export COLLECTD_KEYSTONE_URL=http://172.29.236.100:5000/v2.0
