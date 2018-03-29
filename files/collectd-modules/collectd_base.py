@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,8 +46,8 @@ def read_callback_wrapper(f):
 class Base(object):
     """Base class for writing Python plugins."""
 
-    FAIL = 0
-    OK = 1
+    OK = 0
+    FAIL = 1
     UNKNOWN = 2
 
     MAX_IDENTIFIER_LENGTH = 63
@@ -286,7 +287,7 @@ class Base(object):
             do_collect_data = data['value'] > 0
             if self.do_collect_data != do_collect_data:
                 # log only the transitions
-                self.logger.info("%s: do_collect_data=%s" %
+                self.logger.notice("%s: do_collect_data=%s" %
                                    (self.__class__.__name__, do_collect_data))
             self.do_collect_data = do_collect_data
 
@@ -375,3 +376,4 @@ class AsyncPoller(threading.Thread):
     @property
     def should_run(self):
         return not self._stop_flag.isSet()
+    

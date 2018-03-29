@@ -456,3 +456,5 @@ class CollectdPlugin(base.Base):
                 self.logger.info('Waiting for {} thread to finish'.format(tid))
                 t.stop()
                 t.join()
+
+

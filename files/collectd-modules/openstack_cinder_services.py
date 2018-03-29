@@ -36,7 +36,6 @@ class CinderServiceStatsPlugin(openstack.CollectdPlugin):
     """
 
     states = {'up': 0, 'down': 1, 'disabled': 2}
-
     cinder_re = re.compile('^cinder-')
 
     def __init__(self, *args, **kwargs):
@@ -56,9 +55,8 @@ class CinderServiceStatsPlugin(openstack.CollectdPlugin):
             state = worker['state']
 
             aggregated_workers[service][state] += 1
-            
             yield {
-                'plugin': PLUGIN_NAME + '_' + 'services',
+                'plugin': PLUGIN_NAME + '_' + 'service',
                 'plugin_instance': service,
                 'type_instance': state, 
                 'hostname': host,
@@ -68,18 +66,15 @@ class CinderServiceStatsPlugin(openstack.CollectdPlugin):
             }
 
         for service in aggregated_workers:
-            total = sum(aggregated_workers[service].values())
+            totalw = sum(aggregated_workers[service].values())
 
             for state in self.states:
-                percent = 0
-                if total > 0:
-                    percent = (100.0 * aggregated_workers[service][state]) / total
-
+                prct = (100.0 * aggregated_workers[service][state]) / totalw
                 yield {
                     'plugin': PLUGIN_NAME + '_' + 'services_percent',
                     'plugin_instance': service,
                     'type_instance': state, 
-                    'values': percent,
+                    'values': prct,
                     'meta': {'state': state, 'service': service,
                              'discard_hostname': True}
                 }
@@ -93,14 +88,17 @@ class CinderServiceStatsPlugin(openstack.CollectdPlugin):
                 }
 
 
-plugin = CinderServiceStatsPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)
+plugin = CinderServiceStatsPlugin(collectd, PLUGIN_NAME,
+                                  disable_check_metric=True)
 
 
 def config_callback(conf):
     plugin.config_callback(conf)
 
+
 def notification_callback(notification):
     plugin.notification_callback(notification)
+
 
 def read_callback():
     plugin.conditional_read_callback()

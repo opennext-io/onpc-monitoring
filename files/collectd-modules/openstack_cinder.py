@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +50,7 @@ class CinderStatsPlugin(openstack.CollectdPlugin):
     def gen_metric(name, nb, state):
         return {
             'plugin': PLUGIN_NAME + '_' + name,
-            'plugin_instance': None,
+            'plugin_instance': name,
             'type_instance': state,
             'values': nb,
             'meta': {

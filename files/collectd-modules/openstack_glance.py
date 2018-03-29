@@ -141,3 +141,4 @@ else:
     collectd.register_config(config_callback)
     collectd.register_notification(notification_callback)
     collectd.register_read(read_callback, INTERVAL)
+    
