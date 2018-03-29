@@ -7,14 +7,14 @@
 [[inputs.netstat]]
 [[inputs.mem]]
 [[inputs.diskio]]
-  devices = "{{ telegraf_disks_filter }}"
+  devices = ["sd[a-z]", "vd[a-z]"]
 [[inputs.processes]]
 [[inputs.net]]
-  interfaces = "{{ telegraf_interfaces_filter }}"
+  interfaces = ["eth*","ens*", "enp*","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]
 [[inputs.kernel]]
 [[inputs.disks]]
   ignore_fs = ["tmpfs", "devtmpfs"]
-  mount_points = "{{ telegraf_mount_points_filter }}"
+  mount_points = ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
 
 {% if inventory_hostname in groups['all_containers'] %}
 [[inputs.cpu]]
