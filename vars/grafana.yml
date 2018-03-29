@@ -25,9 +25,8 @@ grafana_datasources:
     database: "{{ influxdb_db_name }}"
     access: proxy
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
-    basicAuth: enable
-    basicAuthUser: "{{ influxdb_db_metric_user }}"
-    basicAuthPassword: "{{influxdb_db_metric_password }}"
+    user: "{{ influxdb_db_metric_user }}"
+    password: "{{influxdb_db_metric_password }}"
     isDefault: true
 
 grafana_plugins: ['grafana-clock-panel']
