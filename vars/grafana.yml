@@ -21,7 +21,7 @@ grafana_security:
 
 grafana_datasources:
   - name: InfluxDB
-    type: InfluxDB
+    type: influxDB
     database: "{{ influxdb_db_name }}"
     access: proxy
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"

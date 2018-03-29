@@ -12,7 +12,7 @@
 [[inputs.net]]
   interfaces = ["eth*","ens*", "enp*","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]
 [[inputs.kernel]]
-[[inputs.disks]]
+[[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
   mount_points = ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
 
