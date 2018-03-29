@@ -125,7 +125,7 @@
     Region "{{ service_region }}"
   </Module>
 
-{% else %}
+  Import "openstack_compute"
 
   Import "openstack_compute"
 
@@ -138,6 +138,8 @@
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
+
+{% else %}
 
   Import "libvirt_check"
 

@@ -25,13 +25,16 @@ import collectd_openstack as openstack
 PLUGIN_NAME = 'openstack_compute'
 INTERVAL = openstack.INTERVAL
 
-
 class HypervisorStatsPlugin(openstack.CollectdPlugin):
     """ Class to report the statistics on Nova hypervisors."""
     VALUE_MAP = {
         'current_workload': 'running_tasks',
         'running_vms': 'running_instances',
-        'local_gb_used': 'disk_gb_used'
+        'local_gb_used': 'used_disk',
+        'free_disk_gb': 'free_disk',
+        'memory_mb_used': 'used_ram',
+        'free_ram_mb': 'free_ram',
+        'vcpus_used': 'used_vcpus',
     }
 
     def __init__(self, *args, **kwargs):
@@ -81,7 +84,8 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
                 m_val = stats.get(k, 0)
                 meta = {'hostname': host}
                 yield {
-                    'plugin': PLUGIN_NAME + '_' + v,
+                    'plugin': PLUGIN_NAME,
+                    'plugin_instance': v,
                     'hostname': host,
                     'values': m_val,
                     'meta': meta
@@ -97,7 +101,8 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
                 free = (int(self.extra_config['cpu_ratio'] *
                         m_vcpus)) - m_vcpus_used
                 yield {
-                    'plugin': PLUGIN_NAME + '_' + 'free_vcpus',
+                    'plugin': PLUGIN_NAME,
+                    'plugin_instance': 'free_vcpus',
                     'hostname': host,
                     'values': free,
                     'meta': {'hostname': host},
@@ -126,7 +131,7 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
                     2)
             for k, v in nova_aggregates[agg]['metrics'].iteritems():
                 yield {
-                    'plugin': PLUGIN_NAME + '_' + 'aggregates',
+                    'plugin': PLUGIN_NAME,
                     'plugin_instance': 'aggregate_{}'.format(k),
                     'type_instance': agg,
                     'values': v,
@@ -139,15 +144,13 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
         # Dispatch the global metrics
         for k, v in total_stats.iteritems():
             yield {
-                'plugin': PLUGIN_NAME + '_' + 'total_stats',
+                'plugin': PLUGIN_NAME,
                 'plugin_instance': 'total_{}'.format(k),
                 'values': v,
                 'meta': {'discard_hostname': True}
             }
 
-plugin = HypervisorStatsPlugin(collectd, PLUGIN_NAME,
-                               disable_check_metric=True)
-
+plugin = HypervisorStatsPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)
 
 def config_callback(conf):
     plugin.config_callback(conf)
