@@ -7,7 +7,9 @@
 
 [[inputs.socket_listener]]
   service_address = "udp://127.0.0.1:25826"
-  name_prefix = "collectd_"
+  name_prefix = ""
   data_format = "collectd"
+  collectd_security_level = "none"
   collectd_typesdb = "{{ collectd_types_db_path }}"
 {% endif %}
+

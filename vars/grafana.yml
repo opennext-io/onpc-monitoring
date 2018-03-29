@@ -20,10 +20,10 @@ grafana_security:
   admin_password: "{{ grafana_admin_password_secret }}"
 
 grafana_datasources:
-  - name: "InfluxDB "
-    type: "InfluxDB"
+  - name: InfluxDB
+    type: InfluxDB
     database: "{{ influxdb_db_name }}"
-    access: "proxy"
+    access: proxy
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
     basicAuth: true
     basicAuthUser: "{{ influxdb_db_metric_user }}"

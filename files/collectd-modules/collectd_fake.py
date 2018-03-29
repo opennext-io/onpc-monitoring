@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,13 +29,13 @@ logging.basicConfig(
 
 class Values(object):
 
-    def __init__(self, type=None, values=None, plugin_instance=None,
-                 type_instance=None, plugin=None, host=None, time=None,
+    def __init__(self, values=None, plugin_instance=None, type_instance=None,
+                 type=None, plugin=None, host=None, time=None,
                  meta=None, interval=None):
-        self._type = type
         self._values = values
         self._plugin_instance = plugin_instance
-        self._type_instance = type_instance
+        self._type = type,
+        self._type_instance = type_instance,
         self._plugin = plugin
         self._host = host
         self._time = time
@@ -45,12 +46,14 @@ class Values(object):
                  type_instance=None, plugin=None, host=None, time=None,
                  meta=None, interval=None):
         info("dispatch: plugin={plugin} plugin_instance={plugin_instance} "
-             "type={type} type_instance={type_instance} "
+             "type_instance={type_instance} "
+             "host={host} interval={interval} "
              "values={values} meta={meta}".format(
                  plugin=plugin or self._plugin,
                  plugin_instance=plugin_instance or self._plugin_instance,
-                 type=type or self._type,
                  type_instance=type_instance or self._type_instance,
+                 host=host or self._host,
+                 interval=interval or self._interval,
                  values=values or self._values,
                  meta=meta or self._meta,
              ))
@@ -71,18 +74,14 @@ def load_configuration(plugin):
 def error(msg):
     logging.error(msg)
 
-
 def warning(msg):
     logging.warning(msg)
-
 
 def notice(msg):
     logging.info(msg)
 
-
 def info(msg):
     logging.info(msg)
-
 
 def debug(msg):
     logging.debug(msg)

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNect SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@ PLUGIN_NAME = 'openstack_neutron'
 INTERVAL = openstack.INTERVAL
 all_states = ('active', 'down', 'build', 'error', 'unknown')
 port_owners = ('compute', 'none')
-floating_ip_states = (None, 'associated')
+floating_ip_states = ('free', 'associated')
 
 
 class NeutronStatsPlugin(openstack.CollectdPlugin):
@@ -45,13 +46,13 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
         self.pagination_limit = 100
 
     @staticmethod
-    def gen_metric(name, nb, type_instance=None, meta={}):
+    def gen_metric(name, nb, s=None, o=None, meta={}):
         metric = {
-            'plugin_instance': name,
+            'plugin': PLUGIN_NAME + '_' + name,
+            'type_instance': s,
+            'plugin_instance': o,
             'values': nb,
         }
-        if type_instance:
-            metric['type_instance'] = type_instance
         metric['meta'] = meta
         metric['meta']['discard_hostname'] = True
         return metric
@@ -74,7 +75,7 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
             return "%s.%s" % (owner, status)
 
         def groupby_floating(x):
-            return 'associated' if x.get('port_id', None) else None
+            return 'associated' if x.get('port_id') else 'free'
 
         # Networks
         networks = self.get_objects('neutron', 'networks', api_version='v2.0',
@@ -83,10 +84,7 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
                                              group_by_func=groupby_status)
         for s in all_states:
             nb = status.get(s, 0)
-            yield NeutronStatsPlugin.gen_metric(
-                'networks',
-                nb,
-                None,
+            yield NeutronStatsPlugin.gen_metric('networks', nb, s, None,
                 {
                     'state': s,
                 })
@@ -95,7 +93,7 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
         # Subnets
         subnets = self.get_objects('neutron', 'subnets', api_version='v2.0',
                                    params={'fields': ['id']})
-        yield NeutronStatsPlugin.gen_metric('subnets', len(subnets))
+        yield NeutronStatsPlugin.gen_metric('subnets', len(subnets), 'total')
 
         # Ports
         ports = self.get_objects('neutron', 'ports', api_version='v2.0',
@@ -106,10 +104,7 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
         for o in port_owners:
             for s in all_states:
                 nb = status.get('{}.{}'.format(o, s), 0)
-                yield NeutronStatsPlugin.gen_metric(
-                    'ports',
-                    nb,
-                    None,
+                yield NeutronStatsPlugin.gen_metric('ports', nb, s, o,
                     {
                         'state': s,
                         'owner': o,
@@ -123,10 +118,7 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
                                              group_by_func=groupby_status)
         for s in all_states:
             nb = status.get(s, 0)
-            yield NeutronStatsPlugin.gen_metric(
-                'routers',
-                nb,
-                None,
+            yield NeutronStatsPlugin.gen_metric('routers', nb, s, None,
                 {
                     'state': s,
                 })
@@ -141,15 +133,11 @@ class NeutronStatsPlugin(openstack.CollectdPlugin):
                                              group_by_func=groupby_floating)
         for s in floating_ip_states:
             nb = status.get(s, 0)
-            yield NeutronStatsPlugin.gen_metric(
-                'floatingips',
-                nb,
-                None,
+            yield NeutronStatsPlugin.gen_metric('floatingips', nb, s, None,
                 {
                     'state': s,
                 })
-        yield NeutronStatsPlugin.gen_metric('floatingips', len(floatingips),
-                                            'total')
+        yield NeutronStatsPlugin.gen_metric('floatingips', len(floatingips), 'total')
 
 
 plugin = NeutronStatsPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)

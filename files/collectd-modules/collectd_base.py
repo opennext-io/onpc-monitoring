@@ -286,7 +286,7 @@ class Base(object):
             do_collect_data = data['value'] > 0
             if self.do_collect_data != do_collect_data:
                 # log only the transitions
-                self.logger.notice("%s: do_collect_data=%s" %
+                self.logger.info("%s: do_collect_data=%s" %
                                    (self.__class__.__name__, do_collect_data))
             self.do_collect_data = do_collect_data
 

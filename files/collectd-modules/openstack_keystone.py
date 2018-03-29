@@ -52,7 +52,8 @@ class KeystoneStatsPlugin(openstack.CollectdPlugin):
                                              group_by_func=groupby)
         for s, nb in status.iteritems():
             yield {
-                'plugin_instance': 'tenants',
+                'plugin': PLUGIN_NAME + '_' + 'tenants',
+                'type_instance': s,
                 'values': nb,
                 'meta': {'state': s, 'discard_hostname': True},
             }
@@ -67,7 +68,8 @@ class KeystoneStatsPlugin(openstack.CollectdPlugin):
                                              group_by_func=groupby)
         for s, nb in status.iteritems():
             yield {
-                'plugin_instance': 'users',
+                'plugin': PLUGIN_NAME + '_' + 'users',
+                'type_instance': s,
                 'values': nb,
                 'meta': {'state': s, 'discard_hostname': True},
             }
@@ -79,7 +81,8 @@ class KeystoneStatsPlugin(openstack.CollectdPlugin):
             return
         roles = r.json().get('roles', [])
         yield {
-            'plugin_instance': 'roles',
+            'plugin': PLUGIN_NAME + '_' + 'roles',
+            'type_instance': s,
             'values': len(roles),
             'meta': {'discard_hostname': True},
         }

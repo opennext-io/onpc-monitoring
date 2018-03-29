@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,16 @@
 # limitations under the License.
 #
 # Collectd plugin for checking the status of OpenStack API services
-import collectd
+if __name__ == '__main__':
+    import collectd_fake as collectd
+else:
+    import collectd
 
 import collectd_openstack as openstack
 
 from urlparse import urlparse
 
-PLUGIN_NAME = 'check_openstack_api'
+PLUGIN_NAME = 'openstack_check_apis'
 INTERVAL = openstack.INTERVAL
 
 
@@ -78,6 +82,8 @@ class APICheckPlugin(openstack.CollectdPlugin):
                 status = self.UNKNOWN
                 check = {}
             else:
+                self.logger.info(
+                    "Check status of service '%s'" % name)
                 check = self.CHECK_MAP[name]
                 url = self._service_url(service['url'], check['path'])
                 r = self.raw_get(url, token_required=check.get('auth', False))
@@ -106,6 +112,8 @@ class APICheckPlugin(openstack.CollectdPlugin):
             if item['status'] != self.UNKNOWN:
                 # skip if status is UNKNOWN
                 yield {
+                    'plugin': PLUGIN_NAME,
+                    'plugin_instance': item['service'],
                     'values': item['status'],
                     'meta': {
                         'region': item['region'],
@@ -129,6 +137,10 @@ def notification_callback(notification):
 def read_callback():
     plugin.conditional_read_callback()
 
-collectd.register_config(config_callback)
-collectd.register_notification(notification_callback)
-collectd.register_read(read_callback, INTERVAL)
+if __name__ == '__main__':
+    collectd.load_configuration(plugin)
+    plugin.read_callback()
+else:
+    collectd.register_config(config_callback)
+    collectd.register_notification(notification_callback)
+    collectd.register_read(read_callback, INTERVAL)

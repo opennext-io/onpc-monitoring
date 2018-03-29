@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,17 +31,7 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
     VALUE_MAP = {
         'current_workload': 'running_tasks',
         'running_vms': 'running_instances',
-        'local_gb_used': 'used_disk',
-        'free_disk_gb': 'free_disk',
-        'memory_mb_used': 'used_ram',
-        'free_ram_mb': 'free_ram',
-        'vcpus_used': 'used_vcpus',
-    }
-    UNIT_MAP = {
-        'local_gb_used': 'GB',
-        'free_disk_gb': 'GB',
-        'memory_mb_used': 'MB',
-        'free_ram_mb': 'MB',
+        'local_gb_used': 'disk_gb_used'
     }
 
     def __init__(self, *args, **kwargs):
@@ -89,10 +80,9 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
             for k, v in self.VALUE_MAP.iteritems():
                 m_val = stats.get(k, 0)
                 meta = {'hostname': host}
-                if k in self.UNIT_MAP:
-                    meta['unit'] = self.UNIT_MAP[k]
                 yield {
-                    'plugin_instance': v,
+                    'plugin': PLUGIN_NAME + '_' + v,
+                    'hostname': host,
                     'values': m_val,
                     'meta': meta
                 }
@@ -107,7 +97,8 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
                 free = (int(self.extra_config['cpu_ratio'] *
                         m_vcpus)) - m_vcpus_used
                 yield {
-                    'plugin_instance': 'free_vcpus',
+                    'plugin': PLUGIN_NAME + '_' + 'free_vcpus',
+                    'hostname': host,
                     'values': free,
                     'meta': {'hostname': host},
                 }
@@ -135,7 +126,9 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
                     2)
             for k, v in nova_aggregates[agg]['metrics'].iteritems():
                 yield {
+                    'plugin': PLUGIN_NAME + '_' + 'aggregates',
                     'plugin_instance': 'aggregate_{}'.format(k),
+                    'type_instance': agg,
                     'values': v,
                     'meta': {
                         'aggregate': agg,
@@ -146,7 +139,8 @@ class HypervisorStatsPlugin(openstack.CollectdPlugin):
         # Dispatch the global metrics
         for k, v in total_stats.iteritems():
             yield {
-                'type_instance': 'total_{}'.format(k),
+                'plugin': PLUGIN_NAME + '_' + 'total_stats',
+                'plugin_instance': 'total_{}'.format(k),
                 'values': v,
                 'meta': {'discard_hostname': True}
             }
@@ -158,10 +152,8 @@ plugin = HypervisorStatsPlugin(collectd, PLUGIN_NAME,
 def config_callback(conf):
     plugin.config_callback(conf)
 
-
 def notification_callback(notification):
     plugin.notification_callback(notification)
-
 
 def read_callback():
     plugin.conditional_read_callback()

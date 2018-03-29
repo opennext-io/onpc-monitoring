@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,7 +48,9 @@ class NovaInstanceStatsPlugin(openstack.CollectdPlugin):
     @staticmethod
     def gen_metric(name, nb, state):
         return {
-            'plugin_instance': name,
+            'plugin': PLUGIN_NAME + '_' + name,
+            'plugin_instance': None,
+            'type_instance': state,
             'values': nb,
             'meta': {
                 'state': state,

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2017 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,8 +55,12 @@ class NovaServiceStatsPlugin(openstack.CollectdPlugin):
             state = worker['state']
 
             aggregated_workers[service][state] += 1
+
             yield {
-                'plugin_instance': 'service',
+	        'plugin': PLUGIN_NAME + '_' + 'service',
+	        'plugin_instance':service, 
+                'type_instance': state,
+                'hostname': host,
                 'values': self.states[state],
                 'meta': {'hostname': host, 'service': service, 'state': state,
                          'az': worker['zone']}
@@ -67,35 +72,36 @@ class NovaServiceStatsPlugin(openstack.CollectdPlugin):
             total = sum(aggregated_workers[service].values())
 
             for state in self.states:
-                prct = 0
+                percent = 0
                 if total > 0:
-                    prct = (100.0 * aggregated_workers[service][state]) / total
+                    percent = (100.0 * aggregated_workers[service][state]) / total
 
                 yield {
-                    'plugin_instance': 'services_percent',
-                    'values': prct,
+                    'plugin': PLUGIN_NAME + '_' + 'services_percent',
+                    'plugin_instance':service, 
+                    'type_instance': state,
+                    'values': percent,
                     'meta': {'state': state, 'service': service,
                              'discard_hostname': True},
                 }
                 yield {
-                    'plugin_instance': 'services',
+                    'plugin': PLUGIN_NAME + '_' + 'services',
+                    'plugin_instance':service, 
+                    'type_instance': state,
                     'values': aggregated_workers[service][state],
                     'meta': {'state': state, 'service': service,
                              'discard_hostname': True},
                 }
 
 
-plugin = NovaServiceStatsPlugin(collectd, PLUGIN_NAME,
-                                disable_check_metric=True)
+plugin = NovaServiceStatsPlugin(collectd, PLUGIN_NAME, disable_check_metric=True)
 
 
 def config_callback(conf):
     plugin.config_callback(conf)
 
-
 def notification_callback(notification):
     plugin.notification_callback(notification)
-
 
 def read_callback():
     plugin.conditional_read_callback()

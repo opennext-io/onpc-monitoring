@@ -48,7 +48,9 @@ class CinderStatsPlugin(openstack.CollectdPlugin):
     @staticmethod
     def gen_metric(name, nb, state):
         return {
-            'plugin_instance': name,
+            'plugin': PLUGIN_NAME + '_' + name,
+            'plugin_instance': None,
+            'type_instance': state,
             'values': nb,
             'meta': {
                 'state': state,

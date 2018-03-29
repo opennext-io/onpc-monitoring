@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright 2015 Mirantis, Inc.
+# Copyright 2018, OpenNext SAS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ import re
 
 import collectd_openstack as openstack
 
-PLUGIN_NAME = 'openstack_neutron_agents'
+PLUGIN_NAME = 'openstack_neutron'
 INTERVAL = openstack.INTERVAL
 
 
@@ -62,7 +63,10 @@ class NeutronAgentStatsPlugin(openstack.CollectdPlugin):
                 meta['az'] = az
 
             yield {
-                'plugin_instance': 'agent',
+                'plugin': PLUGIN_NAME + '_' + 'agents',
+                'plugin_instance': service,
+                'type_instance': state,
+                'hostname': host,
                 'values': self.states[state],
                 'meta': meta,
             }
@@ -73,13 +77,17 @@ class NeutronAgentStatsPlugin(openstack.CollectdPlugin):
             for state in self.states:
                 prct = (100.0 * aggregated_agents[service][state]) / totala
                 yield {
-                    'plugin_instance': 'agents_percent',
+                    'plugin': PLUGIN_NAME + '_' + 'agents_percent',
+                    'plugin_instance': service, 
+                    'type_instance': state,
                     'values': prct,
                     'meta': {'service': service, 'state': state,
                              'discard_hostname': True},
                 }
                 yield {
-                    'plugin_instance': 'agents',
+                    'plugin': PLUGIN_NAME + '_' + 'agents',
+                    'plugin_instance': service, 
+                    'type_instance': state,
                     'values': aggregated_agents[service][state],
                     'meta': {'service': service, 'state': state,
                              'discard_hostname': True},
