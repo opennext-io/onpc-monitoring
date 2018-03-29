@@ -21,11 +21,11 @@ grafana_security:
 
 grafana_datasources:
   - name: InfluxDB
-    type: influxDB
+    type: influxdb
     database: "{{ influxdb_db_name }}"
     access: proxy
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"
-    basicAuth: true
+    basicAuth: enable
     basicAuthUser: "{{ influxdb_db_metric_user }}"
     basicAuthPassword: "{{influxdb_db_metric_password }}"
     isDefault: true
