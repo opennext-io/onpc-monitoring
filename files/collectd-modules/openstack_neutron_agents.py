@@ -63,7 +63,7 @@ class NeutronAgentStatsPlugin(openstack.CollectdPlugin):
                 meta['az'] = az
 
             yield {
-                'plugin': PLUGIN_NAME + '_' + 'agents',
+                'plugin': PLUGIN_NAME + '_' + 'agent',
                 'plugin_instance': service,
                 'type_instance': state,
                 'hostname': host,
