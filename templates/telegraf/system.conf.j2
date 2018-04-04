@@ -6,28 +6,32 @@
 [[inputs.mem]]
 [[inputs.netstat]]
 [[inputs.mem]]
-[[inputs.diskio]]
-  devices = ["sd[a-z]", "vd[a-z]"]
 [[inputs.processes]]
-[[inputs.net]]
-  interfaces = ["eth*","ens*", "enp*","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]
 [[inputs.kernel]]
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
   mount_points = ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
 
 {% if inventory_hostname in groups['all_containers'] %}
+[[inputs.diskio]]
+  devices = ["vd[a-z][0-9]"]
 [[inputs.cpu]]
   percpu = false
   fielddrop = ["time_*"]
+[[inputs.net]]
+  interfaces = ["eth*"]
 {% else %}
+[[inputs.diskio]]
+  devices = ["sd[a-z][0-9]"]
 [[inputs.cpu]]
   percpu = true
   totalcpu = true
   fielddrop = ["time_*"]
 [[inputs.conntrack]]
   files = ["ip_conntrack_count","ip_conntrack_max","nf_conntrack_count","nf_conntrack_max"]
-  dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]    
+  dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]
+[[inputs.net]]
+  interfaces = ["eth*","ens*", "enp*","br-vxlan","br-vlan","br-storage","br-mgmt", "lxcbr0"]  
 [[inputs.swap]]
 [[inputs.bond]]
 {% endif %}

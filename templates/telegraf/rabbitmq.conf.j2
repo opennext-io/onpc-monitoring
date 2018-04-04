@@ -7,6 +7,6 @@
     prefix = "rabbitmq"
 [[inputs.rabbitmq]]
     url = "http://127.0.0.1:15672"
-    username = "guest"
-    password = "guest"
+    username = "{{ rabbitmq_monitoring_userid }}"
+    password = "{{ rabbitmq_monitoring_password }}"
 {% endif %}
