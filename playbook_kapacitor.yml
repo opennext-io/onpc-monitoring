@@ -42,4 +42,4 @@
   vars_files:
     - vars/main.yml
     - vars/influxdb.yml
-    - var/kapacitor.yml
+    - vars/kapacitor.yml
