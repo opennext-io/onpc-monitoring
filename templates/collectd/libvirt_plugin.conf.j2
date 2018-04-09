@@ -15,6 +15,6 @@
   HostnameFormat "hostname"
   PluginInstanceFormat "uuid"
   Instances {{ collectd_readthreads }}
-  ExtraStats "cpu_util" "disk" "disk_err" "vcpupin"
+  ExtraStats "cpu_util disk disk_err domain_state fs_info pcpu perf vcpupin"
 </Plugin>
 {% endif %}

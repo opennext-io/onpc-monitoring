@@ -3,9 +3,11 @@
 
 {% if inventory_hostname in groups['rabbitmq'] %}
 [[inputs.procstat]]
-    systemd_unit = "rabbitmq-server.service"
+#    systemd_unit = "rabbitmq-server.service"
+    pattern = "beam.smp"
     prefix = "rabbitmq"
 [[inputs.rabbitmq]]
+    interval = "60s"
     url = "http://127.0.0.1:15672"
     username = "{{ rabbitmq_monitoring_userid }}"
     password = "{{ rabbitmq_monitoring_password }}"

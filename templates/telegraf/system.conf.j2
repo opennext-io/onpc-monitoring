@@ -11,7 +11,6 @@
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
   mount_points = ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
-
 {% if inventory_hostname in groups['all_containers'] %}
 [[inputs.diskio]]
   devices = ["vd[a-z][0-9]"]

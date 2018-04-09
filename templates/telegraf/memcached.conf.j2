@@ -3,5 +3,5 @@
 
 {% if inventory_hostname in groups['memcached'] %}
 [[inputs.memcached]]
-  servers = ["127.0.0.1:11211"]
+  servers = ["{{ ansible_host }}:11211"]
 {% endif %}
