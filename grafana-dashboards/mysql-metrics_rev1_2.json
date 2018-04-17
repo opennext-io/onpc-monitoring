@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.0.3"
+      "version": "5.0.4"
     },
     {
       "type": "panel",
@@ -53,7 +53,7 @@
   "gnetId": 1177,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1521826340980,
+  "iteration": 1523958112873,
   "links": [],
   "panels": [
     {
@@ -72,11 +72,11 @@
     },
     {
       "cacheTimeout": null,
-      "colorBackground": false,
+      "colorBackground": true,
       "colorValue": false,
       "colors": [
         "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
+        "#64b0c8",
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "${DS_INFLUXDB}",
@@ -177,7 +177,7 @@
           "textEditor": true
         }
       ],
-      "thresholds": "300,3600",
+      "thresholds": "",
       "timeFrom": "1h",
       "title": "Current MySQL Uptime",
       "type": "singlestat",
@@ -193,18 +193,18 @@
     },
     {
       "cacheTimeout": null,
-      "colorBackground": false,
+      "colorBackground": true,
       "colorValue": false,
       "colors": [
         "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
+        "#9ac48a",
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "${DS_INFLUXDB}",
       "decimals": 0,
       "editable": true,
       "error": false,
-      "format": "none",
+      "format": "short",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -219,6 +219,7 @@
         "y": 1
       },
       "height": "100px",
+      "hideTimeOverride": true,
       "id": 3,
       "interval": null,
       "links": [],
@@ -298,9 +299,10 @@
           "textEditor": true
         }
       ],
-      "thresholds": "35,75",
-      "timeFrom": "1h",
-      "title": "Current Queries",
+      "thresholds": "",
+      "timeFrom": "5m",
+      "timeShift": null,
+      "title": "Number of Queries",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -323,7 +325,7 @@
       "fill": 1,
       "grid": {},
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 7,
         "x": 8,
         "y": 1
@@ -506,13 +508,13 @@
       "fill": 1,
       "grid": {},
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 8,
         "x": 15,
         "y": 1
       },
       "id": 4,
-      "interval": "",
+      "interval": "1m",
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -564,9 +566,10 @@
             }
           ],
           "measurement": "mysql",
+          "orderByTime": "ASC",
           "policy": "default",
-          "query": "select mean(\"value\") from \"mysql_value\" WHERE \"type_instance\" = 'Threads_connected' AND \"type\" = 'gauge' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
+          "query": "SELECT mean(\"threads_connected\") FROM \"mysql\" WHERE (\"host\" =~ /^$host$/) AND $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -610,9 +613,10 @@
             }
           ],
           "measurement": "mysql",
+          "orderByTime": "ASC",
           "policy": "default",
-          "query": "select mean(\"value\") from \"mysql_value\" WHERE \"type_instance\" = 'Threads_running' AND \"type\" = 'gauge' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
-          "rawQuery": false,
+          "query": "SELECT mean(\"threads_running\") FROM \"mysql\" WHERE (\"host\" =~ /^$host$/) AND $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
           "select": [
@@ -646,7 +650,7 @@
       "tooltip": {
         "msResolution": false,
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -659,7 +663,7 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -690,7 +694,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 8
       },
       "id": 25,
       "interval": "",
@@ -872,7 +876,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 8
       },
       "id": 27,
       "interval": "",
@@ -1060,7 +1064,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 13
       },
       "id": 29,
       "legend": {
@@ -1394,7 +1398,7 @@
         "h": 4,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 13
       },
       "id": 28,
       "legend": {
@@ -1629,7 +1633,7 @@
         "h": 4,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 17
       },
       "id": 30,
       "legend": {
@@ -1810,7 +1814,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 18
       },
       "id": 31,
       "legend": {
@@ -2097,7 +2101,7 @@
         "h": 3,
         "w": 12,
         "x": 0,
-        "y": 21
+        "y": 23
       },
       "id": 26,
       "legend": {
@@ -2219,7 +2223,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 26
       },
       "id": 45,
       "panels": [],
@@ -2241,7 +2245,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 27
       },
       "id": 41,
       "legend": {
@@ -2737,7 +2741,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 27
       },
       "id": 42,
       "legend": {
@@ -3225,7 +3229,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 34
       },
       "id": 39,
       "legend": {
@@ -3663,7 +3667,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 34
       },
       "id": 43,
       "legend": {
@@ -4093,7 +4097,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 41
       },
       "id": 46,
       "panels": [],
@@ -4115,7 +4119,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 42
       },
       "id": 37,
       "legend": {
@@ -4286,7 +4290,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 42
       },
       "id": 38,
       "legend": {
@@ -4613,7 +4617,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 49
       },
       "id": 47,
       "panels": [],
@@ -4635,7 +4639,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 48
+        "y": 50
       },
       "id": 35,
       "legend": {
@@ -4763,7 +4767,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 48
+        "y": 50
       },
       "id": 36,
       "legend": {
@@ -4891,7 +4895,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 48
+        "y": 50
       },
       "id": 33,
       "legend": {
@@ -5015,7 +5019,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 48
+        "y": 50
       },
       "id": 34,
       "legend": {
@@ -5228,7 +5232,6 @@
   },
   "timepicker": {
     "refresh_intervals": [
-      "5s",
       "10s",
       "30s",
       "1m",
@@ -5252,7 +5255,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Service - MySQL Metrics",
+  "title": "MySQL Metrics",
   "uid": "XvX7eKziz",
   "version": 4
 }
