@@ -57,13 +57,13 @@ class NovaServiceStatsPlugin(openstack.CollectdPlugin):
             aggregated_workers[service][state] += 1
 
             yield {
-	        'plugin': PLUGIN_NAME + '_' + 'service',
-	        'plugin_instance':service, 
-                'type_instance': state,
-                'hostname': host,
-                'values': self.states[state],
-                'meta': {'hostname': host, 'service': service, 'state': state,
-                         'az': worker['zone']}
+	          'plugin': PLUGIN_NAME + '_' + 'service',
+	          'plugin_instance':service, 
+              'type_instance': state,
+              'hostname': host,
+              'values': self.states[state],
+              'meta': {'hostname': host, 'service': service, 'state': state,
+                      'az': worker['zone']}
             }
 
         for service in set(aggregated_workers.keys()).union(

@@ -112,9 +112,15 @@ data_dir = "/var/lib/kapacitor"
   source = "Kapacitor"
 
 [slack]
+{% if kapacitor_slack_enabled | bool %}
+  enabled = true
+  url = "{{ kapacitor_slack_url }}"
+  channel = "{{ kapacitor_slack_channel }}"
+{% else %}
   enabled = false
   url = ""
   channel = ""
+{% endif %}
   global = false
   state-changes-only = false
 
@@ -145,7 +151,7 @@ data_dir = "/var/lib/kapacitor"
   origin = "kapacitor"
 
 [reporting]
-  enabled = true
+  enabled = false
   url = "https://usage.influxdata.com"
 
 [stats]

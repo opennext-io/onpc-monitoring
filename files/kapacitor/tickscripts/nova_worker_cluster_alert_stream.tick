@@ -1,0 +1,42 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert: nova_worker_cluster_alert_stream
+// Define: kapacitor define nova_worker_cluster_alert_stream -type stream \
+//           -tick nova_worker_cluster_alert_stream.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable nova_worker_cluster_alert_stream
+//
+dbrp "telegraf"."autogen"
+
+var period = 1m 
+var every = 1m 
+var crit = 2.0/3.0
+
+stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('openstack_nova_services_percent_value')
+    .groupBy('instance', 'region')
+    .where(lambda: "type_instance" == 'up')
+  |window()
+    .period(period)
+    .every(every)
+  |last('value')
+    .as('stat')
+  |alert()
+    .id('{{ index .Tags "region" }}/nova-{{ index .Tags "instance" }}/cluster_status')
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" }}%')
+    .crit(lambda: "stat" <= crit)
+    .log('/tmp/nova_worker_cluster_alert_log.txt')
+    .topic('openstack')

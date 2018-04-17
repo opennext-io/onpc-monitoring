@@ -31,6 +31,8 @@ INTERVAL = openstack.INTERVAL
 class APICheckPlugin(openstack.CollectdPlugin):
     """Class to check the status of OpenStack API services."""
 
+    states = {0: 'okay', 1: 'failed', 2: 'unknown'}
+
     # TODO(all): sahara, murano
     CHECK_MAP = {
         'keystone': {
@@ -109,11 +111,12 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     def itermetrics(self):
         for item in self.check_api():
-            if item['status'] != self.UNKNOWN:
+            # if item['status'] != self.UNKNOWN:
                 # skip if status is UNKNOWN
                 yield {
                     'plugin': PLUGIN_NAME,
                     'plugin_instance': item['service'],
+                    'type_instance': self.states[item['status']],
                     'values': item['status'],
                     'meta': {
                         'region': item['region'],
@@ -144,3 +147,4 @@ else:
     collectd.register_config(config_callback)
     collectd.register_notification(notification_callback)
     collectd.register_read(read_callback, INTERVAL)
+

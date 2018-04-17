@@ -1,0 +1,43 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert: openstack_api_alert_stream
+//
+// DEFINE: kapacitor define openstack_api_alert_stream -type stream \
+//           -tick openstack_api_alert_stream.tick -dbrp telegraf.autogen
+// ENABLE: kapacitor enable openstack_api_alert_stream
+
+dbrp "telegraf"."autogen"
+
+var period = 1m 
+var every = 1m 
+
+stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('openstack_check_apis_value')
+    .groupBy('instance', 'region')
+  |window()
+    .period(period)
+    .every(every)
+  |last('value')
+    .as('stat')
+  |alert()
+    .id('{{ index .Tags "region" }}/{{ index .Tags "instance" }}/check')
+    .message('{{ .ID }}: [{{ .Level }}] Status of {{ index .Tags "instance" }} check is {{ index .Tags "type_instance" }}')
+    .warn(lambda: "stat" > 1)
+    .crit(lambda: "stat" == 1)
+    .log('/tmp/openstack_api_alert_log.txt')
+    .topic('openstack')
+

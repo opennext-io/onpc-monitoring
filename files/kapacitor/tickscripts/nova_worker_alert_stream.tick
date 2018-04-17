@@ -1,0 +1,41 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert: nova_worker_alert_stream
+//
+// DEFINE: kapacitor define nova_worker_alert_stream -type stream \
+//           -tick openstack_nova_alert_stream.tick -dbrp telegraf.autogen
+// ENABLE: kapacitor enable nova_worker_alert_stream
+//
+dbrp "telegraf"."autogen"
+
+var period = 1m 
+var every = 1m 
+
+stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('openstack_nova_service_value')
+    .groupBy('instance', 'region', 'host')
+  |window()
+    .period(period)
+    .every(every)
+  |last('value')
+    .as('stat')
+  |alert()
+    .id('{{ index .Tags "region" }}/nova-{{ index .Tags "instance" }}/state')
+    .message('{{ .ID }}: [{{ .Level }}] State of "{{ index .Tags "instance" }}" worker on host "{{ index .Tags "host" }}" is "{{ index .Tags "type_instance" }}"')
+    .warn(lambda: "stat" > 0)
+    .log('/tmp/nova_worker_alert_log.txt')
+    .topic('openstack')
