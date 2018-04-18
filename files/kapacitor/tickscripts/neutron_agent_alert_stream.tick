@@ -18,18 +18,12 @@
 //
 dbrp "telegraf"."autogen"
 
-var period = 1m 
-var every = 1m 
-
 stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('openstack_neutron_agent_value')
     .groupBy('instance', 'region', 'host')
-  |window()
-    .period(period)
-    .every(every)
   |last('value')
     .as('stat')
   |alert()

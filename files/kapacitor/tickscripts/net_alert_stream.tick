@@ -1,14 +1,26 @@
-// net_alert_stream
-
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert: net_alert_stream
+// Define: kapacitor define net_alert_stream -type stream \
+//           -tick net_alert_stream -dbrp telegraf.autogen
+// Enable: kapacitor net_alert_stream
+//
 // metric: err_in, err_out, drop_in, drop_out
 // available_fields: "bytes_recv","bytes_sent","packets_recv","packets_sent"
 // NOTE: More fields are available with the `[[inputs.net]]` plugin on linux
 
-// TELEGRAF CONFIGURATION
-// [[inputs.net]]
-
-// DEFINE: kapacitor define net_alert_stream -type stream -tick net/net_alert_stream.tick -dbrp telegraf.autogen
-// ENABLE: kapacitor enable net_alert_stream
+dbrp "telegraf"."autogen"
 
 // Parameters
 var info = 50
@@ -55,11 +67,12 @@ var data = err_in
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "host"}}/net_stats')
-    .message('{{ .ID }}: err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
-    .info(lambda: "err_in.value" > info OR "err_out.value" > info OR "drop_in.value" > info OR "drop_out.value" > info)
-    .warn(lambda: "err_in.value" > warn OR "err_out.value" > warn OR "drop_in.value" > warn OR "drop_out.value" > warn)
-    .crit(lambda: "err_in.value" > crit OR "err_out.value" > crit OR "drop_in.value" > crit OR "drop_out.value" > crit)
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host"}}/{{ index .Tags "instance" }}/netstats')
+    .message('{{ .ID }}: [{{ .Level }}] err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
+    .info(lambda: "err_in.value" > info OR "err_out.value" > info OR "drop_in.value" > info OR "drop_out.value" >= info)
+    .warn(lambda: "err_in.value" > warn OR "err_out.value" > warn OR "drop_in.value" > warn OR "drop_out.value" >= warn)
+    .crit(lambda: "err_in.value" > crit OR "err_out.value" > crit OR "drop_in.value" > crit OR "drop_out.value" >= crit)
+    .topic('system')
 
 // Alert
 alert

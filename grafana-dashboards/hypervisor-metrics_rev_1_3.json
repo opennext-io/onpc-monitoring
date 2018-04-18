@@ -53,7 +53,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1523981976351,
+  "iteration": 1524035826377,
   "links": [],
   "panels": [
     {
@@ -66,7 +66,7 @@
       },
       "id": 36,
       "panels": [],
-      "title": "Hypervisor Current Status",
+      "title": "Current Status",
       "type": "row"
     },
     {
@@ -1216,7 +1216,7 @@
       },
       "id": 28,
       "panels": [],
-      "title": "Hypervisor Statistics",
+      "title": "Resource Usage Statistics",
       "type": "row"
     },
     {
@@ -1573,7 +1573,7 @@
       "fill": 1,
       "gridPos": {
         "h": 7,
-        "w": 11,
+        "w": 12,
         "x": 12,
         "y": 17
       },
@@ -1585,7 +1585,7 @@
         "current": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -1700,7 +1700,7 @@
       "fill": 1,
       "gridPos": {
         "h": 7,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 25
       },
@@ -1888,8 +1888,8 @@
       "fill": 1,
       "gridPos": {
         "h": 7,
-        "w": 11,
-        "x": 11,
+        "w": 12,
+        "x": 12,
         "y": 25
       },
       "id": 205,
@@ -2114,7 +2114,7 @@
       "fill": 1,
       "gridPos": {
         "h": 11,
-        "w": 11,
+        "w": 12,
         "x": 0,
         "y": 32
       },
@@ -2260,7 +2260,7 @@
         "multi": false,
         "name": "instance",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"virt_value\" WITH KEY = \"instance\"",
+        "query": "SHOW TAG VALUES FROM \"virt_value\" WITH KEY = \"instance\" WHERE \"host\" =~ /^$host$/",
         "refresh": 1,
         "regex": "",
         "sort": 2,
@@ -2268,7 +2268,7 @@
         "tags": [],
         "tagsQuery": "",
         "type": "query",
-        "useTags": false
+        "useTags": true
       }
     ]
   },
@@ -2306,5 +2306,5 @@
   "timezone": "browser",
   "title": "Hypervisor Metrics",
   "uid": "Pc5edcZiz",
-  "version": 15
+  "version": 16
 }

@@ -18,8 +18,6 @@
 //
 dbrp "telegraf"."autogen"
 
-var period = 1m 
-var every = 1m 
 var crit = 2.0/3.0
 
 stream
@@ -29,9 +27,6 @@ stream
     .measurement('openstack_cinder_services_percent_value')
     .groupBy('instance', 'region')
     .where(lambda: "type_instance" == 'up')
-  |window()
-    .period(period)
-    .every(every)
   |last('value')
     .as('stat')
   |alert()
