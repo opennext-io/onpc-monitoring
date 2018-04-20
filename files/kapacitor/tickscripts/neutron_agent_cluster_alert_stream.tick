@@ -18,7 +18,8 @@
 //
 dbrp "telegraf"."autogen"
 
-var crit = 2.0/3.0
+var warn = 2/3
+var crit = 1/3
 
 stream
   |from()
@@ -31,7 +32,9 @@ stream
     .as('stat')
   |alert()
     .id('{{ index .Tags "region" }}/neutron-{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is less than {{ index .Fields "stat" }}%')
+    .info(lambda: "stat" > warn)
+    .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .log('/tmp/neutron_agent_cluster_alert_log.txt')
     .topic('openstack')

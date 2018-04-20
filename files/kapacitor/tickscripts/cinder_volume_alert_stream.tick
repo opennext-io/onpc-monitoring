@@ -23,8 +23,8 @@ dbrp "telegraf"."autogen"
 var info = 50 
 var warn = 80 
 var crit = 90
-var period = 5m 
-var every = 1m 
+var period = 1m 
+var every = 1m
 
 // Dataframe
 var rawdata = stream
@@ -33,19 +33,17 @@ var rawdata = stream
     .retentionPolicy('autogen')
     .measurement('openstack_cinder_volumes_size_value')
     .groupBy('region')
-
-var available = rawdata
   |window()
     .period(period)
     .every(every)
+    .align()
+
+var available = rawdata
   |where(lambda: "type_instance" == 'available')
   |mean('value')
     .as('value')
 
 var in_use = rawdata
-  |window()
-    .period(period)
-    .every(every)
   |where(lambda: "type_instance" == 'in-use')
   |mean('value')
     .as('value')

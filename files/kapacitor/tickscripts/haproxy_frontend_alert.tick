@@ -1,0 +1,35 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert:  haproxy_frontend_alert
+// Define: kapacitor define haproxy_frontend_alert -type stream \
+//           -tick haproxy_frontend_alert.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable haproxy_frontend_alert
+//
+dbrp "telegraf"."autogen"
+
+stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('haproxy')
+    .groupBy('region', 'proxy')
+    .where(lambda: "type" == 'frontend')
+  |last('status')
+    .as('stat')
+  |alert()
+    .id('{{ index .Tags "region" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/backend_state')
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of backend is {{ index .Fields "stat" }}')
+    .warn(lambda: "stat" != 'OPEN')
+    .topic('openstack')
+    .log('/tmp/haproxy_frontend_alert_log.txt')

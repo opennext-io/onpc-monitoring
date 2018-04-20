@@ -12,9 +12,9 @@
 // limitations under the License.
 //
 // Alert: compute_disk_alert_stream
-// Define: kapacitor define compute_disk_alert_stream -type stream \
-//           -tick compute_disk_alert_stream.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable compute_disk_alert_stream
+// Define: kapacitor define compute_vdisk_alert_stream -type stream \
+//           -tick compute_vdisk_alert_stream.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable compute_vdisk_alert_stream
 //
 
 dbrp "telegraf"."autogen"
@@ -23,8 +23,8 @@ dbrp "telegraf"."autogen"
 var info = 50 
 var warn = 80 
 var crit = 90
-var period = 5m 
-var every = 1m 
+var period = 1m 
+var every = 1m
 
 // Dataframe
 var rawdata = stream
@@ -33,19 +33,18 @@ var rawdata = stream
     .retentionPolicy('autogen')
     .measurement('openstack_compute_value')
     .groupBy('region')
-
-var available = rawdata
   |window()
     .period(period)
     .every(every)
+    .align()
+
+var available = rawdata
+  
   |where(lambda: "instance" == 'total_free_disk')
   |mean('value')
     .as('value')
 
 var in_use = rawdata
-  |window()
-    .period(period)
-    .every(every)
   |where(lambda: "instance" == 'total_used_disk')
   |mean('value')
     .as('value')

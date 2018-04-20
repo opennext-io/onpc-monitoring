@@ -1,21 +1,22 @@
 // cpu_alert_stream
-
+//
 // metric: usage_idle
 // available_fields: "usage_guest","usage_guest_nice","usage_user","usage_iowait", "usage_irq","usage_nice","usage_softirq","usage_steal","usage_system"
-
+//
 // TELEGRAF CONFIGURATION
 // [[inputs.cpu]]
 //   percpu = true
 //   totalcpu = true
 //   fielddrop = ["time_*"]
-
+//
 // DEFINE: kapacitor define cpu_alert_stream -type stream -tick cpu/cpu_alert_stream.tick -dbrp telegraf.autogen
 // ENABLE: kapacitor enable cpu_alert_stream
 
 // Parameters
-var info = 21
-var warn = 11
-var crit = 2
+dbrp "telegraf"."autogen"
+var info = 20
+var warn = 10
+var crit = 1
 var period = 10s
 var every = 10s
 
@@ -25,7 +26,8 @@ var data = stream
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('cpu')
-    .groupBy('host')
+    .groupBy('region', 'host')
+  |where(lambda: "node_type" == 'host')
   |window()
     .period(period)
     .every(every)
@@ -35,11 +37,12 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "host"}}/cpu_used')
-    .message('{{ .ID }}:{{ index .Fields "stat" }}')
-    .info(lambda: "stat" < info)
-    .warn(lambda: "stat" < warn)
-    .crit(lambda: "stat" < crit)
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
+    .message('{{ .ID }}: [{{ .Level }}] CPU idle is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .info(lambda: "stat" <= info)
+    .warn(lambda: "stat" <= warn)
+    .crit(lambda: "stat" <= crit)
+    .topic('system')
 
 // Alert
 alert

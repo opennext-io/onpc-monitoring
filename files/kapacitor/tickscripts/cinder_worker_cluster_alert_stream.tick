@@ -18,6 +18,7 @@
 //
 dbrp "telegraf"."autogen"
 
+var warn = 1.0/3.0
 var crit = 2.0/3.0
 
 stream
@@ -31,7 +32,8 @@ stream
     .as('stat')
   |alert()
     .id('{{ index .Tags "region" }}/cinder-{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is less than {{ index .Fields "stat" }}%')
+    .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .log('/tmp/cinder_worker_cluster_alert_log.txt')
     .topic('openstack')

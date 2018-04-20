@@ -22,8 +22,8 @@ dbrp "telegraf"."autogen"
 var info = 50 
 var warn = 80 
 var crit = 90
-var period = 5m 
-var every = 1m 
+var period = 1m 
+var every = 1m
 
 // Dataframe
 var rawdata = stream
@@ -32,19 +32,17 @@ var rawdata = stream
     .retentionPolicy('autogen')
     .measurement('openstack_compute_value')
     .groupBy('region')
-
-var available = rawdata
   |window()
     .period(period)
     .every(every)
+    .align()
+
+var available = rawdata
   |where(lambda: "instance" == 'total_free_ram')
   |mean('value')
     .as('value')
 
 var in_use = rawdata
-  |window()
-    .period(period)
-    .every(every)
   |where(lambda: "instance" == 'total_used_ram')
   |mean('value')
     .as('value')

@@ -1,21 +1,25 @@
+
 // conntrack_alert
-
+//
 // metric: {ip_conntrack_count,ip_conntrack_max}
-
+//
 // TELEGRAF CONFIGURATION
 // [[inputs.conntrack]]
 //  files = ["ip_conntrack_count","ip_conntrack_max",
 //            "nf_conntrack_count","nf_conntrack_max"]
 //  dirs = ["/proc/sys/net/ipv4/netfilter","/proc/sys/net/netfilter"]
-
+//
 // DEFINE: kapacitor define conntrack_alert_batch -type batch -tick conntrack_alert_batch.tick -dbrp telegraf.autogen
 // ENABLE: kapacitor enable conntrack_alert_batch
-
+//
 // Parameters
-var info = 69
-var warn = 79
-var crit = 89
-var period = 10s
+
+dbrp "telegraf"."autogen"
+
+var info = 70 
+var warn = 80 
+var crit = 90 
+var period =1m 
 var every = 10s
 
 // Dataframe
@@ -28,12 +32,14 @@ var data = batch
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "host"}}/connection_used')
-    .message('{{ .ID }}:{{ index .Fields "stat" }}')
-    .info(lambda: "stat" > info)
-    .warn(lambda: "stat" > warn)
-    .crit(lambda: "stat" > crit)
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
+    .message('{{ .ID }}: [{{ .Level }}] Connections used is  {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .info(lambda: "stat" >= info)
+    .warn(lambda: "stat" >= warn)
+    .crit(lambda: "stat" >= crit)
+    .topic('system')
 
 // Alert
 alert
   .log('/tmp/conntrack_alert_log.txt')
+

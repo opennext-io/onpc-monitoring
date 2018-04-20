@@ -10,14 +10,13 @@
 // ENABLE: kapacitor enable netstat_alert_stream
 
 // Parameters
-var info = 20
-var warn = 40
-var crit = 60
+dbrp "telegraf"."autogen"
+
 var infoSig = 2.5
 var warnSig = 3
 var critSig = 3.5
-var period = 10s
-var every = 10s
+var period = 1m 
+var every = 1m
 
 // Dataframe
 var data = stream
@@ -25,7 +24,7 @@ var data = stream
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('netstat')
-    .groupBy('host')
+    .groupBy('region','host')
   |window()
     .period(period)
     .every(every)
@@ -38,12 +37,14 @@ var alert = data
     .as('sigma')
     .keep()
   |alert()
-    .id('{{ index .Tags "host"}}/tcp_conns')
-    .message('{{ .ID }}:{{ index .Fields "stat" }}')
-    .info(lambda: "stat" > info OR "sigma" > infoSig)
-    .warn(lambda: "stat" > warn OR "sigma" > warnSig)
-    .crit(lambda: "stat" > crit OR "sigma" > critSig)
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
+    .message('{{ .ID }}: [{{ .Level }}] TCP connections rate stddev is {{ index .Fields "sigma" | printf "%0.2f" }}%')
+ // .info(lambda: "sigma" > infoSig)
+    .warn(lambda: "sigma" > warnSig)
+    .crit(lambda: "sigma" > critSig)
+    .topic('system')
 
 // Alert
 alert
   .log('/tmp/netstat_alert_stream_log.txt')
+
