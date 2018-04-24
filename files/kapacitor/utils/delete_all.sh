@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -x
 tasks=$(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}')
 for var in "${tasks[@]}"; do
   kapacitor delete tasks ${var}

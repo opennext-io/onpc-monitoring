@@ -12,16 +12,16 @@
 // limitations under the License.
 //
 // Alert:  haproxy_backend_cluster_alert
-// Define: kapacitor define haproxy_backend_cluster_alert -type stream \
-//           -tick haproxy_backend_cluster_alert.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable haproxy_backend_cluster_alert
+// Define: kapacitor define haproxy_backend_cluster_alert_stream -type stream \
+//           -tick haproxy_backend_cluster_alert_stream.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable haproxy_backend_cluster_alert_stream
 //
 dbrp "telegraf"."autogen"
 
 var warn = 2/3
 var crit = 1/3
-var period = 10s
-var every = 10s
+var period = 1m
+var every = 1m
 
 var rawdata = stream
     |from()
@@ -57,5 +57,5 @@ var alert = data
         .info(lambda: "stat" > warn)
         .warn(lambda: "stat" <= warn)
         .crit(lambda: "stat" <= crit)
-        .topic('openstack')
+        .topic('haproxy')
         .log('/tmp/haproxy_backend_cluster_alert_log.txt')

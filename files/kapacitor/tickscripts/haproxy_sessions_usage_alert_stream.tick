@@ -1,0 +1,62 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert:  haproxy_sessions_usage_alert
+// Define: kapacitor define haproxy_sessions_usage_alert -type stream \
+//           -tick haproxy_sessions_usage_alert.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable haproxy_sessions_usage_alert
+//
+
+dbrp "telegraf"."autogen"
+
+var info = 50 
+var warn = 80
+var crit = 90
+var period=1m
+var every=1m
+
+// Dataframe
+var rawdata = stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('haproxy')
+    .groupBy('region', 'host', 'type', 'proxy')
+  |window()
+    .period(period)
+    .every(every)
+    .align()
+
+var scur = rawdata
+  |mean('scur')
+    .as('value')
+
+var slim = rawdata 
+  |mean('slim')
+    .as('value')
+
+var data = slim
+  |join(scur)
+    .as('slim', 'scur')
+
+var alert = data
+  |eval(lambda: float("scur.value")/float("slim.value") * 100.0)
+    .as('stat')
+  |alert()
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions_usage')
+    .message('{{ .ID }}: [{{ .Level }}] HAProxy session usage is {{ index .Fields "stat" }}%')
+    .info(lambda: "stat" < warn)
+    .warn(lambda: "stat" >= warn)
+    .crit(lambda: "stat" >= crit)
+    .topic('haproxy')
+    .log('/tmp/haproxy_sessions_usage_alert_log.txt')

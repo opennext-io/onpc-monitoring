@@ -47,7 +47,7 @@
   "gnetId": 317,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1523958234825,
+  "iteration": 1524572893691,
   "links": [
     {
       "icon": "external link",
@@ -1588,5 +1588,5 @@
   "timezone": "browser",
   "title": "InfluxDB Metrics",
   "uid": "0GiYm5kmz",
-  "version": 3
+  "version": 4
 }

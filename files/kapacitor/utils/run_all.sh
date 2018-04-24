@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-for i in $(find /opt/kapacitor/kapacitor_files/tickscripts -type f -name "*.tick"); do
+for i in $(find /opt/kapacitor/tickscripts -type f -name "*.tick"); do
     echo $i
     IFS='.' read -ra NAMES <<< "$i"
     IFS='/' read -ra NAMES <<< "${NAMES[-2]}"
     if [[ $i == *"batch"* ]]; then
-      kapacitor define ${NAMES[-1]} -type batch -tick $i -dbrp telegraf.autogen
+      kapacitor define ${NAMES[-1]} -type batch -tick $i
     else
-      kapacitor define ${NAMES[-1]} -type stream -tick $i -dbrp telegraf.autogen
+      kapacitor define ${NAMES[-1]} -type stream -tick $i
     fi
     kapacitor enable ${NAMES[-1]}
 done

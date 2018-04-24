@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Alert:  haproxy_backend_alert
-// Define: kapacitor define haproxy_backend_alert -type stream \
-//           -tick haproxy_backend_alert.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable haproxy_backend_alert
+// Alert:  haproxy_frontend_alert
+// Define: kapacitor define haproxy_frontend_state_aler_stream -type stream \
+//           -tick haproxy_frontend_state_aler_stream.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable haproxy_frontend_state_aler_stream
 //
 dbrp "telegraf"."autogen"
 
@@ -24,12 +24,12 @@ stream
     .retentionPolicy('autogen')
     .measurement('haproxy')
     .groupBy('region', 'proxy')
-    .where(lambda: "type" == 'server')
+    .where(lambda: "type" == 'frontend')
   |last('status')
     .as('stat')
   |alert()
     .id('{{ index .Tags "region" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/backend_state')
     .message('{{ .ID }}: [{{ .Level }}] Availability state of backend is {{ index .Fields "stat" }}')
-    .warn(lambda: "stat" != 'UP')
-    .topic('openstack')
-    .log('/tmp/haproxy_backend_alert_log.txt')
+    .warn(lambda: "stat" != 'OPEN')
+    .topic('haproxy')
+    .log('/tmp/haproxy_frontend_state_alert_log.txt')

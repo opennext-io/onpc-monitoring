@@ -1,0 +1,69 @@
+// Copyright 2018, OpenNext SAS
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Alert:  haproxy_backend_alert
+// Define: kapacitor define haproxy_backend_error_alert_stream -type stream \
+//           -tick haproxy_backend_error_alert_stream.tick -dbrp telegraf.autogen
+// Enable: kapacitor enable haproxy_backend_state_alert_stream
+
+dbrp "telegraf"."autogen"
+
+// Parameters
+
+var info = 50 
+var warn = 75
+var crit = 90
+var unit = 1s
+
+// Dataframe
+var rawdata = stream
+  |from()
+    .database('telegraf')
+    .retentionPolicy('autogen')
+    .measurement('haproxy')
+    .where(lambda: "type" == 'backend')
+    .groupBy('region', 'host', 'proxy')
+
+var econ = rawdata
+  |derivative('econ')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+    
+var dresp = rawdata
+  |derivative('dresp')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+
+var eresp = rawdata
+  |derivative('eresp')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+
+var data = econ 
+  |join(dresp, eresp)
+    .as('econ', 'dresp', 'eresp')
+
+// Thresholds
+var alert = data
+  |alert()
+
+    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/backend_errors')
+    .message('{{ .ID }}: [{{ .Level }}] econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
+    .info(lambda: "econ.value" >= info OR "dresp.value" >= info OR "eresp.value" >= info)
+    .warn(lambda: "econ.value" >= warn OR "dresp.value" >= warn OR "eresp.value" >= warn)
+    .crit(lambda: "econ.value" >= crit OR "dresp.value" >= crit OR "eresp.value" >= crit)
+    .topic('haproxy')
+    .log('/tmp/haproxy_backend_error_alert.txt')
