@@ -18,6 +18,7 @@
   hosts: "influxdb_relay"
   gather_facts: true
   user: root
+  environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - name: Check init system
       command: cat /proc/1/comm

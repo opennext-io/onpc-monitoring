@@ -17,6 +17,7 @@
   hosts: "kapacitor"
   gather_facts: true
   user: root
+  environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - name: Add kapacitor repo
       apt_repository:

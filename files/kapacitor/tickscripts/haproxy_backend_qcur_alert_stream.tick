@@ -48,7 +48,7 @@ var alert = data
     .keep()
   |alert()
     .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/qcur')
-    .message('{{ .ID }}: [{{ .Level }}] Backend requests waiting={{ index .Fields "stat" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
+    .message('{{ .ID }}: [{{ .Level }}] Backend requests waiting={{ index .Fields "stat" | printf "%0.2f" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
     .crit(lambda: "sigma" >= critSig OR "stat" >= crit)

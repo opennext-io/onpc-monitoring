@@ -48,7 +48,7 @@ var alert = data
     .keep()
   |alert()
     .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/rtime')
-    .message('{{ .ID }}: [{{ .Level }}] Backend response time avg={{ index .Fields "stat" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
+    .message('{{ .ID }}: [{{ .Level }}] Backend response time avg={{ index .Fields "stat" | printf "%0.2f" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
     .crit(lambda: "sigma" >= critSig OR "stat" >= crit)

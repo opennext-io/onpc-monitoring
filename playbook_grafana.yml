@@ -18,6 +18,7 @@
   hosts: "grafana "
   gather_facts: true
   user: root
+  environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     - name: Create DB for service
       mysql_db:

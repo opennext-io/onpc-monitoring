@@ -18,6 +18,7 @@
   hosts: "influxdb"
   gather_facts: true
   user: root
+  environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - name: InfluxDB datapath bind mount
       lxc_container:
