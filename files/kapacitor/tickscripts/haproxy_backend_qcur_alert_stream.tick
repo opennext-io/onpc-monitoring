@@ -24,7 +24,7 @@ var crit = 20
 var infoSig = 2.5 
 var warnSig = 3
 var critSig = 3.5
-var period = 1m 
+var period = 5m 
 var every = 1m 
 
 // Dataframe
