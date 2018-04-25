@@ -18,6 +18,7 @@
   hosts: "grafana "
   gather_facts: true
   user: root
+  environment: "{{ deployment_environment_variables }}"
   pre_tasks:
     - name: Create DB for service
       mysql_db:
@@ -52,18 +53,28 @@
   
   post_tasks:
     - name: Create local grafana dashboard directory
-      become: no
       file:
         path: /tmp/dashboards
         state: directory
         mode: 0755
-      delegate_to: localhost
       run_once: yes
+      delegate_to: localhost
       tags: [grafana, grafana-post-install]
     - name: Copy selected dashboards
       copy:
         src: "grafana-dashboards/{{ item.name }}.json"
         dest: "/tmp/dashboards/{{ item.name }}.json"
+      with_items: "{{ onpc_grafana_dashboards }}"
+      delegate_to: localhost
+      run_once: yes
+      tags: [grafana, grafana-post-install]
+    - name: Set the correct data source name in the dashboard
+      replace:
+        path: "/tmp/dashboards/{{ item.name }}.json"
+        regexp: '"(?:\${)?DS_[A-Z]+(?:})?"'
+        replace: '"{{ item.datasource }}"'
+      delegate_to: localhost
+      run_once: yes
       with_items: "{{ onpc_grafana_dashboards }}"
       tags: [grafana, grafana-post-install]
     - name: Import grafana dashboards
@@ -75,10 +86,11 @@
         method: POST
         body_format: json
         body: '{ "dashboard": {{ lookup("file", item) }}, "overwrite": true }'
-      no_log: True
+      no_log: False
       with_fileglob:
         - /tmp/dashboards/*
       tags: [grafana, grafana-post-install]
+
   
   vars_files:
     - vars/grafana.yml

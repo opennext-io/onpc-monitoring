@@ -37,22 +37,22 @@ grafana_dashboards: []
 # Local ONPC dashboards
 onpc_grafana_dashboards:
   - name: container-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: hypervisor-metrics
-    type: Inluxdb
+    datasource: Inluxdb
   - name: mysql-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: rabbitmq-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: haproxy-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: influxdb-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: openstack-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: host-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: memcached-metrics
-    type: Influxdb
+    datasource: Influxdb
   - name: openstack-swift-proxy-metrics
-    type: Influxdb
+    datasource: Influxdb
