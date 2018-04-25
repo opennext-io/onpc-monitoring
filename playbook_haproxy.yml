@@ -17,7 +17,7 @@
   hosts: haproxy
   gather_facts: true
   user: root
-  environment: "{{ deployment_environment_variables | default({}) }}"
+  environment: "{{ onpc_environment_variables | default({}) }}"
   roles:
     - role: "haproxy_server"
       haproxy_service_configs:

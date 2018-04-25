@@ -15,8 +15,8 @@ dbrp "telegraf"."autogen"
 var infoSig = 3 
 var warnSig = 6
 var critSig = 12
-var period = 5m
-var every = 1m 
+var period = 10m
+var every = 1m
 
 // Dataframe
 var data = stream

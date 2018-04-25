@@ -17,7 +17,7 @@
   hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
   user: root
-
+  environment: "{{ onpc_environment_variables | default({}) }}"
   roles:
     - collectd
 

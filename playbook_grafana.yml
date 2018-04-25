@@ -18,7 +18,6 @@
   hosts: "grafana "
   gather_facts: true
   user: root
-  environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     - name: Create DB for service
       mysql_db:
@@ -44,10 +43,43 @@
         - "localhost"
         - "%"
       tags: [grafana, grafana-pre-install]
-  
-  roles:
-    - grafana
 
+  roles:
+    - role: grafana
+      http_proxy: "{{ deployment_environment_variables.http_proxy }}"
+      https_proxy: "{{ deployment_environment_variables.https_proxy }}"
+      no_proxy: "{{ deployment_environment_variables.no_proxy }}"
+  
+  post_tasks:
+    - name: Create local grafana dashboard directory
+      become: no
+      file:
+        path: /tmp/dashboards
+        state: directory
+        mode: 0755
+      delegate_to: localhost
+      run_once: yes
+      tags: [grafana, grafana-post-install]
+    - name: Copy selected dashboards
+      copy:
+        src: "grafana-dashboards/{{ item.name }}.json"
+        dest: "/tmp/dashboards/{{ item.name }}.json"
+      with_items: "{{ onpc_grafana_dashboards }}"
+      tags: [grafana, grafana-post-install]
+    - name: Import grafana dashboards
+      uri:
+        url: "{{ grafana_url }}/api/dashboards/db"
+        user: "{{ grafana_security.admin_user }}"
+        password: "{{ grafana_security.admin_password }}"
+        force_basic_auth: yes
+        method: POST
+        body_format: json
+        body: '{ "dashboard": {{ lookup("file", item) }}, "overwrite": true }'
+      no_log: True
+      with_fileglob:
+        - /tmp/dashboards/*
+      tags: [grafana, grafana-post-install]
+  
   vars_files:
     - vars/grafana.yml
     - vars/influxdb.yml

@@ -30,3 +30,29 @@ grafana_datasources:
     isDefault: true
 
 grafana_plugins: ['grafana-clock-panel']
+
+# Dashboards from https://grafana.com/dashboards
+grafana_dashboards: []
+
+# Local ONPC dashboards
+onpc_grafana_dashboards:
+  - name: container-metrics
+    type: Influxdb
+  - name: hypervisor-metrics
+    type: Inluxdb
+  - name: mysql-metrics
+    type: Influxdb
+  - name: rabbitmq-metrics
+    type: Influxdb
+  - name: haproxy-metrics
+    type: Influxdb
+  - name: influxdb-metrics
+    type: Influxdb
+  - name: openstack-metrics
+    type: Influxdb
+  - name: host-metrics
+    type: Influxdb
+  - name: memcached-metrics
+    type: Influxdb
+  - name: openstack-swift-proxy-metrics
+    type: Influxdb
