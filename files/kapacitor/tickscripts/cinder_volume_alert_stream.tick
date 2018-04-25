@@ -57,7 +57,7 @@ var alert = data
   |eval(lambda: float("in_use.value")/float("available.value") * 100.0)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "region" }}/cinder-volume-used/percent')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/cinder/volume-usage/percent')
     .message('{{ .ID }}: [{{ .Level }}] Cinder volumes capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)

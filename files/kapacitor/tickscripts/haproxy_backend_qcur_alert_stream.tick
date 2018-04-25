@@ -47,7 +47,7 @@ var alert = data
     .as('sigma')
     .keep()
   |alert()
-    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/qcur')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/qcur')
     .message('{{ .ID }}: [{{ .Level }}] Backend requests waiting={{ index .Fields "stat" | printf "%0.2f" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)

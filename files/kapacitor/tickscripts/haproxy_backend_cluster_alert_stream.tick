@@ -52,7 +52,7 @@ var alert = data
     |eval(lambda: 100.0 - ((float("down.value") / float("total.value") * 100.0)))
         .as('stat')
     |alert()
-        .id('{{ index .Tags "region" }}/{{ index .Tags "proxy" }}/cluster_status')
+        .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "proxy" }}/cluster_status')
         .message('{{ .ID }}: [{{ .Level }}] Availability state of the cluster is {{ index .Fields "stat" }}%')
         .info(lambda: "stat" > warn)
         .warn(lambda: "stat" <= warn)

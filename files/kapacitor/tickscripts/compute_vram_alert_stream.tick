@@ -56,7 +56,7 @@ var alert = data
   |eval(lambda: float("in_use.value")/float("available.value") * 100.0)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "region" }}/compute-vram-used/percent')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/compute/vram-usage/percent')
     .message('{{ .ID }}: [{{ .Level }}] Compute memory capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)

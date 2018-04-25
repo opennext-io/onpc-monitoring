@@ -32,7 +32,7 @@ var data = batch
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
     .message('{{ .ID }}: [{{ .Level }}] Connections used is  {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)

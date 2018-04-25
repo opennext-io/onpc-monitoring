@@ -37,7 +37,7 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
     .message('{{ .ID }}: [{{ .Level }}] CPU idle is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" <= info)
     .warn(lambda: "stat" <= warn)

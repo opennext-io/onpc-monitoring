@@ -35,6 +35,8 @@ telegraf_global_tags:
     tag_value: "{{ 'container' if inventory_hostname in groups['all_containers'] else 'host' }}"
   - tag_name: region
     tag_value: "{{ service_region }}"
+  - tag_name: environment
+    tag_value: "{{ onpc_environment_name }}"
 
 telegraf_agent_output: []
 telegraf_plugins_default: []
