@@ -3,5 +3,5 @@
 # Kapacitor Vars
 kapacitor_port: 9092
 kapacitor_slack_enabled: True
-kapacitor_slack_channel: "{{ slack_alert_channel }}"
+kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"

@@ -41,7 +41,7 @@
         - monitoring_handler
         - openstack_handler
         - slack_handler
-        - system_handler.yml
+        - system_handler
     - name: Drop Kapacitor tickscripts
       copy:
         src: /opt/onpc-monitoring/files/kapacitor/tickscripts
