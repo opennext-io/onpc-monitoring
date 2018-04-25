@@ -28,6 +28,13 @@
       apt:
         pkg: "kapacitor"
         state: "latest"
+    - name: Create the handler directory 
+      file:
+        path: "/opt/kapacitor/{{ item }}"
+        state: directory
+        mode: 0644
+      with_items:
+        - handlers
     - name: Drop kapacitor config file
       template:
         src: templates/kapacitor/kapacitor.conf.j2
@@ -45,18 +52,21 @@
     - name: Drop Kapacitor tickscripts
       copy:
         src: /opt/onpc-monitoring/files/kapacitor/tickscripts
-        dest: /opt/kapacitor/tickscripts
+        dest: /opt/kapacitor
+        mode: 0644
     - name: Drop Kapacitor utils
       copy:
         src: /opt/onpc-monitoring/files/kapacitor/utils
-        dest: /opt/kapacitor/utils
+        dest: /opt/kapacitor
+        mode: 0755
     - name: Start kapacitor server
       shell: kapacitord -config /etc/kapacitor/kapacitor.conf &
     - name: Register handlers
-      shell: chmod 755 /opt/kapacitor/utils/*.*;bash /opt/kapacitor/run_all_tasks.sh
+      shell: bash /opt/kapacitor/utils/run_all_tasks.sh
     - name: Register tickscripts
-      shell: chmod 755 /opt/kapacitor/utils/*.*;bash /opt/kapacitor/run_all_handlers.sh
+      shell: bash /opt/kapacitor/utils/run_all_handlers.sh
   vars_files:
     - vars/main.yml
     - vars/influxdb.yml
     - vars/kapacitor.yml
+

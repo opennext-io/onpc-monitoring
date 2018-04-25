@@ -14,8 +14,5 @@
 # limitations under the License.
 
 for i in $(find /opt/kapacitor/handlers/ -type f -name "*.yml"); do
-    echo $i
-    IFS='.' read -ra NAMES <<< "$i"
-    IFS='/' read -ra NAMES <<< "${NAMES[-2]}"
-    echo "kapacitor define-topic-handler ${NAMES[-1]}"
+    echo "kapacitor define-topic-handler ${i}"
 done
