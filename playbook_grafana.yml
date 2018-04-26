@@ -18,7 +18,7 @@
   hosts: "grafana "
   gather_facts: true
   user: root
-  environment: "{{ deployment_environment_variables }}"
+  environment: "{{onpc_environment_variables }}"
   pre_tasks:
     - name: Create DB for service
       mysql_db:
@@ -47,9 +47,9 @@
 
   roles:
     - role: grafana
-      http_proxy: "{{ deployment_environment_variables.http_proxy }}"
-      https_proxy: "{{ deployment_environment_variables.https_proxy }}"
-      no_proxy: "{{ deployment_environment_variables.no_proxy }}"
+      http_proxy: "{{ onpc_environment_variables.http_proxy }}"
+      https_proxy: "{{ onpc_environment_variables.https_proxy }}"
+      no_proxy: "{{ onpc_environment_variables.no_proxy }}"
   
   post_tasks:
     - name: Create local grafana dashboard directory
