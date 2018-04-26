@@ -1,0 +1,72 @@
+---
+# Copyright 2016, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Deploy kapacitor
+  hosts: "kapacitor"
+  gather_facts: true
+  user: root
+  environment: "{{ onpc_environment_variables | default({}) }}"
+  tasks:
+    - name: Add kapacitor repo
+      apt_repository:
+        repo: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: "present"
+        update_cache: yes
+    - name: Install kapacitor
+      apt:
+        pkg: "kapacitor"
+        state: "latest"
+    - name: Create the handler directory 
+      file:
+        path: "/opt/kapacitor/{{ item }}"
+        state: directory
+        mode: 0644
+      with_items:
+        - handlers
+    - name: Drop kapacitor config file
+      template:
+        src: templates/kapacitor/kapacitor.conf.j2
+        dest: /etc/kapacitor/kapacitor.conf
+    - name: Drop kapacitor handlers
+      template:
+        src: "templates/kapacitor/handlers/{{ item }}.yml.j2"
+        dest: "/opt/kapacitor/handlers/{{ item }}.yml"
+      with_items:
+        - haproxy_handler
+        - monitoring_handler
+        - openstack_handler
+        - slack_handler
+        - system_handler
+    - name: Drop Kapacitor tickscripts
+      copy:
+        src: /opt/onpc-monitoring/files/kapacitor/tickscripts
+        dest: /opt/kapacitor
+        mode: 0644
+    - name: Drop Kapacitor utils
+      copy:
+        src: /opt/onpc-monitoring/files/kapacitor/utils
+        dest: /opt/kapacitor
+        mode: 0755
+    - name: Start kapacitor server
+      shell: kapacitord -config /etc/kapacitor/kapacitor.conf &
+    - name: Register handlers
+      shell: bash /opt/kapacitor/utils/run_all_tasks.sh
+    - name: Register tickscripts
+      shell: bash /opt/kapacitor/utils/run_all_handlers.sh
+  vars_files:
+    - vars/main.yml
+    - vars/influxdb.yml
+    - vars/kapacitor.yml
+
