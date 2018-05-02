@@ -12,14 +12,10 @@
 // Parameters
 dbrp "telegraf"."autogen"
 
-var info = 60
-var warn = 80
-var crit = 100
 var infoSig = 2.5
-var warnSig = 3
-var critSig = 3.5
-var period = 10s
-var every = 10s
+var warnSig = 3.5
+var period = 1m
+var every = 1m
 
 // Dataframe
 var data = stream
@@ -46,9 +42,8 @@ var alert = data
     //.info(lambda: "stat" >= info OR "sigma" >= infoSig)
     //.warn(lambda: "stat" >= warn OR "sigma" >= warnSig)
     //.crit(lambda: "stat" >= crit OR "sigma" >= critSig)
-    .info(lambda: "stat" >= info)
-    .warn(lambda: "stat" >= warn)
-    .crit(lambda: "stat" >= crit)
+    .info(lambda: "stat" >= infoSig)
+    .warn(lambda: "stat" >= warnSig)
     
     .topic('system')
     .log('/tmp/netstat_alert_stream_log.txt')
