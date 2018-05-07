@@ -33,7 +33,7 @@ var data = stream
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('haproxy')
-    .where(lambda: "type" == 'backend')
+    .where(lambda: "type" == 'backend' AND "proxy" != 'stats')
     .groupBy('region', 'host', 'proxy')
   |window()
     .period(period)
