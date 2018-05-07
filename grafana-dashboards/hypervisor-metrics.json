@@ -53,7 +53,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1524572873599,
+  "iteration": 1525705007556,
   "links": [],
   "panels": [
     {
@@ -988,7 +988,7 @@
       },
       "hideTimeOverride": true,
       "id": 191,
-      "interval": "1m",
+      "interval": "",
       "links": [],
       "mappingType": 1,
       "mappingTypes": [
@@ -1043,7 +1043,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "openstack",
-          "query": "select last(value) from libvirt_check_value WHERE \"host\" =~ /^$host$/ fill(null)",
+          "query": "select last(value) from libvirt_check_value WHERE \"host\" =~ /^$host$/ AND $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1086,11 +1086,6 @@
           "op": "=",
           "text": "UNK",
           "value": "2"
-        },
-        {
-          "op": "=",
-          "text": "UNK",
-          "value": "null"
         }
       ],
       "valueName": "current"
@@ -1115,7 +1110,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 3,
         "x": 3,
         "y": 5
       },
@@ -1227,7 +1222,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 7,
+        "x": 6,
         "y": 5
       },
       "hideTimeOverride": true,
@@ -1964,7 +1959,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Disk operations ROC",
+      "title": "Disk operations",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2190,7 +2185,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Network operations ROC",
+      "title": "Network operations",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2424,5 +2419,5 @@
   "timezone": "browser",
   "title": "Hypervisor Metrics",
   "uid": "Pc5edcZiz",
-  "version": 18
+  "version": 21
 }
