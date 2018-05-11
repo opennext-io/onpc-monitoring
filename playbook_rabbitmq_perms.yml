@@ -12,27 +12,3 @@
   - name: attribute permissions for monitoring user on rabbitmq vhosts
     shell: 'rabbitmqctl set_permissions -p {{ item }} monitoring "^$" ".*" "^$" '
     with_items: "{{ RABBITMQ_VHOSTS.stdout_lines | select('match', '^(/)') | list }}"
-
-### OLD CONFIG : rabbitmq_user module doesn't support multiple permissions attributions ! ! ! ###
-#  - rabbitmq_user:
-#      user: "{{ rabbitmq_monitoring_userid|default('monitoring') }}"
-#      password: "{{ rabbitmq_monitoring_password }}"
-#      tags: "monitoring"
-      #with_items: "{{ RABBITMQ_VHOSTS.stdout_lines | select('match', '^(/)') | list }}"
-
-#      permissions:
-#        - vhost: "{{ item }}"
-#          configure_priv: .*
-#          read_priv: .*
-#          write_priv: .*
-      #state: "present"
-      #when: rabbitmq_monitoring_password is defined
-#    with_items: "{{ RABBITMQ_VHOSTS.stdout_lines | select('match', '^(/)') | list }}"
-      #- /nova
-      #- /keystone
-      #- /neutron
-  #environment: "{{ deployment_environment_variables | default({}) }}"
-  #tags:
-      #- rabbitmq-config
-      #- rabbitmq
-      #- common-rabbitmq
