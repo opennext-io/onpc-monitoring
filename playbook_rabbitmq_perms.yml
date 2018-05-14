@@ -1,4 +1,19 @@
 ---
+# Copyright 2018, OpenNext SAS
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# Create an admin user
+
 - name: Create and configure rabbitmq container
   hosts: "{{ rabbitmq_host_group | default('rabbitmq_all') }}"
   serial: 1
@@ -7,8 +22,8 @@
   tasks:
   - name: extract list of rabbitmq vhosts
     shell: "rabbitmqctl list_vhosts"
-    register: RABBITMQ_VHOSTS
+    register: rabbitmq_vhosts
 
   - name: attribute permissions for monitoring user on rabbitmq vhosts
     shell: 'rabbitmqctl set_permissions -p {{ item }} monitoring "^$" ".*" "^$" '
-    with_items: "{{ RABBITMQ_VHOSTS.stdout_lines | select('match', '^(/)') | list }}"
+    with_items: "{{ rabbitmq_vhosts.stdout_lines | select('match', '^(/)') | list }}"
