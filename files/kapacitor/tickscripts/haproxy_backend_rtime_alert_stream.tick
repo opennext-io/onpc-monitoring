@@ -18,10 +18,7 @@
 
 dbrp "telegraf"."autogen"
 // Parameters
-var info = 100
-var warn = 300
-var crit = 600
-var infoSig = 2.5
+var infoSig = 2.0
 var warnSig = 3.5
 var period = 1m
 var every = 1m
@@ -48,8 +45,7 @@ var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/rtime')
     .message('{{ .ID }}: [{{ .Level }}] Backend response time avg={{ index .Fields "stat" | printf "%0.2f" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
-    .info(lambda: "stat" >= info)
-    .warn(lambda: "stat" >= warn)
-    .crit(lambda: "stat" >= crit)
+    .info(lambda: "sigma" >= infoSig)
+    .warn(lambda: "sigma" >= warnSig)
     .topic('haproxy')
     .log('/tmp/haproxy_backend_rtime_alert.txt')
