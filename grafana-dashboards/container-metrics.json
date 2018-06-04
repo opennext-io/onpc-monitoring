@@ -59,7 +59,7 @@
   "gnetId": 1443,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1524558866420,
+  "iteration": 1527167052878,
   "links": [],
   "panels": [
     {
@@ -820,6 +820,7 @@
         "x": 0,
         "y": 7
       },
+      "hideTimeOverride": true,
       "id": 25,
       "interval": "",
       "links": [],
@@ -854,7 +855,7 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
       "tableColumn": "",
       "targets": [
@@ -877,7 +878,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT 100 - last(usage_idle) - 1 FROM \"cpu\" WHERE \"host\" =~ /^$host$/ and \"cpu\" = 'cpu-total' ",
+          "query": "SELECT 100 - last(usage_idle) FROM \"cpu\" WHERE \"host\" =~ /^$host$/ AND \"cpu\" = 'cpu-total'  AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -899,6 +900,8 @@
         }
       ],
       "thresholds": "70,90",
+      "timeFrom": "1m",
+      "timeShift": null,
       "title": "CPU Used Percent",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -935,6 +938,7 @@
         "x": 3,
         "y": 7
       },
+      "hideTimeOverride": true,
       "id": 18,
       "interval": "",
       "links": [],
@@ -989,7 +993,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(used_percent) FROM \"mem\" WHERE \"host\" =~ /^$host$/",
+          "query": "SELECT last(used_percent) FROM \"mem\" WHERE \"host\" =~ /^$host$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1011,7 +1015,238 @@
         }
       ],
       "thresholds": "70,90",
+      "timeFrom": "1m",
+      "timeShift": null,
       "title": "Memory Used Percent",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(244, 126, 30, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "percent",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 6,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 44,
+      "interval": "",
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select last(\"used_percent\") FROM disk WHERE  \"host\" =~ /^$host$/ and $timeFilter AND \"path\" = '/' fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "70,90",
+      "timeFrom": "1m",
+      "timeShift": null,
+      "title": "Root Partition Used Percent",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(244, 126, 30, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "percent",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 9,
+        "y": 7
+      },
+      "id": 45,
+      "interval": "",
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select last(\"used_percent\") FROM disk WHERE  \"host\" =~ /^$host$/ and $timeFilter AND \"path\" = '/var/log' fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "70,90",
+      "timeFrom": "1m",
+      "timeShift": null,
+      "title": "Log Partition Used Percent",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1047,6 +1282,7 @@
         "x": 12,
         "y": 7
       },
+      "hideTimeOverride": true,
       "id": 8,
       "interval": "",
       "links": [],
@@ -1101,7 +1337,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"load1\") FROM \"system\" WHERE \"host\" =~ /^$host$/",
+          "query": "SELECT last(\"load1\") FROM \"system\" WHERE \"host\" =~ /^$host$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1123,6 +1359,8 @@
         }
       ],
       "thresholds": "5,8",
+      "timeFrom": "1m",
+      "timeShift": null,
       "title": "load 1",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1159,6 +1397,7 @@
         "x": 16,
         "y": 7
       },
+      "hideTimeOverride": true,
       "id": 14,
       "interval": "",
       "links": [],
@@ -1213,7 +1452,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"load5\") FROM \"system\" WHERE \"host\" =~ /^$host$/",
+          "query": "SELECT last(\"load5\") FROM \"system\" WHERE \"host\" =~ /^$host$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1235,6 +1474,7 @@
         }
       ],
       "thresholds": "5,8",
+      "timeFrom": "1m",
       "title": "load 5",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1271,6 +1511,7 @@
         "x": 20,
         "y": 7
       },
+      "hideTimeOverride": true,
       "id": 15,
       "interval": "",
       "links": [],
@@ -1325,7 +1566,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"load15\") FROM \"system\" WHERE \"host\" =~ /^$host$/",
+          "query": "SELECT last(\"load15\") FROM \"system\" WHERE \"host\" =~ /^$host$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1347,6 +1588,8 @@
         }
       ],
       "thresholds": "5,8",
+      "timeFrom": "1m",
+      "timeShift": null,
       "title": "load 15",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1691,7 +1934,7 @@
           "measurement": "mem",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"total\") FROM \"mem\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT last(\"total\") FROM \"mem\" WHERE \"host\" =~ /^$host$/ AND $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1732,7 +1975,7 @@
           "measurement": "mem",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"available\") FROM \"mem\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"available\") FROM \"mem\" WHERE \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -1773,7 +2016,7 @@
           "measurement": "mem",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"used\") FROM \"mem\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"used\") FROM \"mem\" WHERE \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "E",
           "resultFormat": "time_series",
@@ -1814,7 +2057,7 @@
           "measurement": "mem",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"cached\") FROM \"mem\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"cached\") FROM \"mem\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
@@ -1855,7 +2098,7 @@
           "measurement": "mem",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"buffered\") FROM \"mem\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"buffered\") FROM \"mem\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -1882,7 +2125,7 @@
       "title": "Memory",
       "tooltip": {
         "shared": true,
-        "sort": 1,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -4111,5 +4354,5 @@
   "timezone": "browser",
   "title": "Container Metrics",
   "uid": "CTno-hWmk",
-  "version": 12
+  "version": 15
 }
