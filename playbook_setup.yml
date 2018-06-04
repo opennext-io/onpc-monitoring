@@ -78,3 +78,6 @@
 
   vars_files:
     - vars/main.yml
+
+- name: Give monitoring user permissions on rabbitmq vhosts
+  include: playbook_rabbitmq_perms.yml
