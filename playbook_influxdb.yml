@@ -20,22 +20,40 @@
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
   tasks:
-    - name: InfluxDB datapath bind mount
-      lxc_container:
-        name: "{{ inventory_hostname }}"
-        container_command: |
-          [[ ! -d "/var/lib/influxdb" ]] && mkdir -p "/var/lib/influxdb"
-        container_config:
-          - "lxc.mount.entry=/openstack/{{ inventory_hostname }} var/lib/influxdb none bind 0 0"
-      delegate_to: "{{ physical_host }}"
-      changed_when: false
-      tags: [influxdb, influxdb-install]
-    - name: Add influxdata apt-keys
+    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+      vars:
+        haproxy_backend: influxdb_admin-back
+        haproxy_state: disabled
+      when:
+        - "'influxdb' in group_names"
+        - "groups['influxdb'] | length > 1"
+      tags: [influxdb, influxdb_admin-disable-haproxy]   
+    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+      vars:
+        haproxy_backend: influxdb-back
+        haproxy_state: disabled
+      when:
+        - "'influxdb' in group_names"
+        - "groups['influxdb'] | length > 1"
+      tags: [influxdb, influxdb-disable-haproxy]   
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+      static: no
+      vars:
+        list_of_bind_mounts: "{{ influxdb_container_bind_mounts }}"
+      tags: [influxdb, influxdb-bind-mounts]
+    # Not that with systemd, influxdb no longer sent logs to /var/log/influxdb but to journald
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
+            dest: "{{ influxdb_log_dir }}"
+      tags: [influxdb, influxdb-logging]
+    - name: Import InfluxDB GPG signing key 
       apt_key:
         url: "https://repos.influxdata.com/influxdb.key"
         state: "present"
       tags: [influxdb, influxdb-install]
-    - name: Add influxdata repo
+    - name: Add influxdata repository
       apt_repository:
         repo: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
         state: "present"
@@ -84,6 +102,22 @@
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
       when: result.stdout.find(influxdb_db_name) == -1
       tags: [influxdb, influxdb-configure]
+    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+      vars:
+        haproxy_backend: influxdb_admin-back
+        haproxy_state: enabled
+      when:
+        - "'influxdb' in group_names"
+        - "groups['influxdb'] | length > 1"
+      tags: [influxdb, influxdb_admin-enable-haproxy]
+    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+      vars:
+        haproxy_backend: influxdb-back
+        haproxy_state: enabled
+      when:
+        - "'influxdb' in group_names"
+        - "groups['influxdb'] | length > 1"
+      tags: [influxdb, influxdb-enable-haproxy]
 
   vars_files:
     - vars/main.yml

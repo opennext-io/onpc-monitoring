@@ -8,7 +8,7 @@ About this repository
 ---------------------
 
 This set of playbooks will deploy Collectd, Telegraf, InfluxDB and Kapacitor
-to collect metrics and monitor the healthiness of the OpenStack infrastructure.
+to collect metrics and monitor the healthiness of the OpenStack environment.
 
 Process
 -------
@@ -24,35 +24,40 @@ Clone the onpc-monitoring repo
 
     cd /opt
     git clone https://github.com/opennext-io/onpc-monitoring.git
+    cd /opt/onpc-monitoring
 
 Create the monitoring container(s)
 
 .. code-block:: bash
 
-    openstack-ansible lxc-containers-create.yml -e container_group=monitoring_containers
+    openstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml \
+      -e 'container_group=influx_containers:collectd_containers:grafana_containers'
 
 Create the monitoring user and install various python dependencies
 
 .. code-block:: bash
 
-    openstack-ansible /opt/onpc-monitoring/playbook_setup.yml
+    openstack-ansible playbook_setup.yml
 
 If you are running HAProxy for load balacing you need run the following playbook as well to enable
-the monitoring services backend and frontend. If HAproxy is already installed for the OpenStack services
-you also need to rerun the HAProxy playbook to enable the HAProxy stats.
+the monitoring services backend and frontend.
 
 .. code-block:: bash
 
     openstack-ansible playbook_haproxy.yml
-    cd /opt/openstack-ansible/playbooks
-    openstack-ansible haproxy-install.yml
+
+If you already deployed OSA you also need to rerun the OSA HAProxy playbook
+to enable the HAProxy stats.
+
+.. code-block:: bash
+
+    openstack-ansible /opt/openstack-ansible/playbooks/haproxy-install.yml
 
 
 Install InfluxDB and InfluxDB Relay
 
 .. code-block:: bash
 
-    cd /opt/onpc-monitoring
     openstack-ansible playbook_influxdb.yml
     openstack-ansible playbook_influxdb_relay.yml
 

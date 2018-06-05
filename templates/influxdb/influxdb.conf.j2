@@ -79,7 +79,7 @@ bind-address = ":{{ influxdb_admin_port }}"
   unix-socket-enabled = false
   bind-socket = "/var/run/influxdb.sock"
   max-body-size = 25000000
-  access-log-path = ""
+  access-log-path = "{{ influxdb_log_dir }}/influxdb_access.log"
 
 [ifql]
   enabled = false
