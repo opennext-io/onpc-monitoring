@@ -23,9 +23,9 @@
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
-        log_dirs:
+        logs_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
-            dest: "{{ telegraf_log_dir }}"
+            dest: "{{ telegraf_logs_dir }}"
       tags: [telegraf, telegraf-logging]
   
   roles:

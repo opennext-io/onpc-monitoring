@@ -43,9 +43,9 @@
       tags: [influxdb, influxdb-bind-mounts]
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
-        log_dirs:
+        logs_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
-            dest: "{{ influxdb_log_dir }}"
+            dest: "{{ influxdb_logs_dir }}"
       tags: [influxdb, influxdb-logging]
     - name: Import InfluxDB GPG signing key 
       apt_key:

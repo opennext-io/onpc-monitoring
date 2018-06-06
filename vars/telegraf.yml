@@ -23,8 +23,8 @@ telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
 telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}"
 telegraf_db_name: "telegraf"
 telegraf_prometheus_enabled: false
-telegraf_log_dir: "/var/log/telegraf"
-telegraf_agent_logfile: "{{ telegraf_log_dir }}/telegraf.log"
+telegraf_logs_dir: "/var/log/telegraf"
+telegraf_agent_logfile: "{{ telegraf_logs_dir }}/telegraf.log"
 # TODO: make this dynamic
 telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"
 telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
