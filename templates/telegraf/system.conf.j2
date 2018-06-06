@@ -8,12 +8,12 @@
 [[inputs.mem]]
 [[inputs.processes]]
 [[inputs.kernel]]
+[[inputs.diskio]]
+  devices = ["sd[a-z][0-9]", "vd[a-z][0-9]"]
+{% if inventory_hostname in groups['all_containers'] %}
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
-  mount_points = ["/","/home","/var/lib/machines","/var/lib/nova/instances","/var/log", "/srv/swift[1-9].img"]
-{% if inventory_hostname in groups['all_containers'] %}
-[[inputs.diskio]]
-  devices = ["vd[a-z][0-9]"]
+  mount_points = ["/","/var/log","/var/backup"]
 [[inputs.cpu]]
   percpu = false
   totalcpu = true
@@ -21,8 +21,9 @@
 [[inputs.net]]
   interfaces = ["eth*"]
 {% else %}
-[[inputs.diskio]]
-  devices = ["sd[a-z][0-9]"]
+[[inputs.disk]]
+  ignore_fs = ["tmpfs", "devtmpfs"]
+  mount_points = ["/","/var","/var/lib/nova/instances","/var/log","/var/lib/lxc","/openstack", "/srv/swift[1-9].img"]
 [[inputs.cpu]]
   percpu = true
   totalcpu = true

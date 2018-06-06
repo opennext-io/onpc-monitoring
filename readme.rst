@@ -64,7 +64,7 @@ Install InfluxDB and InfluxDB Relay
 Install Telegraf
 
 If you wish to install telegraf and point it at a specific target, or list of targets, set the ``telegraf_influxdb_targets``
-variable in the ``user_onpc_variables.yml`` file as a list containing all targets that telegraf should ship metrics to.
+variable in the ``user_onpc_variables.yml`` file as a list containing all targets that telegraf should send metrics to.
 
 .. code-block:: bash
 

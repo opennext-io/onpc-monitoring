@@ -41,7 +41,6 @@
       vars:
         list_of_bind_mounts: "{{ influxdb_container_bind_mounts }}"
       tags: [influxdb, influxdb-bind-mounts]
-    # Not that with systemd, influxdb no longer sent logs to /var/log/influxdb but to journald
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
@@ -102,6 +101,7 @@
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
       when: result.stdout.find(influxdb_db_name) == -1
       tags: [influxdb, influxdb-configure]
+      notify: InfluxDB restart 
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_admin-back
@@ -118,6 +118,10 @@
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
       tags: [influxdb, influxdb-enable-haproxy]
+  
+  handlers:
+    - name: InfluxDB restart
+      service: name=influxdb state=restarted
 
   vars_files:
     - vars/main.yml

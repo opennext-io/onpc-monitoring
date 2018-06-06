@@ -19,6 +19,15 @@
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
 
+  pre_tasks:
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
+            dest: "{{ telegraf_log_dir }}"
+      tags: [telegraf, telegraf-logging]
+  
   roles:
     - telegraf
   
