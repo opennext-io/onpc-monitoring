@@ -18,6 +18,17 @@
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
+  
+  pre_tasks:
+
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-collectd"
+            dest: "{{ collectd_logs_dir }}"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+  
   roles:
     - collectd
 

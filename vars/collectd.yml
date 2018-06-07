@@ -10,3 +10,5 @@ collectd_prefix: /opt/collectd      # The place where Collectd will be installed
 collectd_types_db_path: "{{ '/usr/share/collectd/types.db' if collectd_use_ppa else collectd_prefix + '/share/collectd/types.db' }}"
 collectd_hostname: "\"{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}\""
 collectd_interval: 60
+collectd_logs_dir: "/var/log/collectd"
+collectd_logpath: "{{ collectd_logs_dir }}/collectd.log"
