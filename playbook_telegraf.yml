@@ -25,7 +25,7 @@
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
-            dest: "{{ telegraf_log_dir }}"
+            dest: "{{ telegraf_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   
   roles:
