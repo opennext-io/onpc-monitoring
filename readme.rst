@@ -85,11 +85,11 @@ Once that last playbook is completed you will have a functioning InfluxDB, Teleg
 active and collecting metrics. Grafana will need some setup, however functional dashboards have been provided in the
 ``grafana-dashboards`` directory.
 
-Install Kapacitor
+Install Kapacitor (default all kapacitor targets)
 
 .. code-block:: bash
 
-   openstack-ansible playbook-kapacitor.yml
+   openstack-ansible playbook-kapacitor.yml -e 'kapacitor_host=<host target>' (optional)
 
 
 OpenStack Swift PRoxy Server Dashboard

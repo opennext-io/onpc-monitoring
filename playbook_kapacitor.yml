@@ -18,6 +18,18 @@
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
+  pre_tasks:
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-kapacitor"
+            dest: "{{ kapacitor_logs_dir }}"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+  
+  roles:
+      - kapacitor
+
   tasks:
     - name: Add kapacitor repo
       apt_repository:
@@ -51,7 +63,7 @@
         - system_handler
     - name: Drop Kapacitor tickscripts
       copy:
-        src: /opt/onpc-monitoring/files/kapacitor/tickscripts
+        src: files/kapacitor/tick/scripts
         dest: /opt/kapacitor
         mode: 0644
     - name: Drop Kapacitor utils

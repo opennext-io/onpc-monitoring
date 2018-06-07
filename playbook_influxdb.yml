@@ -47,6 +47,7 @@
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
             dest: "{{ influxdb_logs_dir }}"
       tags: [influxdb, influxdb-logging]
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
     - name: Import InfluxDB GPG signing key 
       apt_key:
         url: "https://repos.influxdata.com/influxdb.key"
