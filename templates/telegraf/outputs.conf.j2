@@ -2,7 +2,7 @@
 # Do NOT modify this file by hand!
 
 [[outputs.influxdb]]
-  urls = ["{{ telegraf_influxdb_targets | map('quote') | join(',') }}"] # required
+  urls = ["{{ telegraf_influxdb_targets | map('quote') | join(',') }}"]
   database = "{{ telegraf_db_name }}"
   timeout = "5s"
 

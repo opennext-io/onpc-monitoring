@@ -27,7 +27,7 @@
       when:
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
-      tags: [influxdb, influxdb_admin-disable-haproxy]   
+      tags: [influxdb, influxdb_admin-disable-haproxy]
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb-back
@@ -43,7 +43,7 @@
       tags: [influxdb, influxdb-bind-mounts]
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
-        logs_dirs:
+        log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
             dest: "{{ influxdb_logs_dir }}"
       tags: [influxdb, influxdb-logging]

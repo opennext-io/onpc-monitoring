@@ -26,7 +26,7 @@
       when:
         - "'influxdb_relay' in group_names"
         - "groups['influxdb_relay'] | length > 1"
-      tags: [influxdb_relay, influxdb_relay-disable-haproxy]
+      tags: [influxdb_relay_haproxy]
     - name: Check init system
       command: cat /proc/1/comm
       changed_when: false
@@ -35,7 +35,7 @@
     - name: Set the name of init system
       set_fact:
         init_name: "{{ _init_name.stdout }}"
-      tags: [influxdb_relay, influxdb_relay-install]
+      tags: [influxdb_relay_init]
     - name: Install dependencies 
       package:
         name: "{{ item }}" 
@@ -43,32 +43,32 @@
       with_items:
         - git
         - wget
-      tags: [influxdb_relay, influxdb_relay-install]
+      tags: [influxdb_relay_dependencies]
     - name: Install GOLang
       script: files/influxdb_relay/deploy_go.sh
       changed_when: false
-      tags: [influxdb_relay, influxdb_relay-install]
+      tags: [influxdb_relay_depedencencies]
     - name: Download and install influx-relay
       script: files/influxdb_relay/deploy_influxdbrelay.sh
       changed_when: false
-      tags: [influxdb_relay, influxdb_relay-install]
+      tags: [influxdb_relay_install]
     - name: Drop influx relay toml file
       template:
         src: templates/influxdb/relay.toml.j2
         dest: /opt/influxdb-relay/relay.toml
-      tags: [influxdb_relay, influxdb_relay-install]
+      tags: [influxdb_relay_install]
     - name: Drop Influx Relay upstart
       template:
         src: templates/influxdb/influxdbrelay.conf.j2
         dest: /etc/init/influxdbrelay.conf
       when: init_name == "init"
-      tags: [influxdb_relay, influxdb_relay-configure]
+      tags: [influxdb_relay_install]
     - name: Drop Influx Relay service file
       template:
         src: templates/influxdb/influxdbrelay.service.j2
         dest: /etc/systemd/system/influxdbrelay.service
       when:  init_name == "systemd"
-      tags: [influxdb_relay, influxdb_relay-configure]
+      tags: [influxdb_relay_install]
     - name: Enable and restart influxdb
       service:
         name: "influxdbrelay"
@@ -80,7 +80,7 @@
       when:
         - "'influxdb_relay' in group_names"
         - "groups['influxdb_relay'] | length > 1"
-      tags: [influxdb_relay, influxdb_relay-enable-haproxy]
+      tags: [influxdb_relay_enable_haproxy]
 
   vars_files:
     - vars/main.yml

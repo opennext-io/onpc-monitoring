@@ -56,7 +56,7 @@
             haproxy_service_name: influxdb_relay
             haproxy_backend_nodes: "{{ groups['influxdb_relay'] | default([]) }}"
             haproxy_ssl: "{{ haproxy_ssl }}"
-            haproxy_port: "{{ influxdb_port }}"
+            haproxy_port: "{{ influxdb_relay_port }}"
             haproxy_backend_port: "{{ influxdb_relay_port }}"
             haproxy_balance_type: http
             haproxy_backend_options:

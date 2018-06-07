@@ -23,13 +23,14 @@
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
-        logs_dirs:
+        log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
-            dest: "{{ telegraf_logs_dir }}"
-      tags: [telegraf, telegraf-logging]
+            dest: "{{ telegraf_log_dir }}"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   
   roles:
-    - telegraf
+    - role: telegraf
+      tags: [telegraf-install]
   
   post_tasks:
     # Use post tasks to install plugins
@@ -48,6 +49,7 @@
         - swift
         - system
       notify: Telegraf restart
+      tags: [telegraf-plugins]
   
   handlers:
     - name: Telegraf restart
@@ -58,3 +60,4 @@
     - vars/telegraf.yml
     - vars/influxdb.yml
     - vars/collectd.yml
+
