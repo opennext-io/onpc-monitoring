@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy kapacitor
-  hosts: "{{ kapacitor_hosts | default('kapacitor') }}"
+  hosts: "kapacitor"
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"

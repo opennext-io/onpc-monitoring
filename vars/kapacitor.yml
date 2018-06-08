@@ -31,7 +31,8 @@ kapacitor_config_influx:
     - name: "{{ onpc_environment_name }}"
       enabled: true
       default: true
-      urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
+#     urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
+      urls: ["http://localhost:{{ influxdb_port }}"]
       username: ""
       password: ""
       ssl-ca: ""
@@ -50,7 +51,7 @@ kapacitor_config_influx:
       subscriptions-sync-interval: "1m0s"
       subscription-mode: "cluster"
   
-kapacitor_slack_enabled: True
+kapacitor_slack_enabled: true
 kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"
 kapacitor_slack_global: false
