@@ -27,10 +27,10 @@ kapacitor_container_bind_mounts:
   - bind_dir_path: "{{ kapacitor_data_dir }}"
     mount_path: "/openstack/{{ inventory_hostname }}"
 
-kapacitor_config_influx:
-  - name: "{{ onpc_environment_name }}"
+kapacitor_influx:
+  - name: "{{ ansible_hostname }}"
     enabled: true
-    default: false
+    default: true
 #   urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
     urls: ["http://localhost:{{ influxdb_port }}"]
     username: ""
@@ -39,6 +39,7 @@ kapacitor_config_influx:
     ssl-cert: ""
     ssl-key: ""
     insecure-skip-verify: false
+    subscription-mode: server
     timeout: "0s"
     disable-subscriptions: false
     subscription-protocol: "http"
@@ -52,9 +53,14 @@ kapacitor_config_influx:
     subscription-mode: "cluster"
   
 kapacitor_slack_enabled: true
+kapacitor_slack_default: true
 kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"
-kapacitor_slack_global: true
-kapacitor_slack_default: true
+kapacitor_slack_global: false
 kapacitor_slack_username: kapacitor
 kapacitor_slack_state_changes_only: true
+
+# Configure global deadman
+kapacitor_deadman_global: true
+kapacitor_deadman_interval: "2m"
+kapacitor_deadman_threshold: "1.0"
