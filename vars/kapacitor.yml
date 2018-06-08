@@ -28,33 +28,33 @@ kapacitor_container_bind_mounts:
     mount_path: "/openstack/{{ inventory_hostname }}"
 
 kapacitor_config_influx:
-    - name: "{{ onpc_environment_name }}"
-      enabled: true
-      default: true
-      global: true
-#     urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
-      urls: ["http://localhost:{{ influxdb_port }}"]
-      username: ""
-      password: ""
-      ssl-ca: ""
-      ssl-cert: ""
-      ssl-key: ""
-      insecure-skip-verify: false
-      timeout: "0s"
-      disable-subscriptions: false
-      subscription-protocol: "http"
-      kapacitor-hostname: "{{ ansible_hostname }}"
-      http-port: 0
-      udp-bind: ""
-      udp-buffer: 1000
-      udp-read-buffer: 0
-      startup-timeout: "5m0s"
-      subscriptions-sync-interval: "1m0s"
-      subscription-mode: "cluster"
+  - name: "{{ onpc_environment_name }}"
+    enabled: true
+    default: false
+#   urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
+    urls: ["http://localhost:{{ influxdb_port }}"]
+    username: ""
+    password: ""
+    ssl-ca: ""
+    ssl-cert: ""
+    ssl-key: ""
+    insecure-skip-verify: false
+    timeout: "0s"
+    disable-subscriptions: false
+    subscription-protocol: "http"
+    kapacitor-hostname: "{{ ansible_hostname }}"
+    http-port: 0
+    udp-bind: ""
+    udp-buffer: 1000
+    udp-read-buffer: 0
+    startup-timeout: "5m0s"
+    subscriptions-sync-interval: "1m0s"
+    subscription-mode: "cluster"
   
 kapacitor_slack_enabled: true
 kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"
-kapacitor_slack_global: false
+kapacitor_slack_global: true
+kapacitor_slack_default: true
 kapacitor_slack_username: kapacitor
 kapacitor_slack_state_changes_only: true
