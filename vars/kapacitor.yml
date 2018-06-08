@@ -31,6 +31,7 @@ kapacitor_config_influx:
     - name: "{{ onpc_environment_name }}"
       enabled: true
       default: true
+      global: true
 #     urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
       urls: ["http://localhost:{{ influxdb_port }}"]
       username: ""
