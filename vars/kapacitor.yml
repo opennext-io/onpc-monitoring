@@ -54,13 +54,13 @@ kapacitor_influx:
   
 kapacitor_slack_enabled: true
 kapacitor_slack_default: true
+kapacitor_slack_global: true
 kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"
-kapacitor_slack_global: false
 kapacitor_slack_username: kapacitor
 kapacitor_slack_state_changes_only: true
 
 # Configure global deadman
 kapacitor_deadman_global: true
 kapacitor_deadman_interval: "2m"
-kapacitor_deadman_threshold: "1.0"
+kapacitor_deadman_threshold: 1.0
