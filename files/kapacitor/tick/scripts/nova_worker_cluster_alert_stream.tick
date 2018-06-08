@@ -16,7 +16,6 @@
 //           -tick nova_worker_cluster_alert_stream.tick -dbrp telegraf.autogen
 // Enable: kapacitor enable nova_worker_cluster_alert_stream
 //
-dbrp "telegraf"."autogen"
 
 var warn = 2/3
 var crit = 1/3

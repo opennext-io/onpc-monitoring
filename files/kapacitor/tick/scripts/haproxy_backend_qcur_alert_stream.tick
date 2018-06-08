@@ -16,7 +16,6 @@
 //           -tick haproxy_backend_qcur_alert_stream.tick -dbrp telegraf.autogen
 // Enable: kapacitor enable haproxy_backend_qcur_alert_stream
 
-dbrp "telegraf"."autogen"
 // Parameters
 var info = 5
 var warn = 10 

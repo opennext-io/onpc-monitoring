@@ -17,8 +17,6 @@
 // Enable: kapacitor enable compute_vcpus_alert_stream
 //
 
-dbrp "telegraf"."autogen"
-
 // Parameters
 var info = 50 
 var warn = 80 

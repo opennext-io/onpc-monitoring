@@ -11,7 +11,6 @@
 // ENABLE: kapacitor enable disk_alert_stream
 
 // Parameters
-dbrp "telegraf"."autogen"
 
 var info = 70
 var warn = 80

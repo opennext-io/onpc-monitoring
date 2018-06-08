@@ -17,7 +17,6 @@
 // Enable: kapacitor enable haproxy_sessions_usage_alert
 //
 
-dbrp "telegraf"."autogen"
 
 var info = 50 
 var warn = 80

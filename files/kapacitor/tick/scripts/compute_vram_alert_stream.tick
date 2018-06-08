@@ -16,7 +16,6 @@
 //           -tick compute_vram_alert_stream.tick -dbrp telegraf.autogen
 // Enable: kapacitor enable compute_vram_alert_stream
 //
-dbrp "telegraf"."autogen"
 
 // Parameters
 var info = 50 

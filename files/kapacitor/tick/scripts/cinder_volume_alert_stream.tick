@@ -17,8 +17,6 @@
 // Enable: kapacitor enable cinder_volume_alert_stream
 //
 
-dbrp "telegraf"."autogen"
-
 // Parameters
 var info = 50 
 var warn = 80 

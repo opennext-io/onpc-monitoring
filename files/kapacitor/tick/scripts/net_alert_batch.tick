@@ -10,7 +10,6 @@
 // ENABLE: kapacitor enable net_alert_batch
 
 // Parameters
-dbrp "telegraf"."autogen"
 
 var info = 1
 var warn = 2

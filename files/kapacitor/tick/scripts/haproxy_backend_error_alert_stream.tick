@@ -16,7 +16,6 @@
 //           -tick haproxy_backend_error_alert_stream.tick -dbrp telegraf.autogen
 // Enable: kapacitor enable haproxy_backend_state_alert_stream
 
-dbrp "telegraf"."autogen"
 
 // Parameters
 

@@ -17,7 +17,6 @@
 //           -tick openstack_api_alert_stream.tick -dbrp telegraf.autogen
 // ENABLE: kapacitor enable openstack_api_alert_stream
 
-dbrp "telegraf"."autogen"
 
 stream
   |from()

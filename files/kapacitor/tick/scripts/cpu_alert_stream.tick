@@ -14,6 +14,7 @@
 
 // Parameters
 dbrp "telegraf"."autogen"
+
 var info = 20
 var warn = 10
 var crit = 1

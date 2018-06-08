@@ -17,7 +17,6 @@
 //           -tick openstack_nova_alert_stream.tick -dbrp telegraf.autogen
 // ENABLE: kapacitor enable nova_worker_alert_stream
 //
-dbrp "telegraf"."autogen"
 
 stream
   |from()

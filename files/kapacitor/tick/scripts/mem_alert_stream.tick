@@ -10,7 +10,6 @@
 // ENABLE: kapacitor enable mem_alert_stream
 //
 // Parameters
-dbrp "telegraf"."autogen"
 var info = 80
 var warn = 90
 var crit = 99

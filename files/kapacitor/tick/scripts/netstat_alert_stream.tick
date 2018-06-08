@@ -10,7 +10,6 @@
 // ENABLE: kapacitor enable netstat_alert_stream
 
 // Parameters
-dbrp "telegraf"."autogen"
 
 var infoSig = 2.5
 var warnSig = 3.5

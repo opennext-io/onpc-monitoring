@@ -16,7 +16,6 @@
 //           -tick cinder_worker_cluster_alert_stream.tick -dbrp telegraf.autogen
 // Enable: kapacitor enable cinder_worker_cluster_alert_stream
 //
-dbrp "telegraf"."autogen"
 
 var warn = 1.0/3.0
 var crit = 2.0/3.0
