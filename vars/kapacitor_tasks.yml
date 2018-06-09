@@ -20,7 +20,7 @@ kapacitor_tasks: [
   { id: "compute_vcpus_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vcpus_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "compute_vdisk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vdisk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "compute_vram_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vram_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "conntrack_alert", type: "stream", batch: "{{ kapacitor_tick_script_dest_dir }}/conntrack_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "conntrack_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/conntrack_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "deadman_check", type: "stream", stream: "{{ kapacitor_tick_script_dest_dir }}/deadman_check_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "disk_alert", type: "stream", stream: "{{ kapacitor_tick_script_dest_dir }}/disk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_cluster_alert", type: "stream", stream: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
