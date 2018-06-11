@@ -18,6 +18,7 @@
 kapacitor_port: 9092
 kapacitor_data_dir: /var/lib/kapacitor
 kapacitor_logs_dir: /var/log/kapacitor
+kapacitor_logging_level: INFO
 kapacitor_logging_file: "{{ kapacitor_logs_dir }}/kapacitor.log"
 kapacitor_tick_script_dir: files/kapacitor/tick/scripts
 kapacitor_tick_template_dir: files/kapacitor/tick/templates

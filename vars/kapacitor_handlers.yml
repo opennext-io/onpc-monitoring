@@ -27,7 +27,7 @@ system_handler_topic: system
 kapacitor_handlers: [
   { topic: "{{ haproxy_handler_topic }}", id: "{{ haproxy_handler_id}}", enabled: true },
   { topic: "{{ monitoring_handler_topic }}", id: "{{ monitoring_handler_id}}", enabled: true },
-  { topic: "{{ openstack_handler_topic }}", id: "{{ openstack_alerts_publisher }}", enabled: true },
+  { topic: "{{ openstack_handler_topic }}", id: "{{ openstack_handler_id }}", enabled: true },
   { topic: "{{ slack_handler_topic }}", id: "{{ slack_handler_id }}", enabled: true },
   { topic: "{{ system_handler_topic }}", id: "{{ system_handler_id }}", enabled: true }
 ]

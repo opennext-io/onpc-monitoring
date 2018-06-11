@@ -46,9 +46,6 @@
         src: files/kapacitor/utils
         dest: /opt/kapacitor/utils
         mode: 0755
-    - name: Enable tasks once
-      shell: bash /opt/kapacitor/utils/all-tasks.sh enable
-      run_once: true
 
   vars_files:
     - vars/main.yml
