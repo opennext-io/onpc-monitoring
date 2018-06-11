@@ -40,12 +40,16 @@
       file:
         path: "/opt/kapacitor/utils"
         state: directory
-        mode: 0644
+        mode: 0755
+      tags: [kapacitor-utils]
     - name: Drop Kapacitor utils
       copy:
-        src: files/kapacitor/utils
+        src: {{ item }}
         dest: /opt/kapacitor/utils
         mode: 0755
+      with_fileglob:
+        - "files/kapacitor/utils/*.sh"
+      tags: [kapacitor-utils]
 
   vars_files:
     - vars/main.yml

@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+set -xe
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-TICKSCRIPTS_DIR = "/usr/local/etc/kapacitor/tick/script"
+TICKSCRIPTS_DIR="/usr/local/etc/kapacitor/tick/script"
 TASKS=$(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}')
 
 case "$1" in
@@ -44,4 +46,6 @@ case "$1" in
     echo "Usage: $SCRIPTNAME {create|delete|enable|disable|reload}" >&2
     exit 1
     ;;
+esac
+
 
