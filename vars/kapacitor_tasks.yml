@@ -31,7 +31,7 @@ kapacitor_tasks: [
   { id: "haproxy_backend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_frontend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_frontend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_session_usage_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_session_usage_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "interface_speed_alert", type: "stream", stream: "{{ kapacitor_tick_script_dest_dir }}/interface_speed_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
+  { id: "interface_speed_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/interface_speed_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
   { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "mem_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/mem_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "net_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/net_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
