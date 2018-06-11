@@ -32,10 +32,25 @@
       tags: [kapacitor-bind-mounts]
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   
-  roles:
-      - kapacitor
+ roles:
+    - kapacitor
 
-  vars_files:
+  post_tasks:
+    - name: Create utils directory 
+      file:
+        path: "/opt/kapacitor/utils"
+        state: directory
+        mode: 0644
+    - name: Drop Kapacitor utils
+      copy:
+        src: files/kapacitor/utils
+        dest: /opt/kapacitor/utils
+        mode: 0755
+    - name: Enable tasks once
+      shell: bash /opt/kapacitor/utils/all-tasks.sh enable
+      run_once: true
+
+vars_files:
     - vars/main.yml
     - vars/influxdb.yml
     - vars/kapacitor.yml
