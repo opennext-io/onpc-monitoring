@@ -13,11 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+haproxy_handler_id: haproxy_alerts_publisher
+haproxy_handler_topic: haproxy
+monitoring_handler_id: montoring_alerts_publisher
+monitoring_handler_topic: monitoring
+openstack_handler_id: openstack_alerts_publisher
+openstack_handler_topic: openstack
+slack_handler_id: slack_alerts_forwarder
+slack_handler_topic: slack
+system_handler_id: system_alerts_publisher
+system_handler_topic: system
+
 kapacitor_handlers: [
-  { name: "haproxy_handler", enabled: true },
-  { name: "monitoring_handler", enabled: true },
-  { name: "openstack_handler", enabled: true },
-  { name: "openstack_handler", enabled: true },
-  { name: "slack_handler", enabled: true },
-  { name: "system_handler", enabled: true }
+  { topic: "{{ haproxy_handler_topic }}", id: "{{ haproxy_handler_id}}", enabled: true },
+  { topic: "{{ monitoring_handler_topic }}", id: "{{ monitoring_handler_id}}", enabled: true },
+  { topic: "{{ openstack_handler_topic }}", id: "{{ openstack_alerts_publisher }}", enabled: true },
+  { topic: "{{ slack_handler_topic }}", id: "{{ slack_handler_id }}", enabled: true },
+  { topic: "{{ system_handler_topic }}", id: "{{ system_handler_id }}", enabled: true }
 ]

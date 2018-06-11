@@ -42,3 +42,4 @@
     - vars/kapacitor_tasks.yml
     - vars/kapacitor_templates.yml
     - vars/kapacitor_handlers.yml
+

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 # Kapacitor Vars
+# Kapacitor Vars
 kapacitor_port: 9092
 kapacitor_data_dir: /var/lib/kapacitor
 kapacitor_logs_dir: /var/log/kapacitor
@@ -50,7 +51,6 @@ kapacitor_influx:
     udp-read-buffer: 0
     startup-timeout: "5m0s"
     subscriptions-sync-interval: "1m0s"
-    subscription-mode: "cluster"
   
 kapacitor_slack_enabled: true
 kapacitor_slack_default: true
