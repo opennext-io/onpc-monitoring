@@ -30,5 +30,5 @@ stream
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/nova-{{ index .Tags "instance" }}/state')
     .message('{{ .ID }}: [{{ .Level }}] State of "{{ index .Tags "instance" }}" worker on host "{{ index .Tags "host" }}" is "{{ index .Tags "type_instance" }}"')
     .warn(lambda: "stat" > 0)
-    .log('/tmp/nova_worker_alert_log.txt')
     .topic('openstack')
+    .log('/var/log/kapacitor/nova_worker_alert.log')

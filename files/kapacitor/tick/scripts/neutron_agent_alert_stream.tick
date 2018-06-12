@@ -29,5 +29,5 @@ stream
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/neutron/{{ index .Tags "instance" }}/state')
     .message('{{ .ID }}: [{{ .Level }}] State of "{{ index .Tags "instance" }}" agent on host "{{ index .Tags "host" }}" is "{{ index .Tags "type_instance" }}"')
     .warn(lambda: "stat" > 0)
-    .log('/tmp/neutron_agent_alert_log.txt')
     .topic('openstack')
+    .log('/var/log/kapacitor/neutron_agent_alert.log')

@@ -4,6 +4,6 @@
 topic: "{{ slack_handler_topic }}"
 id: "{{ slack_handler_id }}"
 kind: slack
-match: changed() == TRUE
+match: changed() == TRUE AND level() >= WARNING
 options:
   channel: "{{ kapacitor_slack_channel }}"

@@ -15,11 +15,11 @@
 // Parameters
 dbrp "telegraf"."autogen"
 
-var info = 20
+var info = 30
 var warn = 10
-var crit = 1
-var period = 10s
-var every = 10s
+var crit = 0
+var period = 1m
+var every = 1m
 
 // Dataframe
 var data = stream
@@ -44,7 +44,5 @@ var alert = data
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('system')
-
-// Alert
-alert
-  .log('/tmp/cpu_alert_log.txt')
+    .log('/var/log/kapacitor/cpu_alert_log.txt')
+  

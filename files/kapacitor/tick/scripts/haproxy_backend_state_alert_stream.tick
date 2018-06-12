@@ -31,4 +31,4 @@ stream
     .message('{{ .ID }}: [{{ .Level }}] Availability state of backend is {{ index .Fields "stat" }}')
     .warn(lambda: "stat" != 'UP')
     .topic('haproxy')
-    .log('/tmp/haproxy_backend_state_alert_log.txt')
+    .log('/var/log/kapacitor/haproxy_backend_state_alert.log')

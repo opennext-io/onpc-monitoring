@@ -13,10 +13,10 @@
 // Parameters
 
 var info = 70
-var warn = 80
-var crit = 90
-var period = 10s
-var every = 10s
+var warn = 90
+var crit = 100
+var period = 1m
+var every = 1m
 
 // Dataframe
 var data = stream
@@ -41,7 +41,4 @@ var alert = data
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('system')
-
-// Alert
-alert
-  .log('/tmp/disk_alert_log.txt')
+    .log('/var/log/kapacitor/disk_alert.log')

@@ -17,9 +17,10 @@
 // Enable: kapacitor enable haproxy_backend_cluster_alert_stream
 //
 
-var warn = 2/3
-var crit = 1/3
-var period = 2m
+var warn = 2.0/3.0
+var crit = 1.0/3.0
+
+var period = 1m
 var every = 1m
 
 var rawdata = stream
@@ -57,4 +58,4 @@ var alert = data
         .warn(lambda: "stat" <= warn)
         .crit(lambda: "stat" <= crit)
         .topic('haproxy')
-        .log('/tmp/haproxy_backend_cluster_alert_log.txt')
+        .log('/var/log/kapacitor/haproxy_backend_cluster_alert.log')

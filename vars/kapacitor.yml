@@ -60,6 +60,7 @@ kapacitor_slack_channel: "{{ slack_alerts_channel }}"
 kapacitor_slack_url: "{{ slack_webhooks_url }}"
 kapacitor_slack_username: kapacitor
 kapacitor_slack_state_changes_only: true
+kapacitor_slack_workspace: OpenNext
 
 # Configure global deadman
 kapacitor_deadman_global: true

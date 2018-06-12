@@ -11,39 +11,46 @@
 
 // Parameters
 
-var infoSig = 2.5
-var warnSig = 3.5
-var period = 1m
-var every = 1m
+var info = 0.1
+var warn = 0.3
+var crit = 0.9
+var unit = 1s
 
-// Dataframe
-var data = stream
+var rawdata = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('netstat')
     .groupBy('region','host')
-  |window()
-    .period(period)
-    .every(every)
-  |mean('tcp_established')
-    .as('stat')
 
-// Thresholds
+var tcp_established = rawdata
+  |derivative('tcp_established')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+
+var tcp_time_wait = rawdata
+  |derivative('tcp_time_wait')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+
+var tcp_close_wait = rawdata
+  |derivative('tcp_close_wait')
+    .as('value')
+    .nonNegative()
+    .unit(unit)
+
+var data = tcp_close_wait
+  |join(tcp_time_wait, tcp_established)
+    .as('tcp_close_wait', 'tcp_time_wait', 'tcp_established')
+
 var alert = data
-  |eval(lambda: sigma("stat"))
-    .as('sigma')
-    .keep()
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
-    .message('{{ .ID }}: [{{ .Level }}] TCP connections avg={{ index .Fields "stat" }},  stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
-    // sigma value is too noisy
-    //.info(lambda: "stat" >= info OR "sigma" >= infoSig)
-    //.warn(lambda: "stat" >= warn OR "sigma" >= warnSig)
-    //.crit(lambda: "stat" >= crit OR "sigma" >= critSig)
-    .info(lambda: "stat" >= infoSig)
-    .warn(lambda: "stat" >= warnSig)
-    
-    .topic('system')
-    .log('/tmp/netstat_alert_stream_log.txt')
-
+    .message('{{ .ID }}: [{{ .Level }}] tcp_established={{ index .Fields "tcp_establised.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
+    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= info)
+    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= warn)
+    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= crit)
+    .topic('network')
+    .log('/var/log/kapacitor/netstat_alert_stream.log')

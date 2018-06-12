@@ -17,8 +17,12 @@
 // Enable: kapacitor enable haproxy_backend_rtime_alert_stream
 
 // Parameters
-var infoSig = 2.0
-var warnSig = 3.5
+var info = 100
+var warn = 300
+var crit = 900
+var infoSig = 2.5 
+var warnSig = 3
+var critSig = 3.5
 var period = 1m
 var every = 1m
 
@@ -43,8 +47,9 @@ var alert = data
     .keep()
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/rtime')
-    .message('{{ .ID }}: [{{ .Level }}] Backend response time avg={{ index .Fields "stat" | printf "%0.2f" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
-    .info(lambda: "sigma" >= infoSig)
-    .warn(lambda: "sigma" >= warnSig)
+    .message('{{ .ID }}: [{{ .Level }}] Backend response time={{ index .Fields "stat" | printf "%0.2f" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
+    .info(lambda: "sigma" >= infoSig OR "stat" >= info)
+    .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
+    .crit(lambda: "sigma" >= critSig OR "stat" >= crit)
     .topic('haproxy')
-    .log('/tmp/haproxy_backend_rtime_alert.txt')
+    .log('/var/log/kapacitor/haproxy_backend_rtime_alert.log')

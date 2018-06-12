@@ -10,9 +10,9 @@
 // ENABLE: kapacitor enable mem_alert_stream
 //
 // Parameters
-var info = 80
+var info = 70
 var warn = 90
-var crit = 99
+var crit = 100
 
 var period = 10s
 var every = 10s
@@ -39,7 +39,4 @@ var alert = data
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('system')
-
-// Alert
-alert
-  .log('/tmp/mem_alert_log.txt')
+    .log('/var/log/kapacitor/mem_alert.log')

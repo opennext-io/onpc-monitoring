@@ -17,8 +17,8 @@
 // Enable: kapacitor enable nova_worker_cluster_alert_stream
 //
 
-var warn = 2/3
-var crit = 1/3
+var warn = 2.0/3.0
+var crit = 1.0/3.0
 
 stream
   |from()
@@ -35,5 +35,5 @@ stream
     .info(lambda: "stat" > warn)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
-    .log('/tmp/nova_worker_cluster_alert_log.txt')
     .topic('openstack')
+    .log('/var/log/kapacitor/nova_worker_cluster_alert.log')

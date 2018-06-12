@@ -18,9 +18,9 @@
 //
 
 // Parameters
-var info = 50 
-var warn = 80 
-var crit = 90
+var info = 70 
+var warn = 90 
+var crit = 100
 var period = 1m 
 var every = 1m
 
@@ -62,6 +62,5 @@ var alert = data
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('openstack')
-
-alert
-    .log('/tmp/compute_disk_alert_log.txt')
+    .log('/var/log/kapacitor/compute_vdisk_alert.log')
+    

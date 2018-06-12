@@ -15,10 +15,10 @@
 // Parameters
 
 var info = 70 
-var warn = 80 
-var crit = 90 
+var warn = 90 
+var crit = 100 
 var period =1m 
-var every = 10s
+var every = 1m
 
 // Dataframe
 var data = batch
@@ -35,9 +35,7 @@ var alert = data
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
-    .topic('system')
-
-// Alert
-alert
-  .log('/tmp/conntrack_alert_log.txt')
+    .topic('network')
+    .log('/var/log/kapacitor/conntrack_alert.log')
+  
 

@@ -31,4 +31,4 @@ stream
     .message('{{ .ID }}: [{{ .Level }}] Availability state of frontend is {{ index .Fields "stat" }}')
     .warn(lambda: "stat" != 'OPEN')
     .topic('haproxy')
-    .log('/tmp/haproxy_frontend_state_alert_log.txt')
+    .log('/var/log/kapacitor/haproxy_frontend_state_alert.log')

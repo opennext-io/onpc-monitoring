@@ -31,6 +31,6 @@ stream
     .message('{{ .ID }}: [{{ .Level }}] Status of {{ index .Tags "instance" }} check is {{ index .Tags "type_instance" }}')
     .warn(lambda: "stat" > 1)
     .crit(lambda: "stat" == 1)
-    .log('/tmp/openstack_api_alert_log.txt')
     .topic('openstack')
+    .log('/var/log/kapacitor/openstack_api_alert.log')
 

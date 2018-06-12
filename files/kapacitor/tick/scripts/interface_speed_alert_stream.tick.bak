@@ -72,4 +72,4 @@ var alert = data
 
 // Alert
  alert
-  .log('/tmp/interface_speed_alert_log.txt')
+  .log('/var/log/kapacitor/interface_speed_alert_log.txt')

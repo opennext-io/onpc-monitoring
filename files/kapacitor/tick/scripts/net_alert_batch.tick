@@ -11,9 +11,9 @@
 
 // Parameters
 
-var info = 1
-var warn = 2
-var crit = 3
+var info = 0.1
+var warn = 0.3
+var crit = 0.9
 var period = 1m
 var every = 1m
 var unit = 1s
@@ -61,8 +61,7 @@ var alert = data
     .info(lambda: "err_in.value" > info OR "err_out.value" > info OR "drop_in.value" > info OR "drop_out.value" >= info)
     .warn(lambda: "err_in.value" > warn OR "err_out.value" > warn OR "drop_in.value" > warn OR "drop_out.value" >= warn)
     .crit(lambda: "err_in.value" > crit OR "err_out.value" > crit OR "drop_in.value" > crit OR "drop_out.value" >= crit)
-    .topic('system')
-  
-// Alert  
-alert
-.log('/tmp/net_alert_log.txt')
+    .topic('network')
+    .log('/var/log/kapacitor/net_alert_log.txt')
+
+

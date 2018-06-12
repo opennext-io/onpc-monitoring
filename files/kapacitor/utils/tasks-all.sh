@@ -14,10 +14,8 @@
 # limitations under the License.
 
 
-set -xe
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 TICKSCRIPTS_DIR="/usr/local/etc/kapacitor/tick/script"
-TASKS=$(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}')
 
 case "$1" in
   create)
@@ -27,19 +25,23 @@ case "$1" in
       IFS='/' read -ra NAMES <<< "${NAMES[-2]}"
       if [[ $i == *"batch"* ]]; then
           kapacitor define ${NAMES[-1]} -type batch -tick $i
+          sleep 1
       else
           kapacitor define ${NAMES[-1]} -type stream -tick $i
+          sleep 1
       fi
     done
     ;;
   enable | disable | reload)
-    for var in "${TASKS[@]}"; do
+    for var in $(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}'); do
       kapacitor $1 ${var}
+      sleep 1
     done
     ;;
   delete)
-    for var in "${TASKS[@]}"; do
+    for var in $(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}'); do
       kapacitor delete task ${var}
+      sleep 1
     done
     ;;
   *)
