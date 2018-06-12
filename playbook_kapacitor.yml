@@ -44,7 +44,7 @@
       tags: [kapacitor-utils]
     - name: Drop Kapacitor utils
       copy:
-        src: {{ item }}
+        src: "{{ item }}"
         dest: /opt/kapacitor/utils
         mode: 0755
       with_fileglob:
