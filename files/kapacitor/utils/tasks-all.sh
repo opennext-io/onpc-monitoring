@@ -13,34 +13,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 TICKSCRIPTS_DIR="/usr/local/etc/kapacitor/tick/script"
 
 case "$1" in
   create)
     for i in $(find $TICKSCRIPTS_DIR -type f -name "*.tick"); do
-      echo $i
       IFS='.' read -ra NAMES <<< "$i"
       IFS='/' read -ra NAMES <<< "${NAMES[-2]}"
+      echo "create task ${NAMES[-1]}"
       if [[ $i == *"batch"* ]]; then
-          kapacitor define ${NAMES[-1]} -type batch -tick $i
+          kapacitor define ${NAMES[-1]} -type batch -tick $i -dbrp "telegraf.autogen"
           sleep 1
       else
-          kapacitor define ${NAMES[-1]} -type stream -tick $i
+          kapacitor define ${NAMES[-1]} -type stream -tick $i -dbrp "telegraf.autogen"
           sleep 1
       fi
     done
     ;;
   enable | disable | reload)
     for var in $(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}'); do
+      echo "$1 task ${var}"
       kapacitor $1 ${var}
       sleep 1
     done
     ;;
   delete)
     for var in $(kapacitor list tasks | sed 's/\|/ /'|awk '{print $1}'); do
-      kapacitor delete task ${var}
+      echo "delete task ${var}"
+      kapacitor delete tasks ${var}
       sleep 1
     done
     ;;
@@ -49,5 +50,3 @@ case "$1" in
     exit 1
     ;;
 esac
-
-

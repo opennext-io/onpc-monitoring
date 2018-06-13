@@ -64,5 +64,5 @@ kapacitor_slack_workspace: OpenNext
 
 # Configure global deadman
 kapacitor_deadman_global: true
-kapacitor_deadman_interval: "2m"
+kapacitor_deadman_interval: "90s"
 kapacitor_deadman_threshold: 1.0

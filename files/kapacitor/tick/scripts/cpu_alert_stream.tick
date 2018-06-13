@@ -13,7 +13,6 @@
 // ENABLE: kapacitor enable cpu_alert_stream
 
 // Parameters
-dbrp "telegraf"."autogen"
 
 var info = 30
 var warn = 10

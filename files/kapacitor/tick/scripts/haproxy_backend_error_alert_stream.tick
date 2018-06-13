@@ -19,9 +19,9 @@
 
 // Parameters
 
-var info = 0.1
-var warn = 0.3
-var crit = 0.9
+var info = 30.0
+var warn = 60.0
+var crit = 90.0
 var unit = 1s
 
 var rawdata = stream

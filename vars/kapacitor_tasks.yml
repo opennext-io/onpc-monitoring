@@ -35,7 +35,7 @@ kapacitor_tasks: [
   { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "mem_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/mem_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "net_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/net_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "netstat_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/netstat_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "netstat_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/netstat_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "neutron_agent_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/neutron_agent_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "neutron_agent_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/neutron_agent_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "nova_worker_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/nova_worker_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },

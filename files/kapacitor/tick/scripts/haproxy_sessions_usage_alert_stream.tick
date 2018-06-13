@@ -30,6 +30,7 @@ var rawdata = stream
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('haproxy')
+    .where(lambda: "type" == 'frontend' OR "type" == 'backend')
     .groupBy('region', 'host', 'type', 'proxy')
   |window()
     .period(period)

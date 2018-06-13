@@ -11,11 +11,11 @@
 
 // Parameters
 
-var info = 0.1
-var warn = 0.3
-var crit = 0.9
-var period = 1m
-var every = 1m
+var info = 30.0
+var warn = 60.0
+var crit = 90.0
+var period = 10s
+var every = 10s
 var unit = 1s
 
 // Dataframe

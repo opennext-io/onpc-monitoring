@@ -1,4 +1,4 @@
-// netstat_alert_stream
+// netstat_alert_batch
 
 // metric: 'tcp_established'
 // available_fields:  "tcp_close","tcp_close_wait","tcp_closing","tcp_established","tcp_fin_wait1","tcp_fin_wait2","tcp_last_ack","tcp_listen","tcp_none","tcp_syn_recv","cp_syn_sent","tcp_time_wait","udp_socket","tcp_listen"
@@ -6,22 +6,22 @@
 // TELEGRAF CONFIGURATION
 // [[inputs.netstat]]
 
-// DEFINE: kapacitor define netstat_alert_stream -type stream -tick netstat/netstat_alert_stream.tick -dbrp telegraf.autogen
-// ENABLE: kapacitor enable netstat_alert_stream
+// DEFINE: kapacitor define netstat_alert_batch -type stream -tick netstat/netstat_alert_batch.tick -dbrp telegraf.autogen
+// ENABLE: kapacitor enable netstat_alert_batch
 
 // Parameters
-
-var info = 0.1
-var warn = 0.3
-var crit = 0.9
+var info = 30.0 
+var warn = 60.0 
+var crit = 90.0 
+var period = 10s
+var every = 10s
 var unit = 1s
 
-var rawdata = stream
-  |from()
-    .database('telegraf')
-    .retentionPolicy('autogen')
-    .measurement('netstat')
-    .groupBy('region','host')
+var rawdata = batch
+  |query('''SELECT tcp_established, tcp_time_wait, tcp_close_wait FROM "telegraf"."autogen"."netstat" ''')
+    .period(period)
+    .every(every)
+    .groupBy('host', 'region')
 
 var tcp_established = rawdata
   |derivative('tcp_established')
@@ -48,9 +48,9 @@ var data = tcp_close_wait
 var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
-    .message('{{ .ID }}: [{{ .Level }}] tcp_established={{ index .Fields "tcp_establised.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
+    .message('{{ .ID }}: [{{ .Level }}] tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
     .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= info)
-    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= warn)
-    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= crit)
+    .warn(lambda: "tcp_established.value" >= warn OR "tcp_time_wait.value" >= warn OR "tcp_close_wait.value" >= warn)
+    .crit(lambda: "tcp_established.value" >= crit OR "tcp_time_wait.value" >= crit OR "tcp_close_wait.value" >= crit)
     .topic('network')
-    .log('/var/log/kapacitor/netstat_alert_stream.log')
+//  .log('/var/log/kapacitor/netstat_alert_batch.log')
