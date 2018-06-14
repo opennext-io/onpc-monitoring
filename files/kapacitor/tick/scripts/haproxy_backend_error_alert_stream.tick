@@ -19,18 +19,18 @@
 
 // Parameters
 
-var info = 30.0
-var warn = 60.0
-var crit = 90.0
+var info = 0.1 
+var warn = 0.3 
+var crit = 0.9 
+var period = 1m 
+var every = 1m
 var unit = 1s
 
-var rawdata = stream
-  |from()
-    .database('telegraf')
-    .retentionPolicy('autogen')
-    .measurement('haproxy')
-    .where(lambda: "type" == 'backend')
-    .groupBy('region', 'host', 'proxy')
+var rawdata = batch
+  |query('''SELECT econ, dresp, eresp FROM "telegraf"."autogen"."haproxy" WHERE type = 'server' ''')
+    .period(period)
+    .every(every)
+    .groupBy('region', 'host', 'proxy', 'sv')
 
 var econ = rawdata
   |derivative('econ')
@@ -64,4 +64,4 @@ var alert = data
     .warn(lambda: "econ.value" >= warn OR "dresp.value" >= warn OR "eresp.value" >= warn)
     .crit(lambda: "econ.value" >= crit OR "dresp.value" >= crit OR "eresp.value" >= crit)
     .topic('haproxy')
-    .log('/var/log/kapacitor/haproxy_backend_error_alert.log')
+//  .log('/var/log/kapacitor/haproxy_backend_error_alert.log')

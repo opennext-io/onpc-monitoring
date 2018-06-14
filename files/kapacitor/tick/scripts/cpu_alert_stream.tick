@@ -13,12 +13,11 @@
 // ENABLE: kapacitor enable cpu_alert_stream
 
 // Parameters
-
-var info = 30
-var warn = 10
-var crit = 0
+var info = 70.0 
+var warn = 90.0 
+var crit = 100.0 
 var period = 1m
-var every = 1m
+var every = 10s
 
 // Dataframe
 var data = stream
@@ -27,21 +26,24 @@ var data = stream
     .retentionPolicy('autogen')
     .measurement('cpu')
     .groupBy('region', 'host')
-  |where(lambda: "node_type" == 'host')
+    .where(lambda: "node_type" == 'host' AND "cpu" == 'cpu-total')
+  |eval(lambda: 100.0 - "usage_idle")
+    .as('used')
   |window()
     .period(period)
     .every(every)
-  |mean('usage_idle')
+  |mean('used')
     .as('stat')
 
 // Thresholds
 var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
-    .message('{{ .ID }}: [{{ .Level }}] CPU idle is {{ index .Fields "stat" | printf "%0.2f" }}%')
-    .info(lambda: "stat" <= info)
-    .warn(lambda: "stat" <= warn)
-    .crit(lambda: "stat" <= crit)
+    .message('{{ .ID }}: [{{ .Level }}] Total CPU usage is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .info(lambda: "stat" >= info)
+    .warn(lambda: "stat" >= warn)
+    .crit(lambda: "stat" >= crit)
     .topic('system')
-    .log('/var/log/kapacitor/cpu_alert_log.txt')
+//  .log('/var/log/kapacitor/cpu_alert_log.txt')
+
   

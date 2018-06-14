@@ -30,4 +30,4 @@ stream
     .message('{{ .ID }}: [{{ .Level }}] State of "{{ index .Tags "instance" }}" agent on host "{{ index .Tags "host" }}" is "{{ index .Tags "type_instance" }}"')
     .warn(lambda: "stat" > 0)
     .topic('openstack')
-    .log('/var/log/kapacitor/neutron_agent_alert.log')
+//  .log('/var/log/kapacitor/neutron_agent_alert.log')

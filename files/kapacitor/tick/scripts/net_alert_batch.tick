@@ -62,6 +62,6 @@ var alert = data
     .warn(lambda: "err_in.value" > warn OR "err_out.value" > warn OR "drop_in.value" > warn OR "drop_out.value" >= warn)
     .crit(lambda: "err_in.value" > crit OR "err_out.value" > crit OR "drop_in.value" > crit OR "drop_out.value" >= crit)
     .topic('network')
-    .log('/var/log/kapacitor/net_alert_log.txt')
+//  .log('/var/log/kapacitor/net_alert_log.txt')
 
 

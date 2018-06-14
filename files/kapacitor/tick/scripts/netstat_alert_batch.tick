@@ -10,18 +10,19 @@
 // ENABLE: kapacitor enable netstat_alert_batch
 
 // Parameters
-var info = 30.0 
-var warn = 60.0 
-var crit = 90.0 
-var period = 10s
-var every = 10s
+
+var info = 1
+var warn = 3 
+var crit = 9 
+var period = 1m 
+var every = 1m 
 var unit = 1s
 
 var rawdata = batch
   |query('''SELECT tcp_established, tcp_time_wait, tcp_close_wait FROM "telegraf"."autogen"."netstat" ''')
     .period(period)
     .every(every)
-    .groupBy('host', 'region')
+    .groupBy('region', 'host')
 
 var tcp_established = rawdata
   |derivative('tcp_established')

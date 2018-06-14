@@ -18,11 +18,11 @@
 //
 
 // Parameters
-var info = 70 
-var warn = 90 
-var crit = 100
-var period = 1m 
-var every = 1m
+var info = 70.0
+var warn = 90.0
+var crit = 100.0
+var period = 90s
+var every = 90s
 
 // Dataframe
 var rawdata = stream
@@ -55,10 +55,10 @@ var alert = data
   |eval(lambda: float("in_use.value")/float("available.value") * 100.0)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/compute/vram-usage/percent')
-    .message('{{ .ID }}: [{{ .Level }}] Compute memory capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/compute/vram')
+    .message('{{ .ID }}: [{{ .Level }}] Hypervisor memory capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('openstack')
-    .log('/var/log/kapacitor/compute_vram_alert.log')  
+//  .log('/var/log/kapacitor/compute_vram_alert.log')  

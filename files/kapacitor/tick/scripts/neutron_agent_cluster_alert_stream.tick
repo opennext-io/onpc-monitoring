@@ -17,8 +17,9 @@
 // Enable: kapacitor enable neutron_agent_cluster_alert_stream
 //
 
-var warn = 2.0/3.0
-var crit = 1.0/3.0
+var info = 2.0/3.0
+var warn = 1.0/3.0
+var crit = 0.0
 
 stream
   |from()
@@ -31,9 +32,9 @@ stream
     .as('stat')
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/neutron/{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is less than {{ index .Fields "stat" | printf "%0.2f" }}%')
-    .info(lambda: "stat" > warn)
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is less than {{ index .Fields "stat" | printf "%0.2f" }}% or less')
+    .info(lambda: "stat" <= warn)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('openstack')
-    .log('/var/log/kapacitor/neutron_agent_cluster_alert.log')
+//  .log('/var/log/kapacitor/neutron_agent_cluster_alert.log')

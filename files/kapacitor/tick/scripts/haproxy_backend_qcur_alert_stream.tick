@@ -17,9 +17,9 @@
 // Enable: kapacitor enable haproxy_backend_qcur_alert_stream
 
 // Parameters
-var info = 30
-var warn = 90 
-var crit = 270
+var info = 10 
+var warn = 30 
+var crit = 90 
 var infoSig = 2.5 
 var warnSig = 3
 var critSig = 3.5
@@ -32,8 +32,8 @@ var data = stream
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('haproxy')
-    .where(lambda: "type" == 'backend')
-    .groupBy('region', 'host')
+    .where(lambda: "type" == 'server')
+    .groupBy('region', 'host', 'sv', 'proxy')
   |window()
     .period(period)
     .every(every)
@@ -46,10 +46,10 @@ var alert = data
     .as('sigma')
     .keep()
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/qcur')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/qcur')
     .message('{{ .ID }}: [{{ .Level }}] Backend queue size={{ index .Fields "stat" | printf "%0.2f" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
     .crit(lambda: "sigma" >= critSig OR "stat" >= crit)
     .topic('haproxy')
-    .log('/var/log/kapacitor/haproxy_backend_qcur.log')
+//  .log('/var/log/kapacitor/haproxy_backend_qcur.log')

@@ -17,9 +17,9 @@
 // Enable: kapacitor enable haproxy_backend_rtime_alert_stream
 
 // Parameters
-var info = 100
-var warn = 300
-var crit = 900
+var info = 300
+var warn = 900
+var crit = 2700
 var infoSig = 2.5 
 var warnSig = 3
 var critSig = 3.5
@@ -27,13 +27,14 @@ var period = 1m
 var every = 1m
 
 // Dataframe
+// Dataframe
 var data = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
     .measurement('haproxy')
-    .where(lambda: "type" == 'backend')
-    .groupBy('region', 'host', 'proxy')
+    .where(lambda: "type" == 'server')
+    .groupBy('region', 'host', 'sv', 'proxy')
   |window()
     .period(period)
     .every(every)
@@ -46,10 +47,10 @@ var alert = data
     .as('sigma')
     .keep()
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/rtime')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/rtime')
     .message('{{ .ID }}: [{{ .Level }}] Backend response time={{ index .Fields "stat" | printf "%0.2f" }} ms, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
-    .info(lambda: "sigma" >= infoSig OR "stat" >= info)
-    .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
-    .crit(lambda: "sigma" >= critSig OR "stat" >= crit)
+    .info(lambda: "stat" >= info)
+    .warn(lambda: "stat" >= warn)
+    .crit(lambda: "stat" >= crit)
     .topic('haproxy')
-    .log('/var/log/kapacitor/haproxy_backend_rtime_alert.log')
+//  .log('/var/log/kapacitor/haproxy_backend_rtime_alert.log')

@@ -14,11 +14,11 @@
 //
 // Parameters
 
-var info = 70 
-var warn = 90 
-var crit = 100 
-var period =1m 
-var every = 1m
+var info = 70.0
+var warn = 90.0
+var crit = 100.0
+var period =10s
+var every = 10s
 
 // Dataframe
 var data = batch
@@ -31,11 +31,11 @@ var data = batch
 var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
-    .message('{{ .ID }}: [{{ .Level }}] Connections used is  {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] TCP connections in use is  {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('network')
-    .log('/var/log/kapacitor/conntrack_alert.log')
+//  .log('/var/log/kapacitor/conntrack_alert.log')
   
 

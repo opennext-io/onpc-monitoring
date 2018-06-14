@@ -12,11 +12,22 @@
 
 // Parameters
 
-var info = 70
-var warn = 90
-var crit = 100
+
+var info = 70.0
+var warn = 90.0
+var crit = 100.0
+var infoSig = 2.5
+var warnSig = 3
+var critSig = 3.5
 var period = 1m
-var every = 1m
+var every = 10s 
+
+// Dataframe
+var info = 70.0
+var warn = 90.0
+var crit = 100.0
+var period = 1m
+var every = 10s 
 
 // Dataframe
 var data = stream
@@ -25,7 +36,7 @@ var data = stream
     .retentionPolicy('autogen')
     .measurement('disk')
     .groupBy('region', 'host', 'path')
-  |where(lambda: "node_type" == 'host')
+    .where(lambda: "node_type" == 'host')
   |window()
     .period(period)
     .every(every)
@@ -35,10 +46,11 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "path" }}/disk')
-    .message('{{ .ID }}: [{{ .Level }}] Disk usage is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/disk')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "path" }} space used is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('system')
-    .log('/var/log/kapacitor/disk_alert.log')
+//  .log('/var/log/kapacitor/disk_alert.log')
+

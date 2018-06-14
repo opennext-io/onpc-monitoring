@@ -34,9 +34,9 @@ var data = stream
 var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/memory')
-    .message('{{ .ID }}: [{{ .Level }}] Memory usage is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] Memory usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('system')
-    .log('/var/log/kapacitor/mem_alert.log')
+ // .log('/var/log/kapacitor/mem_alert.log')

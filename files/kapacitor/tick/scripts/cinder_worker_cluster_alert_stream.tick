@@ -17,8 +17,9 @@
 // Enable: kapacitor enable cinder_worker_cluster_alert_stream
 //
 
-var warn = 2.0/3.0
-var crit = 1.0/3.0
+var info = 2.0/3.0
+var warn = 1.0/3.0
+var crit = 0.0
 
 stream
   |from()
@@ -31,8 +32,9 @@ stream
     .as('stat')
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/cinder/{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is less than {{ index .Fields "stat" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" | printf "%0.2f" }}% or less')
+    .info(lambda: "stat" <= info)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('openstack')
-    .log('/var/log/kapacitor/cinder_worker_cluster_alert.log')
+//  .log('/var/log/kapacitor/cinder_worker_cluster_alert.log')

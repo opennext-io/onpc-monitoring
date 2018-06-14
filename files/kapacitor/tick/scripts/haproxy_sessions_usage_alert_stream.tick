@@ -17,7 +17,6 @@
 // Enable: kapacitor enable haproxy_sessions_usage_alert
 //
 
-
 var info = 70
 var warn = 90
 var crit = 100
@@ -59,4 +58,5 @@ var alert = data
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('haproxy')
-    .log('/var/log/kapacitor/haproxy_sessions_usage_alert.log')
+//  .log('/var/log/kapacitor/haproxy_sessions_usage_alert.log')
+
