@@ -19,9 +19,9 @@
 
 // Parameters
 
-var info = 0.1 
-var warn = 0.3 
-var crit = 0.9 
+var info = 10
+var warn = 30 
+var crit = 90 
 var period = 1m 
 var every = 1m
 var unit = 1s

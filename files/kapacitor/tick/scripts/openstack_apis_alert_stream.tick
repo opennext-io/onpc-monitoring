@@ -32,5 +32,5 @@ stream
     .warn(lambda: "stat" > 1)
     .crit(lambda: "stat" == 1)
     .topic('openstack')
-    .log('/var/log/kapacitor/openstack_api_alert.log')
+//  .log('/var/log/kapacitor/openstack_api_alert.log')
 
