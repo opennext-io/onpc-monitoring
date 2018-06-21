@@ -20,6 +20,15 @@
   user: root
   environment: "{{onpc_environment_variables }}"
   pre_tasks:
+    # Disable grafana haproxy backend to avoid false positive alerts.
+    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+      vars:
+        haproxy_backend: grafana-back
+        haproxy_state: disabled
+      when:
+        - "'grafana' in group_names"
+        - "groups['grafana'] | length > 1"
+      tags: [grafana-disable-haproxy]
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
@@ -51,14 +60,6 @@
         - "localhost"
         - "%"
       tags: [grafana-database]
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
-      vars:
-        haproxy_backend: grafana-back
-        haproxy_state: disabled
-      when:
-        - "'grafana' in group_names"
-        - "groups['grafana'] | length > 1"
-      tags: [grafana-haproxy] 
 
   roles:
     - role: grafana
@@ -113,7 +114,7 @@
       when:
         - "'grafana' in group_names"
         - "groups['grafana'] | length > 1"
-      tags: [grafana-haproxy]
+      tags: [grafana-enable-haproxy]
 
   vars_files:
     - vars/grafana.yml

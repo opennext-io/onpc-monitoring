@@ -39,7 +39,7 @@
         src: files/collectd-modules
         dest: "{{ collectd_plugins_dir }}"
       notify: collectd restart
-      tags: [collectd, collectd-configure]
+      tags: [collectd-modules]
       
     # Configure collectd with all the plugins
     - name: collectd-configure | Plugins configuration
@@ -52,7 +52,7 @@
         - libvirt_plugin
         - network_plugin
       notify: Collectd restart
-      tags: [collectd, collectd-configure]
+      tags: [collectd-configure]
     
   handlers:
     - name: Collectd restart

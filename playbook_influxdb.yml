@@ -27,7 +27,7 @@
       when:
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
-      tags: [influxdb, influxdb_admin-disable-haproxy]
+      tags: [influxdb-admin-disable-haproxy]
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb-back
@@ -35,53 +35,52 @@
       when:
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
-      tags: [influxdb, influxdb-disable-haproxy]   
+      tags: [influxdb-disable-haproxy]   
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       static: no
       vars:
         list_of_bind_mounts: "{{ influxdb_container_bind_mounts }}"
-      tags: [influxdb, influxdb-bind-mounts]
+      tags: [influxdb-bind-mounts]
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
             dest: "{{ influxdb_logs_dir }}"
-      tags: [influxdb, influxdb-logging]
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
     - name: Import InfluxDB GPG signing key 
       apt_key:
         url: "https://repos.influxdata.com/influxdb.key"
         state: "present"
-      tags: [influxdb, influxdb-install]
+      tags: [influxdb-install]
     - name: Add influxdata repository
       apt_repository:
         repo: "deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
         state: "present"
         update_cache: yes
-      tags: [influxdb, influxdb-install]
+      tags: [influxdb-install]
     - name: Install influxdb
       apt:
         pkg: "influxdb"
         state: "latest"
-      tags: [influxdb, influxdb-install]
-    - name: Drop influxdb config file
+      tags: [influxdb-install]
+    - name: Drop in influxdb config file
       template:
         src: templates/influxdb/influxdb.conf.j2
         dest: /etc/influxdb/influxdb.conf
-      tags: [influxdb, influxdb-configure]
+      tags: [influxdb-configure]
     - name: Enable and restart influxdb
       service:
         name: "influxdb"
         enabled: true
         state: restarted
-      tags: [influxdb, influxdb-configure]
+      tags: [influxdb-configure]
     - name: Wait for influxdb to be ready
       wait_for:
         host: "{{ hostvars[item]['ansible_host'] }}"
         port: "{{ influxdb_port }}"
         delay: 1
       with_items: "{{ groups['influxdb'] }}"
-      tags: [influxdb, influxdb-configure]
+      tags: [influxdb-configure]
     - name: Check whether the metrics DB already exists or not
       shell: >
         influx -username {{ influxdb_db_root_name }}
@@ -89,7 +88,7 @@
         -execute 'SHOW DATABASES' -format=json
       register: result
       changed_when: false
-      tags: [influxdb, influxdb-configure]
+      tags: [influxdb-configure]
     - name: Create metrics DB
       shell: >
         influx -username {{ influxdb_db_root_name }}
@@ -101,7 +100,7 @@
         - "CREATE USER {{ influxdb_db_metric_user }} WITH PASSWORD '{{ influxdb_db_metric_password }}'"
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
       when: result.stdout.find(influxdb_db_name) == -1
-      tags: [influxdb, influxdb-configure]
+      tags: [influxdb-configure]
       notify: InfluxDB restart 
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
@@ -110,7 +109,7 @@
       when:
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
-      tags: [influxdb, influxdb_admin-enable-haproxy]
+      tags: [influxdb_admin-enable-haproxy]
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb-back
@@ -118,7 +117,7 @@
       when:
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
-      tags: [influxdb, influxdb-enable-haproxy]
+      tags: [influxdb-enable-haproxy]
   
   handlers:
     - name: InfluxDB restart
