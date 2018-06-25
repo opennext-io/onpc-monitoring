@@ -14,8 +14,8 @@ Process
 -------
 
 Before proceeding with the installation of the monitoring stack, you need to
-setup the environment of an OpenNext deployement model.
-Check the onpc-basic-model for a simple (a.k.a) "Starter Kit" deployement model.
+setup the environment of an OpenNext deployment model.
+Check the onpc-basic-model for a simple (a.k.a) "Starter Kit" deployment model.
 
 
 Clone the onpc-monitoring repo
