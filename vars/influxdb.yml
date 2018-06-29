@@ -23,4 +23,4 @@ influxdb_cache_max_memory_size: 1073741824
 influxdb_cache_snapshot_memory_size: 26214400
 influxdb_container_bind_mounts:
   - bind_dir_path: "{{ influxdb_data_dir }}"
-    mount_path: "/openstack/{{ inventory_hostname }}"
+    mount_path: "/openstack/{{ inventory_hostname }}/influxdb"

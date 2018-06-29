@@ -27,7 +27,7 @@ kapacitor_tick_handler_dir: templates/kapacitor/handlers
 
 kapacitor_container_bind_mounts:
   - bind_dir_path: "{{ kapacitor_data_dir }}"
-    mount_path: "/openstack/{{ inventory_hostname }}"
+    mount_path: "/openstack/{{ inventory_hostname }}/kapacitor"
 
 kapacitor_influx:
   - name: "{{ ansible_hostname }}"
