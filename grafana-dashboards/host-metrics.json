@@ -59,7 +59,7 @@
   "gnetId": 1443,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1528806381148,
+  "iteration": 1530527546647,
   "links": [],
   "panels": [
     {
@@ -4018,9 +4018,10 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": true,
+        "hideZero": false,
         "max": true,
         "min": false,
+        "rightSide": true,
         "show": true,
         "sort": "current",
         "sortDesc": true,
@@ -4201,9 +4202,10 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": true,
+        "hideZero": false,
         "max": true,
         "min": false,
+        "rightSide": true,
         "show": true,
         "sort": "current",
         "sortDesc": true,
@@ -4403,7 +4405,7 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
@@ -5488,5 +5490,5 @@
   "timezone": "browser",
   "title": "Hosts Metrics",
   "uid": "UQTN6aziz",
-  "version": 6
+  "version": 9
 }
