@@ -14,31 +14,32 @@
 # limitations under the License.
 # Create an admin user
 
-- name: Install required python pip packages
-  hosts: collectd 
-  user: root
-  environment: "{{ onpc_environment_variables | default({}) }}"
-  tasks:
-    - name: Install python pip
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - python-pip
-        - python-pkg-resources
-        - python-setuptools
-    - name: Install required pip packages
-      pip: 
-        name: "{{ item }}"
-        state: "latest"
-      register: install_packages
-      until: install_packages|success
-      retries: 5
-      delay: 2
-      with_items:
-        - python_dateutil
-        - requests
-        - simplejson
+
+#- name: Install required python pip packages
+#  hosts: collectd 
+#  user: root
+#  environment: "{{ onpc_environment_variables | default({}) }}"
+#  tasks:
+#    - name: Install python pip
+#      package:
+#        name: "{{ item }}"
+#        state: latest
+#      with_items:
+#        - python-pip
+#        - python-pkg-resources
+#        - python-setuptools
+#    - name: Install required pip packages
+#      pip: 
+#        name: "{{ item }}"
+#        state: "latest"
+#      register: install_packages
+#      until: install_packages|success
+#      retries: 5
+#      delay: 2
+#      with_items:
+#        - python_dateutil
+#        - requests
+#        - simplejson
 - name: Create monitoring user 
   hosts: utility
   user: root
@@ -75,7 +76,7 @@
       until: add_service|success
       retries: 5
       delay: 10
-
+  
   vars_files:
     - vars/main.yml
 

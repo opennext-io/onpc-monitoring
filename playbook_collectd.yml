@@ -20,7 +20,6 @@
   environment: "{{ onpc_environment_variables | default({}) }}"
   
   pre_tasks:
-
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
@@ -33,7 +32,30 @@
         path: "{{ collectd_logs_dir }}"
         state: directory
         mode: 0664
-  
+    - name: Install required python pip packages
+      hosts: collectd 
+      tasks:
+        - name: Install python pip
+          package:
+             name: "{{ item }}"
+            state: latest
+          with_items:
+            - python-pip
+            - python-pkg-resources
+            - python-setuptools
+        - name: Install required pip packages
+          pip: 
+            name: "{{ item }}"
+            state: "latest"
+          register: install_packages
+          until: install_packages|success
+          retries: 5
+          delay: 2
+          with_items:
+            - python_dateutil
+            - requests
+            - simplejson
+
   roles:
     - collectd
 
