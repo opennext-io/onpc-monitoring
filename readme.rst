@@ -31,7 +31,7 @@ Create the monitoring container(s)
 .. code-block:: bash
 
     openstack-ansible /opt/openstack-ansible/playbooks/lxc-containers-create.yml \
-      -e 'container_group=influx_containers:collectd_containers:grafana_containers'
+      -e container_group='influx_containers:collectd_containers:grafana_containers'
 
 Create the monitoring user and install various python dependencies
 
