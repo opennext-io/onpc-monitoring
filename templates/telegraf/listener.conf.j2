@@ -13,3 +13,9 @@
   collectd_typesdb = "{{ collectd_types_db_path }}"
 {% endif %}
 
+
+{% if inventory_hostname in groups['ceph-mon'] %}
+[[inputs.socket_listener]]
+  service_address = "udp://127.0.0.1:8094"
+  data_format = "influx"
+{% endif %}

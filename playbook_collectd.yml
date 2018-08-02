@@ -13,81 +13,76 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 - hosts: collectd
-
-  - name: Install required python pip packages
-    user: root
-    environment: "{{ onpc_environment_variables | default({}) }}"
-    tasks:
-      - name: Install python pip
-        package:
-          name: "{{ item }}"
-          state: latest
-        with_items:
-          - python-pip
-          - python-pkg-resources
-          - python-setuptools
-      - name: Install required pip packages
-        pip: 
-          name: "{{ item }}"
-          state: "latest"
-        register: install_packages
-        until: install_packages|success
-        retries: 5
-        delay: 2
-        with_items:
-          - python_dateutil
-          - requests
-          - simplejson
+  user: root
+  environment: "{{ onpc_environment_variables | default({}) }}"
+  tasks:
+    - name: Install python pip
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - python-pip
+        - python-pkg-resources
+        - python-setuptools
+    - name: Install required pip packages
+      pip: 
+        name: "{{ item }}"
+        state: "latest"
+      register: install_packages
+      until: install_packages|success
+      retries: 5
+      delay: 2
+      with_items:
+        - python_dateutil
+        - requests
+        - simplejson
 
 - hosts: "collectd:{{ nova_compute_hosts }}" 
-
-  - name: Install and configure Collectd
-    gather_facts: true
-    user: root
-    environment: "{{ onpc_environment_variables | default({}) }}"
+  gather_facts: true
+  user: root
+  environment: "{{ onpc_environment_variables | default({}) }}"
     
-    pre_tasks:
-      - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
-      - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
-        vars:
-          log_dirs:
-            - src: "/openstack/log/{{ inventory_hostname }}-collectd"
-              dest: "{{ collectd_logs_dir }}"
-      - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-      - name: Create log directory 
-        file:
-          path: "{{ collectd_logs_dir }}"
-          state: directory
-          mode: 0664
+  pre_tasks:
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-collectd"
+            dest: "{{ collectd_logs_dir }}"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - name: Create log directory 
+      file:
+        path: "{{ collectd_logs_dir }}"
+        state: directory
+        mode: 0664
 
-    roles:
-      - collectd
+  roles:
+    - collectd
 
-    post_tasks:
-      # Copy all python modules in place
-      - name: collectd-configure | Copy python modules
-        copy:
-          src: files/collectd-modules
-          dest: "{{ collectd_plugins_dir }}"
-        notify: collectd restart
-        tags: [collectd-modules]
-        
-      # Configure collectd with all the plugins
-      - name: collectd-configure | Plugins configuration
-        template:
-          src: "templates/collectd/{{ item }}.conf.j2"
-          dest: "{{ collectd_plugins_prefix }}/{{ item }}.conf"
-          validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
-        with_items:
-          - openstack_plugins
-          - libvirt_plugin
-          - network_plugin
-        notify: Collectd restart
-        tags: [collectd-configure]
+  post_tasks:
+    # Copy all python modules in place
+    - name: collectd-configure | Copy python modules
+      copy:
+        src: files/collectd-modules
+        dest: "{{ collectd_plugins_dir }}"
+      notify: collectd restart
+      tags: [collectd-modules]
       
-    handlers:
+    # Configure collectd with all the plugins
+    - name: collectd-configure | Plugins configuration
+      template:
+        src: "templates/collectd/{{ item }}.conf.j2"
+        dest: "{{ collectd_plugins_prefix }}/{{ item }}.conf"
+        validate: "{{ collectd_sbin_path }}/collectd -t -C %s"
+      with_items:
+        - openstack_plugins
+        - libvirt_plugin
+        - network_plugin
+      notify: Collectd restart
+      tags: [collectd-configure]
+    
+  handlers:
       - name: Collectd restart
         service: name=collectd state=restarted
   
