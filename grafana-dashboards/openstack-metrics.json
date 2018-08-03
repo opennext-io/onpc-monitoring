@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1533214242727,
+  "iteration": 1533296395117,
   "links": [],
   "panels": [
     {
@@ -2224,8 +2224,8 @@
       "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
-        "h": 11,
-        "w": 12,
+        "h": 9,
+        "w": 24,
         "x": 0,
         "y": 24
       },
@@ -2375,8 +2375,8 @@
       "gridPos": {
         "h": 7,
         "w": 12,
-        "x": 12,
-        "y": 24
+        "x": 0,
+        "y": 33
       },
       "hideTimeOverride": true,
       "id": 129,
@@ -2515,7 +2515,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 33
       },
       "id": 134,
       "interval": "1m",
@@ -2635,7 +2635,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 40
       },
       "id": 30,
       "panels": [
@@ -3597,7 +3597,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 41
       },
       "id": 26,
       "panels": [
@@ -4425,5 +4425,5 @@
   "timezone": "browser",
   "title": "OpenStack Metrics",
   "uid": "OwRmDQzik",
-  "version": 1
+  "version": 4
 }

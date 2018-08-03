@@ -41,6 +41,10 @@
       with_items: "{{ telegraf_plugins_list }}"
       notify: Telegraf restart
       tags: [telegraf-plugins]
+    - name: Create telegraf user cephx key
+      include: ../tasks/create_telegraf_ceph_key.yml
+      when: inventory_hostname in groups['ceph-mon']
+      delegate_to: "{{ groups['ceph-mon'][0] }}"
   
   handlers:
     - name: Telegraf restart

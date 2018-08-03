@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.1.3"
+      "version": "5.2.2"
     },
     {
       "type": "panel",
@@ -59,7 +59,7 @@
   "gnetId": 1234,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1529058421117,
+  "iteration": 1533289384006,
   "links": [],
   "panels": [
     {
@@ -623,7 +623,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(mean(\"ereq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT non_negative_derivative(mean(\"ereq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -735,7 +735,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(mean(\"dreq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT non_negative_derivative(mean(\"dreq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -4544,7 +4544,7 @@
       "fill": 1,
       "gridPos": {
         "h": 7,
-        "w": 11,
+        "w": 12,
         "x": 12,
         "y": 84
       },
@@ -5170,5 +5170,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 9
+  "version": 2
 }
