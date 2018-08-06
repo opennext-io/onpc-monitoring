@@ -16,8 +16,8 @@
 
 - name: Install and configure Telegraf
   hosts: "all"
-  gather_facts: false
-  user: root
+  gather_facts: true
+  become: true
   environment: "{{ onpc_environment_variables | default({}) }}"
 
   pre_tasks:
@@ -36,7 +36,9 @@
   post_tasks:
     # Use post tasks to install plugins
    - include: ../tasks/create_telegraf_ceph_key.yml
-     when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+     when:
+       - "'ceph-mon' in group_names"
+       - "groups['ceph-mon'] | length > 1"
      tags: [telegraf-ceph]
   
    - name: telegraf-configure | Plugins configuration
@@ -46,7 +48,6 @@
      with_items: "{{ telegraf_plugins_list }}"
      notify: Telegraf restart
      tags: [telegraf-plugins, always]
-    
   
   handlers:
     - name: Telegraf restart
@@ -57,4 +58,4 @@
     - ../vars/telegraf.yml
     - ../vars/influxdb.yml
     - ../vars/collectd.yml
-    
+
