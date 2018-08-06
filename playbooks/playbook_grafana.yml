@@ -117,5 +117,5 @@
       tags: [grafana-enable-haproxy]
 
   vars_files:
-    - vars/grafana.yml
-    - vars/influxdb.yml
+    - ../vars/grafana.yml
+    - ../vars/influxdb.yml

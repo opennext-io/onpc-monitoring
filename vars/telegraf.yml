@@ -50,4 +50,7 @@ telegraf_cephx:
   caps: 
     mon: "allow r"
     osd: "allow r"
+    mgr: "allow r"
+    mds: "allow r"
+
   mode: 0600

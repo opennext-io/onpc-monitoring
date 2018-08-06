@@ -78,7 +78,7 @@
       delay: 10
   
   vars_files:
-    - vars/main.yml
+    - ../vars/main.yml
 
 - name: Give monitoring user permissions on rabbitmq vhosts
   hosts: rabbitmq[0]

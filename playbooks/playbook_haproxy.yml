@@ -80,6 +80,6 @@
             haproxy_backend_options:
               - tcp-check
   vars_files:
-    - vars/main.yml
-    - vars/influxdb.yml
-    - vars/grafana.yml
+    - ../vars/main.yml
+    - ../vars/influxdb.yml
+    - ../vars/grafana.yml

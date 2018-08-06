@@ -90,6 +90,6 @@
     - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
 
   vars_files:
-    - vars/main.yml
-    - vars/collectd.yml
-    - vars/influxdb.yml
+    - ../vars/main.yml
+    - ../vars/collectd.yml
+    - ../vars/influxdb.yml

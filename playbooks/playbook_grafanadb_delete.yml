@@ -34,4 +34,4 @@
         state: "absent"
 
   vars_files:
-    - vars/grafana.yml
+    - ../vars/grafana.yml

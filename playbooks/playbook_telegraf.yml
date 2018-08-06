@@ -15,7 +15,7 @@
 
 - name: Install and configure Telegraf
   hosts: "all"
-  gather_facts: true
+  gather_facts: false
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
 
@@ -52,8 +52,8 @@
       service: name=telegraf state=restarted
 
   vars_files:
-    - vars/main.yml
-    - vars/telegraf.yml
-    - vars/influxdb.yml
-    - vars/collectd.yml
+    - ../vars/main.yml
+    - ../vars/telegraf.yml
+    - ../vars/influxdb.yml
+    - ../vars/collectd.yml
 
