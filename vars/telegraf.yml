@@ -52,5 +52,3 @@ telegraf_cephx:
     osd: "allow r"
     mgr: "allow r"
     mds: "allow r"
-
-  mode: 0600

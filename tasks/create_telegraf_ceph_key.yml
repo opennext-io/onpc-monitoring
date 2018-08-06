@@ -54,4 +54,5 @@
     dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
     owner: telegraf
     group: telegraf
-    mode: "{{ telegraf_cephx.mode|default(omit) }}"
+    mode: 0600
+    backup: yes
