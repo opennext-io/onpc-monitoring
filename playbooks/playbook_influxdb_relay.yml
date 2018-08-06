@@ -54,18 +54,18 @@
       tags: [influxdb-relay_install]
     - name: Drop influx relay toml file
       template:
-        src: templates/influxdb/relay.toml.j2
+        src: ../templates/influxdb/relay.toml.j2
         dest: /opt/influxdb-relay/relay.toml
       tags: [influxdb-relay_install]
     - name: Drop Influx Relay upstart
       template:
-        src: templates/influxdb/influxdbrelay.conf.j2
+        src: ../templates/influxdb/influxdbrelay.conf.j2
         dest: /etc/init/influxdbrelay.conf
       when: init_name == "init"
       tags: [influxdb-relay_install]
     - name: Drop Influx Relay service file
       template:
-        src: templates/influxdb/influxdbrelay.service.j2
+        src: ../templates/influxdb/influxdbrelay.service.j2
         dest: /etc/systemd/system/influxdbrelay.service
       when:  init_name == "systemd"
       tags: [influxdb-relay_install]

@@ -36,7 +36,7 @@
     # Use post tasks to install plugins
     - name: telegraf-configure | Plugins configuration
       template:
-        src: "templates/telegraf/{{ item }}.conf.j2"
+        src: "../templates/telegraf/{{ item }}.conf.j2"
         dest: "{{ telegraf_plugins_prefix }}/{{ item }}.conf"
       with_items: "{{ telegraf_plugins_list }}"
       notify: Telegraf restart
