@@ -34,19 +34,20 @@
   
   post_tasks:
     # Use post tasks to install plugins
-    - name: telegraf-configure | Plugins configuration
+   - name: Configure ceph key for telegraf
+      include: ../tasks/create_telegraf_ceph_key.yml
+      when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+      run_once: true
+      tags: [telegraf-ceph]
+  
+   - name: telegraf-configure | Plugins configuration
       template:
         src: "../templates/telegraf/{{ item }}.conf.j2"
         dest: "{{ telegraf_plugins_prefix }}/{{ item }}.conf"
       with_items: "{{ telegraf_plugins_list }}"
       notify: Telegraf restart
       tags: [telegraf-plugins, always]
-    - name: Create telegraf user cephx key
-      include: ../tasks/create_telegraf_ceph_key.yml
-      when: inventory_hostname in groups['ceph-mon']
-      delegate_to: "{{ groups['ceph-mon'][0] }}"
-      notify: Telegraf restart
-      tags: [telegraf-ceph]
+    
   
   handlers:
     - name: Telegraf restart

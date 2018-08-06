@@ -24,7 +24,7 @@
 #    mode: "{{ telegraf_cephx.mode|default(omit) }}"
 #  delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: Add telegraf user to Ceph
+- name: Add telegraf user to ceph auth
   shell: >-
     ceph-authtool --create-keyring /etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring --gen-key -n {{ telegraf_cephx.name }}
     --cap mon 'allow r'
@@ -34,7 +34,7 @@
   changed_when: false
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: Add telegraf user to Ceph group
+- name: Add telegraf user to ceph group
   user:
     name: telegraf
     groups: ceph
