@@ -32,6 +32,7 @@
     --cap mds 'allow r'
     --cap mgr 'allow r'
   changed_when: false
+  run_once: true
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
 - name: Add telegraf user to ceph group
@@ -43,14 +44,14 @@
 - name: fetch telegraf cephx key
   fetch:
     src: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
-    dest: "{{ fetch_directory }}/ceph.{{ telegraf_cephx.name }}.keyring"
+    dest: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
     flat: yes
     fail_on_missing: yes
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
 - name: copy telegraf cephx key to other mons and osd nodes
   copy:
-    src: "{{ fetch_directory }}/ceph.{{ telegraf_cephx.name }}.keyring"
+    src: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
     dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
     owner: telegraf
     group: telegraf
