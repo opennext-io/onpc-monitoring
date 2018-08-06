@@ -45,6 +45,7 @@
       include: ../tasks/create_telegraf_ceph_key.yml
       when: inventory_hostname in groups['ceph-mon']
       delegate_to: "{{ groups['ceph-mon'][0] }}"
+      notify: Telegraf restart
       tags: [telegraf-ceph]
   
   handlers:
