@@ -26,7 +26,7 @@
 
 - name: Add telegraf user to Ceph
   shell: >-
-    ceph-authtool --create-keyring /etc/ceph/{{ telegraf_cephx.name }}.keyring --gen-key -n client.telegraf
+    ceph-authtool --create-keyring /etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring --gen-key -n {{ telegraf_cephx.name }}
     --cap mon 'allow r'
     --cap osd 'allow r'
     --cap mds 'allow r'
@@ -42,17 +42,16 @@
   
 - name: fetch telegraf cephx key
   fetch:
-    src: "/etc/ceph/{{ fsid }}.{{ telegraf_cephx.name }}.keyring"
-    dest: "{{ fetch_directory }}/{{ fsid }}/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
+    src: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
+    dest: "{{ fetch_directory }}/ceph.{{ telegraf_cephx.name }}.keyring"
     flat: yes
     fail_on_missing: yes
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
 - name: copy telegraf cephx key to other mons and osd nodes
   copy:
-    src: "{{ fetch_directory }}/{{ fsid }}/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
-    dest: "/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
+    src: "{{ fetch_directory }}/ceph.{{ telegraf_cephx.name }}.keyring"
+    dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
     owner: telegraf
     group: telegraf
     mode: "{{ telegraf_cephx.mode|default(omit) }}"
-  delegate_to: "{{ groups['ceph-mon', 'ceph-osd'] }}"

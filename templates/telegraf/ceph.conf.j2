@@ -32,7 +32,7 @@
   ##         keyring = /etc/ceph/client.telegraf.keyring
   ##
   ## Consult the ceph documentation for more detail on keyring generation.
-  ceph_user = "ceph.client.telegraf"
+  ceph_user = "{{ telegraf_cephx.name }}"
 
   ## Ceph configuration to use to locate the cluster
   ceph_config = "/etc/ceph/ceph.conf"
