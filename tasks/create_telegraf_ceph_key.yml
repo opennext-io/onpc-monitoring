@@ -14,18 +14,17 @@
 # limitations under the License.
 # Create an admin user
 
-- name: create openstack cephx key(s)
+- name: create telegraf cephx key(s)
   ceph_key:
     state: present
     name: "{{ telegraf_cephx.name }}"
     caps: "{{ telegraf_cephx.caps }}"
     secret: "{{ telegraf_cephx.key | default('') }}"
-    containerized: "{{ hostvars[groups[mon_group_name][0]]['docker_exec_cmd'] | default('') }}"
     cluster: "{{ fsid }}"
     mode: "{{ telegraf_cephx.mode|default(omit) }}"
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: fetch openstack cephx key(s)
+- name: fetch telegraf cephx key
   fetch:
     src: "/etc/ceph/{{ fsid }}.{{ telegraf_cephx.name }}.keyring"
     dest: "{{ fetch_directory }}/{{ fsid }}/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
@@ -33,7 +32,7 @@
     fail_on_missing: yes
   delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: copy telegraf cephx key to other mons and osd hosts
+- name: copy telegraf cephx key to other mons and osd nodes
   copy:
     src: "{{ fetch_directory }}/{{ fsid }}/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
     dest: "/etc/ceph/{{ cluster }}.{{ telegraf_cephx.name }}.keyring"
