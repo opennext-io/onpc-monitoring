@@ -46,9 +46,9 @@ telegraf_plugins_default: []
 
 # Telegraf cephx key details
 telegraf_cephx:
-  name: client.telegraf
+  name: client.admin
   caps: 
-    mon: "allow r"
-    osd: "allow r"
-    mgr: "allow r"
-    mds: "allow r"
+    mon: "allow *"
+    osd: "allow *"
+    mgr: "allow *"
+    mds: "allow *"

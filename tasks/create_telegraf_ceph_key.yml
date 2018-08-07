@@ -24,35 +24,35 @@
 #    mode: "{{ telegraf_cephx.mode|default(omit) }}"
 #  delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: Add telegraf user to ceph auth
-  shell: >-
-    ceph-authtool --create-keyring /etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring --gen-key -n {{ telegraf_cephx.name }}
-    --cap mon 'allow r'
-    --cap osd 'allow r'
-    --cap mds 'allow r'
-    --cap mgr 'allow r'
-  changed_when: false
-  run_once: true
-  delegate_to: "{{ groups['ceph-mon'][0] }}"
+#- name: Add telegraf user to ceph auth
+#  shell: >-
+#    ceph-authtool --create-keyring /etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring --gen-key -n {{ telegraf_cephx.name }}
+#    --cap mon 'allow r'
+#    --cap osd 'allow r'
+#    --cap mds 'allow r'
+#    --cap mgr 'allow r'
+#  changed_when: false
+#  run_once: true
+#  delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: fetch telegraf cephx key
-  fetch:
-    src: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
-    dest: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
-    flat: yes
-    fail_on_missing: yes
-  run_once: true
-  delegate_to: "{{ groups['ceph-mon'][0] }}"
+#- name: fetch telegraf cephx key
+#  fetch:
+#    src: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
+#    dest: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
+#    flat: yes
+#    fail_on_missing: yes
+#  run_once: true
+#  delegate_to: "{{ groups['ceph-mon'][0] }}"
 
-- name: copy telegraf cephx key to other mons and osd nodes
-  copy:
-    src: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
-    dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
-    owner: telegraf
-    group: telegraf
-    mode: 0600
-    backup: yes
-  when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+#- name: copy telegraf cephx key to other mons and osd nodes
+#  copy:
+#    src: "{{ fetch_directory }}/{{ fsid }}/ceph.{{ telegraf_cephx.name }}.keyring"
+#    dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
+#    owner: telegraf
+#    group: telegraf
+#    mode: 0600
+#    backup: yes
+#  when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
 
 - name: Add telegraf user to ceph group
   user:
@@ -60,3 +60,10 @@
     groups: ceph
     append: yes
   when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+
+- name: Add group permission to read client keyring
+  file:
+    dest= "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
+    mode=g+r
+  when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+   
