@@ -66,8 +66,9 @@
 
 - name: Add group read permission to telegraf client keyring
   file:
-    dest= "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
-    mode=g+r
+    dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
+    state: touch
+    mode: "g+r"
   when:
     - "'ceph-mon' in group_names"
     - "groups['ceph-mon'] | length > 1"
