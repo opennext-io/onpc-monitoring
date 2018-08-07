@@ -59,11 +59,16 @@
     name: telegraf
     groups: ceph
     append: yes
-  when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+  when:
+    - "'ceph-mon' in group_names"
+    - "groups['ceph-mon'] | length > 1"
+    
 
-- name: Add group permission to read client keyring
+- name: Add group read permission to telegraf client keyring
   file:
     dest= "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
     mode=g+r
-  when: inventory_hostname in groups['ceph-mon'] or inventory_hostname in groups['ceph-osd']
+  when:
+    - "'ceph-mon' in group_names"
+    - "groups['ceph-mon'] | length > 1"
    
