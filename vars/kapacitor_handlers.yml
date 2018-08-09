@@ -25,6 +25,8 @@ system_handler_id: system_alerts_publisher
 system_handler_topic: system
 network_handler_id: network_alerts_publisher
 network_handler_topic: network
+ceph_handler_id: ceph_alerts_publisher
+ceph_handler_topic: ceph
 
 kapacitor_handlers: [
   { topic: "{{ haproxy_handler_topic }}", id: "{{ haproxy_handler_id}}", enabled: true },
@@ -32,5 +34,6 @@ kapacitor_handlers: [
   { topic: "{{ openstack_handler_topic }}", id: "{{ openstack_handler_id }}", enabled: true },
   { topic: "{{ slack_handler_topic }}", id: "{{ slack_handler_id }}", enabled: true },
   { topic: "{{ system_handler_topic }}", id: "{{ system_handler_id }}", enabled: true },
-  { topic: "{{ network_handler_topic }}", id: "{{ network_handler_id }}", enabled: true }
+  { topic: "{{ network_handler_topic }}", id: "{{ network_handler_id }}", enabled: true },
+  { topic: "{{ ceph_handler_topic }}", id: "{{ ceph_handler_id }}", enabled: true }
 ]

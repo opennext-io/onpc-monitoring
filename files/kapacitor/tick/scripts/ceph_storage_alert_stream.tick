@@ -53,7 +53,7 @@ var alert = data
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
-    .topic('openstack')
+    .topic('ceph')
 //  .log('/var/log/kapacitor/ceph_storage_alert.log')
     
     
