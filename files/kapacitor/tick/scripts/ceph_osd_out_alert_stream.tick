@@ -11,30 +11,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Alert:  cinder_worker_cluster_alert_stream
-// Define: kapacitor define cinder_worker_cluster_alert_stream -type stream \
-//           -tick cinder_worker_cluster_alert_stream.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable cinder_worker_cluster_alert_stream
-//
 
-var info = 100.0
-var warn = 75.0
+// Parameters
+var info = 0.0
+var warn = 25.0
 var crit = 50.0
 
-stream
+// Dataframe
+var rawdata = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
-    .measurement('openstack_cinder_services_percent_value')
-    .groupBy('instance', 'region')
-    .where(lambda: "type_instance" == 'up')
-  |last('value')
+    .measurement('ceph')
+    .groupBy('region')
+
+var in = rawdata
+  |last('num_in_osds')
+    .as('value')
+
+var total = rawdata
+  |last('num_osds')
+    .as('value')
+
+var data = in
+  |join(total)
+    .as('in', 'total')
+
+// Thresholds
+var alert = data 
+  |eval(lambda: float("in.value") / float("in.total") * 100)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/cinder/{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd_out')
+    .message('{{ .ID }}: [{{ .Level }}] Count of Ceph OSDs out is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" <= info)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('openstack')
-//  .log('/var/log/kapacitor/cinder_worker_cluster_alert.log')
+//  .log('/var/log/kapacitor/ceph_osd_out_alert.log')
+    
+    

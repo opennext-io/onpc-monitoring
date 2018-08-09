@@ -11,11 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Alert: compute_disk_alert_stream
-// Define: kapacitor define compute_vdisk_alert_stream -type stream \
-//           -tick compute_vdisk_alert_stream.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable compute_vdisk_alert_stream
-//
 
 // Parameters
 var info = 60.0
@@ -29,7 +24,7 @@ var rawdata = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
-    .measurement('openstack_compute_value')
+    .measurement('ceph_usage')
     .groupBy('region')
   |window()
     .period(period)
@@ -37,14 +32,11 @@ var rawdata = stream
     .align()
 
 var available = rawdata
-  
-  |where(lambda: "instance" == 'total_free_disk')
-  |mean('value')
+  |mean('total_avail_bytes')
     .as('value')
 
 var in_use = rawdata
-  |where(lambda: "instance" == 'total_used_disk')
-  |mean('value')
+  |mean('total_used_bytes')
     .as('value')
 
 var data = available
@@ -56,11 +48,12 @@ var alert = data
   |eval(lambda: float("in_use.value")/float("available.value") * 100.0)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/compute/vdisk')
-    .message('{{ .ID }}: [{{ .Level }}] Hypervisor disk capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/storage')
+    .message('{{ .ID }}: [{{ .Level }}] Total Ceph storage capacity in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('openstack')
-//  .log('/var/log/kapacitor/compute_vdisk_alert.log')
+//  .log('/var/log/kapacitor/ceph_storage_alert.log')
+    
     

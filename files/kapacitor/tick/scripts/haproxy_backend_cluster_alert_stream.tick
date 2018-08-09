@@ -17,12 +17,12 @@
 // Enable: kapacitor enable haproxy_backend_cluster_alert_stream
 //
 
-var info = 2.0/3.0
-var warn = 1.0/3.0
-var crit = 0.0 
+var info = 100.0
+var warn = 75.0
+var crit = 50.0
 
-var period = 10s
-var every = 10s
+var period = 1m
+var every = 1m
 
 var rawdata = stream
     |from()

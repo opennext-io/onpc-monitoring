@@ -18,11 +18,11 @@
 //
 
 // Parameters
-var info = 70.0
-var warn = 90.0 
-var crit = 100.0
-var period = 90s 
-var every = 90s
+var info = 60.0
+var warn = 80.0 
+var crit = 90.0
+var period = 5m 
+var every = 5m
 
 // Dataframe
 var rawdata = stream

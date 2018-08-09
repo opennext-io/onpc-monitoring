@@ -17,11 +17,11 @@
 // Enable: kapacitor enable haproxy_sessions_usage_alert
 //
 
-var info = 70
-var warn = 90
-var crit = 100
-var period=1m
-var every=1m
+var info = 60.0
+var warn = 80.0 
+var crit = 90.0
+var period = 5m 
+var every = 5m
 
 // Dataframe
 var rawdata = stream
@@ -54,7 +54,7 @@ var alert = data
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions')
     .message('{{ .ID }}: [{{ .Level }}] HAProxy sessions usage is {{ index .Fields "stat" | printf "%0.2f" }}%')
-    .info(lambda: "stat" < warn)
+    .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
     .topic('haproxy')

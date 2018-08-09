@@ -57,7 +57,6 @@ var data = econ
 // Thresholds
 var alert = data
   |alert()
-
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/backend_errors')
     .message('{{ .ID }}: [{{ .Level }}] econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }} derivatives')
     .info(lambda: "econ.value" >= info OR "dresp.value" >= info OR "eresp.value" >= info)

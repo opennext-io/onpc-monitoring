@@ -14,11 +14,11 @@
 //
 // Parameters
 
-var info = 70.0
-var warn = 90.0
-var crit = 100.0
-var period =10s
-var every = 10s
+var info = 60.0
+var warn = 80.0 
+var crit = 90.0
+var period = 1m 
+var every = 1m
 
 // Dataframe
 var data = batch

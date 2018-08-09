@@ -26,7 +26,7 @@ stream
     .groupBy('instance', 'region')
   |deadman(1.0, 90s)
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "instance" }}/deadman_check')
-    .message('{{ .ID }}: [{{ .Level }}] Stopped receiving monitoring checks from Collectd and/or Telegraf }}')
+    .message('{{ .ID }}: [{{ .Level }}] Stopped receiving API checks from Collectd and/or Telegraf }}')
     .topic('monitoring')
     .stateChangesOnly()
 

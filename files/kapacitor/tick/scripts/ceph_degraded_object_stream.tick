@@ -11,30 +11,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// Alert:  cinder_worker_cluster_alert_stream
-// Define: kapacitor define cinder_worker_cluster_alert_stream -type stream \
-//           -tick cinder_worker_cluster_alert_stream.tick -dbrp telegraf.autogen
-// Enable: kapacitor enable cinder_worker_cluster_alert_stream
-//
 
-var info = 100.0
-var warn = 75.0
+// Parameters
+var info = 0.0
+var warn = 25.0
 var crit = 50.0
+var period = 5m 
+var every = 5m
 
-stream
+// Dataframe
+var rawdata = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
-    .measurement('openstack_cinder_services_percent_value')
-    .groupBy('instance', 'region')
-    .where(lambda: "type_instance" == 'up')
-  |last('value')
+    .measurement('ceph')
+    .groupBy('region')
+  |window()
+    .period(period)
+    .every(every)
+    .align()
+
+var total = rawdata
+  |mean('num_object')
+    .as('value')
+
+var degraded = rawdata
+  |mean('num_object_degraded')
+    .as('value')
+
+var data = total
+  |join(degraded)
+    .as('total', 'degraded')
+
+// Thresholds
+var alert = data 
+  |eval(lambda: float(("degraded.value")/float("total.value") * 100))
     .as('stat')
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/cinder/{{ index .Tags "instance" }}/cluster_status')
-    .message('{{ .ID }}: [{{ .Level }}] Availability state of "{{ index .Tags "instance" }}" cluster is {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .id('{{ Index .Tags "environment" }}/{{ Index .Tags "region" }}/ceph/osd/degraded_objects')
+    .message('{{ .ID }}: [{{ .Level }}] Count of Ceph degraded objects is {{ Index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" <= info)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('openstack')
-//  .log('/var/log/kapacitor/cinder_worker_cluster_alert.log')
+//  .log('/var/log/kapacitor/ceph_degraded_objects_alert.log')
+    
+    
