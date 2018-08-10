@@ -23,13 +23,6 @@ var period = 5m
 var every = 5m 
 
 // Dataframe
-var info = 70.0
-var warn = 90.0
-var crit = 100.0
-var period = 1m
-var every = 10s 
-
-// Dataframe
 var data = stream
   |from()
     .database('telegraf')
