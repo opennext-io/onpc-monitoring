@@ -120,6 +120,11 @@ class OSClient(object):
                 # behavior of picking the first one.
                 endpoint = item['endpoints'][0]
 
+            self.logger.debug("Got service endpoint '{}'".format(
+                endpoint
+            )
+            )
+
             if 'internalURL' not in endpoint and 'publicURL' not in endpoint:
                 self.logger.warning(
                     "Skipping service '{}' with no valid URL".format(
@@ -133,6 +138,11 @@ class OSClient(object):
                 'region': endpoint['region'],
                 'url': endpoint.get('internalURL', endpoint.get('publicURL')),
             })
+
+            self.logger.debug("Stored service endpoint '{}'".format(
+                self.service_catalog[-1]
+            )
+            )
 
         self.logger.debug("Got token '%s'" % self.token)
         return self.token
@@ -158,7 +168,7 @@ class OSClient(object):
             kwargs['params'] = params
 
         func = getattr(self.session, verb.lower())
-        
+
         self.logger.debug("Request = %s" % kwargs)
 
         try:
@@ -169,7 +179,7 @@ class OSClient(object):
             return
 
         self.logger.debug("Response with status code %d = %s" %
-                         (r.status_code, r.content))
+                          (r.status_code, r.content))
 
         if r.status_code == 401:
             # Clear token in case it is revoked or invalid
@@ -209,7 +219,8 @@ class CollectdPlugin(base.Base):
             if url[-1] != '/':
                 url += '/'
             url = "%s%s" % (url, resource)
-            self.logger.debug("Url construct for service request %s = %s" % (service, url))
+            self.logger.debug(
+                "Url construct for service request %s = %s" % (service, url))
         else:
             self.logger.error("Service '%s' not found in catalog" % service)
         return url
@@ -298,7 +309,7 @@ class CollectdPlugin(base.Base):
 
     def get_service(self, service_name):
         return next((x for x in self.service_catalog
-                    if x['name'] == service_name), None)
+                     if x['name'] == service_name), None)
 
     def config_callback(self, config):
         super(CollectdPlugin, self).config_callback(config)
@@ -325,7 +336,8 @@ class CollectdPlugin(base.Base):
         if self.tenant_name is None:
             raise PluginConfigurationException('Tenant parameter is missing')
         if self.keystone_url is None:
-            raise PluginConfigurationException('KeystoneUrl parameter is missing')
+            raise PluginConfigurationException(
+                'KeystoneUrl parameter is missing')
 
         self.os_client = OSClient(self.username, self.password,
                                   self.tenant_name, self.keystone_url,
@@ -437,7 +449,6 @@ class CollectdPlugin(base.Base):
                                list_object,
                                group_by_func,
                                count_func=None):
-
         """ Count the number of items grouped by arbitrary criteria."""
 
         counts = defaultdict(int)
@@ -456,5 +467,3 @@ class CollectdPlugin(base.Base):
                 self.logger.info('Waiting for {} thread to finish'.format(tid))
                 t.stop()
                 t.join()
-
-

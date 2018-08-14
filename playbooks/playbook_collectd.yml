@@ -69,7 +69,14 @@
       notify: collectd restart
       tags: [collectd-modules]
       
-    # Configure collectd with all the plugins
+    # Drop python module environment variables
+    - name: collectd-configure | Plugins configuration
+      template:
+        src: "../templates/collectd/debenv.j2"
+        dest: "{{ collectd_plugins_prefix }}/debenv"
+      tags: [collectd-modules]
+
+      # Drop collectd plugins configuration
     - name: collectd-configure | Plugins configuration
       template:
         src: "../templates/collectd/{{ item }}.conf.j2"

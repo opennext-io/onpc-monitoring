@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1533296395117,
+  "iteration": 1534253510401,
   "links": [],
   "panels": [
     {
@@ -95,12 +95,12 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2.4,
+        "w": 2,
         "x": 0,
         "y": 1
       },
       "hideTimeOverride": true,
-      "id": 4,
+      "id": 203,
       "interval": "1m",
       "links": [],
       "mappingType": 1,
@@ -131,6 +131,8 @@
       ],
       "repeat": "api_endpoint",
       "repeatDirection": "h",
+      "repeatIteration": 1534246501265,
+      "repeatPanelId": 4,
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
@@ -181,7 +183,7 @@
       "thresholds": "1,2",
       "timeFrom": "2m",
       "timeShift": null,
-      "title": "$api_endpoint status",
+      "title": "$api_endpoint API",
       "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1565,7 +1567,7 @@
       "valueName": "current"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1573,391 +1575,412 @@
         "y": 14
       },
       "id": 28,
-      "panels": [
-        {
-          "columns": [],
-          "datasource": "${DS_INFLUXDB}",
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 6,
-            "w": 11,
-            "x": 0,
-            "y": 15
-          },
-          "hideTimeOverride": true,
-          "id": 131,
-          "links": [],
-          "pageSize": null,
-          "scroll": true,
-          "showHeader": true,
-          "sort": {
-            "col": 4,
-            "desc": true
-          },
-          "styles": [
-            {
-              "alias": "Time",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "hidden"
-            },
-            {
-              "alias": "Worker",
-              "colorMode": "value",
-              "colors": [
-                "rgba(50, 172, 45, 0.97)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(245, 54, 54, 0.9)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "mappingType": 1,
-              "pattern": "instance",
-              "thresholds": [],
-              "type": "string",
-              "unit": "short",
-              "valueMaps": []
-            },
-            {
-              "alias": "Status",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "pattern": "type_instance",
-              "thresholds": [],
-              "type": "string",
-              "unit": "short"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "mappingType": 1,
-              "pattern": "value",
-              "thresholds": [],
-              "type": "hidden",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "alias": "",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT last(\"value\") as \"value\", \"instance\" FROM \"openstack_nova_service_value\" WHERE $timeFilter GROUP BY \"host\", \"type_instance\" fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "table",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "timeFrom": "5m",
-          "title": "Workers Status per Node",
-          "transform": "table",
-          "type": "table"
-        },
-        {
-          "columns": [],
-          "datasource": "${DS_INFLUXDB}",
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 6,
-            "w": 10,
-            "x": 11,
-            "y": 15
-          },
-          "hideTimeOverride": true,
-          "id": 132,
-          "links": [],
-          "pageSize": null,
-          "scroll": true,
-          "showHeader": true,
-          "sort": {
-            "col": 4,
-            "desc": false
-          },
-          "styles": [
-            {
-              "alias": "Time",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "hidden"
-            },
-            {
-              "alias": "Worker",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "pattern": "instance",
-              "thresholds": [],
-              "type": "string",
-              "unit": "short"
-            },
-            {
-              "alias": "Status",
-              "colorMode": null,
-              "colors": [
-                "rgba(50, 172, 45, 0.97)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(245, 54, 54, 0.9)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "link": false,
-              "mappingType": 1,
-              "pattern": "type_instance",
-              "preserveFormat": false,
-              "sanitize": false,
-              "thresholds": [
-                ""
-              ],
-              "type": "string",
-              "unit": "short",
-              "valueMaps": []
-            },
-            {
-              "alias": "Count",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 0,
-              "pattern": "last",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            },
-            {
-              "alias": "",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "alias": "",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT last(\"value\") FROM \"openstack_nova_services_value\" WHERE $timeFilter GROUP BY \"instance\", \"type_instance\" fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "table",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "timeFrom": "5m",
-          "title": "Global Worker Status",
-          "transform": "table",
-          "type": "table"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "decimals": 0,
-          "fill": 1,
-          "gridPos": {
-            "h": 8,
-            "w": 11,
-            "x": 0,
-            "y": 21
-          },
-          "id": 126,
-          "interval": "1m",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": false,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$tag_type_instance",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"value\") FROM \"openstack_nova_instances_value\" WHERE $timeFilter GROUP BY time($__interval), \"type_instance\" fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Global Instances Status",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
+      "panels": [],
       "title": "Nova  Statistics",
       "type": "row"
+    },
+    {
+      "columns": [],
+      "datasource": "${DS_INFLUXDB}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "hideTimeOverride": true,
+      "id": 131,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 4,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "Host",
+          "colorMode": null,
+          "colors": [
+            "rgba(50, 172, 45, 0.97)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(245, 54, 54, 0.9)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "host",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": []
+        },
+        {
+          "alias": "Worker",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": "cell",
+          "colors": [
+            "rgba(50, 172, 45, 0.97)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(245, 54, 54, 0.9)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "link": true,
+          "linkTooltip": "",
+          "linkUrl": "",
+          "mappingType": 1,
+          "pattern": "value",
+          "thresholds": [
+            "1",
+            "2"
+          ],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "up",
+              "value": "0"
+            },
+            {
+              "text": "down",
+              "value": "1"
+            },
+            {
+              "text": "disabled",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"value\") AS \"value\" FROM \"openstack_nova_service_value\" WHERE $timeFilter GROUP BY \"host\", \"instance\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "timeFrom": "180s",
+      "timeShift": null,
+      "title": "Workers Status per Node",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "${DS_INFLUXDB}",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "hideTimeOverride": true,
+      "id": 132,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 4,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "Worker",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Status",
+          "colorMode": null,
+          "colors": [
+            "rgba(50, 172, 45, 0.97)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(245, 54, 54, 0.9)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "link": false,
+          "linkTooltip": "",
+          "linkUrl": "",
+          "mappingType": 1,
+          "pattern": "type_instance",
+          "preserveFormat": false,
+          "sanitize": false,
+          "thresholds": [
+            ""
+          ],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": []
+        },
+        {
+          "alias": "Count",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 0,
+          "pattern": "last",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"value\") FROM \"openstack_nova_services_value\" WHERE $timeFilter GROUP BY \"instance\", \"type_instance\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "timeFrom": "5m",
+      "title": "Global Worker Status",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "decimals": 0,
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 126,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_type_instance",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"value\") FROM \"openstack_nova_instances_value\" WHERE $timeFilter GROUP BY time($__interval), \"type_instance\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Global Instances Status",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "collapsed": false,
@@ -1965,7 +1988,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 32
       },
       "id": 32,
       "panels": [],
@@ -1986,7 +2009,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 33
       },
       "id": 57,
       "interval": "1m",
@@ -2112,7 +2135,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 33
       },
       "id": 133,
       "interval": "1m",
@@ -2225,9 +2248,9 @@
       "fontSize": "100%",
       "gridPos": {
         "h": 9,
-        "w": 24,
+        "w": 12,
         "x": 0,
-        "y": 24
+        "y": 41
       },
       "hideTimeOverride": true,
       "id": 130,
@@ -2236,8 +2259,8 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
-        "desc": true
+        "col": 1,
+        "desc": false
       },
       "styles": [
         {
@@ -2257,69 +2280,62 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "pattern": "host",
+          "sanitize": false,
           "thresholds": [],
           "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Status",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "type_instance",
-          "preserveFormat": false,
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Count",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "pattern": "last",
-          "thresholds": [],
-          "type": "hidden",
           "unit": "short"
         },
         {
           "alias": "Worker",
           "colorMode": null,
           "colors": [
-            "rgba(245, 54, 54, 0.9)",
+            "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(245, 54, 54, 0.9)"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "pattern": "instance",
+          "preserveFormat": false,
           "thresholds": [],
           "type": "string",
           "unit": "short"
         },
         {
-          "alias": "",
-          "colorMode": null,
+          "alias": "Status",
+          "colorMode": "cell",
           "colors": [
-            "rgba(245, 54, 54, 0.9)",
+            "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(245, 54, 54, 0.9)"
           ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
+          "link": true,
+          "linkTooltip": "",
+          "linkUrl": "",
+          "mappingType": 1,
+          "pattern": "value",
+          "thresholds": [
+            "1",
+            "2"
+          ],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "up",
+              "value": "0"
+            },
+            {
+              "text": "down",
+              "value": "1"
+            },
+            {
+              "text": "disabled",
+              "value": "2"
+            }
+          ]
         }
       ],
       "targets": [
@@ -2341,7 +2357,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"value\"), \"host\", \"type_instance\" FROM \"openstack_cinder_service_value\" WHERE $timeFilter GROUP BY \"instance\", \"host\" fill(null)",
+          "query": "SELECT last(\"value\") AS \"value\" FROM \"openstack_cinder_service_value\" WHERE $timeFilter GROUP BY \"host\", \"instance\" fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -2373,10 +2389,10 @@
       "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
-        "h": 7,
+        "h": 9,
         "w": 12,
-        "x": 0,
-        "y": 33
+        "x": 12,
+        "y": 41
       },
       "hideTimeOverride": true,
       "id": 129,
@@ -2385,7 +2401,7 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
+        "col": 2,
         "desc": true
       },
       "styles": [
@@ -2421,7 +2437,9 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "pattern": "type_instance",
-          "thresholds": [],
+          "thresholds": [
+            ""
+          ],
           "type": "string",
           "unit": "short"
         },
@@ -2435,7 +2453,7 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 0,
-          "pattern": "last",
+          "pattern": "value",
           "thresholds": [],
           "type": "number",
           "unit": "short"
@@ -2474,7 +2492,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"value\") FROM \"openstack_cinder_services_value\" WHERE $timeFilter GROUP BY \"instance\", \"type_instance\" fill(null)",
+          "query": "SELECT last(\"value\") AS \"value\" FROM \"openstack_cinder_services_value\" WHERE $timeFilter GROUP BY \"instance\", \"type_instance\" fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -2512,10 +2530,10 @@
       "description": "Aggregated size of snapshots by state",
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
-        "x": 12,
-        "y": 33
+        "x": 0,
+        "y": 50
       },
       "id": 134,
       "interval": "1m",
@@ -2635,7 +2653,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 57
       },
       "id": 30,
       "panels": [
@@ -2653,7 +2671,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 36
+            "y": 42
           },
           "id": 67,
           "interval": "1m",
@@ -2890,7 +2908,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 36
+            "y": 42
           },
           "id": 76,
           "interval": "1m",
@@ -3127,7 +3145,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 45
+            "y": 51
           },
           "id": 78,
           "interval": "1m",
@@ -3364,7 +3382,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 45
+            "y": 51
           },
           "id": 79,
           "interval": "1m",
@@ -3597,7 +3615,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 58
       },
       "id": 26,
       "panels": [
@@ -3613,7 +3631,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 55
+            "y": 67
           },
           "id": 166,
           "interval": "1m",
@@ -3732,7 +3750,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 55
+            "y": 67
           },
           "id": 167,
           "interval": "1m",
@@ -3851,7 +3869,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 63
+            "y": 75
           },
           "id": 168,
           "interval": "1m",
@@ -3970,7 +3988,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 63
+            "y": 75
           },
           "id": 169,
           "interval": "1m",
@@ -4085,7 +4103,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 71
+            "y": 83
           },
           "hideTimeOverride": true,
           "id": 156,
@@ -4120,21 +4138,6 @@
               "unit": "short"
             },
             {
-              "alias": "Status",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "decimals": 2,
-              "pattern": "type_instance",
-              "thresholds": [],
-              "type": "string",
-              "unit": "short"
-            },
-            {
               "alias": "Agent",
               "colorMode": null,
               "colors": [
@@ -4150,19 +4153,37 @@
               "unit": "short"
             },
             {
-              "alias": "",
-              "colorMode": null,
+              "alias": "Status",
+              "colorMode": "cell",
               "colors": [
-                "rgba(245, 54, 54, 0.9)",
+                "rgba(50, 172, 45, 0.97)",
                 "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
+                "rgba(245, 54, 54, 0.9)"
               ],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "decimals": 2,
-              "pattern": "last",
-              "thresholds": [],
-              "type": "hidden",
-              "unit": "short"
+              "mappingType": 1,
+              "pattern": "value",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "string",
+              "unit": "short",
+              "valueMaps": [
+                {
+                  "text": "up",
+                  "value": "0"
+                },
+                {
+                  "text": "down",
+                  "value": "1"
+                },
+                {
+                  "text": "disabled",
+                  "value": "2"
+                }
+              ]
             },
             {
               "alias": "",
@@ -4198,7 +4219,7 @@
               ],
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT last(\"value\"), \"host\", \"type_instance\" FROM \"openstack_neutron_agent_value\" WHERE $timeFilter GROUP BY \"instance\" fill(null)",
+              "query": "SELECT last(\"value\") AS \"value\" FROM \"openstack_neutron_agent_value\" WHERE $timeFilter GROUP BY \"host\", \"instance\" fill(null)",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -4232,7 +4253,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 71
+            "y": 83
           },
           "hideTimeOverride": true,
           "id": 165,
@@ -4425,5 +4446,5 @@
   "timezone": "browser",
   "title": "OpenStack Metrics",
   "uid": "OwRmDQzik",
-  "version": 4
+  "version": 10
 }

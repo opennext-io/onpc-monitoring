@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 # Collectd plugin for checking the status of OpenStack API services
+
 if __name__ == '__main__':
     import collectd_fake as collectd
 else:
@@ -27,7 +28,6 @@ from urlparse import urlparse
 PLUGIN_NAME = 'openstack_check_apis'
 INTERVAL = openstack.INTERVAL
 
-
 class APICheckPlugin(openstack.CollectdPlugin):
     """Class to check the status of OpenStack API services."""
 
@@ -35,24 +35,33 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     # TODO(all): sahara, murano
     CHECK_MAP = {
-        'keystone': {
-            'path': '/', 'expect': [300], 'name': 'keystone-public-api'},
-        'heat': {'path': '/', 'expect': [300], 'name': 'heat-api'},
-        'heat-cfn': {'path': '/', 'expect': [300], 'name': 'heat-cfn-api'},
-        'glance': {'path': '/', 'expect': [300], 'name': 'glance-api'},
-        # Since Mitaka, Cinder returns 300 instead of 200 in previous releases
-        'cinder': {'path': '/', 'expect': [200, 300], 'name': 'cinder-api'},
-        'cinderv2': {
-            'path': '/', 'expect': [200, 300], 'name': 'cinder-v2-api'},
-        'neutron': {'path': '/', 'expect': [200], 'name': 'neutron-api'},
-        'nova': {'path': '/', 'expect': [200], 'name': 'nova-api'},
+        'keystone':
+            {'path': '', 'expect': [300], 'name': 'keystone'},
+        'heat':
+            {'path': 'build_info', 'expect': [200], 'name': 'heat', 'auth': True},
+        'heat-cfn':
+            {'path': '/', 'expect': [300], 'name': 'heat-cfn'},
+        'glance':
+            {'path': '', 'expect': [300], 'name': 'glance'},
+        'cinder':
+            {'path': 'limits', 'expect': [200], 'name': 'cinder', 'auth': True},
+        'cinderv2':
+            {'path': 'limits', 'expect': [200], 'name': 'cinderv2', 'auth': True},
+        'cinderv3':
+            {'path': 'limits', 'expect': [200], 'name': 'cinderv3', 'auth': True},
+        'neutron':
+            {'path': '', 'expect': [200], 'name': 'neutron'},
+        'nova':
+            {'path': '', 'expect': [200], 'name': 'nova', 'auth': True},
         # Ceilometer requires authentication for all paths
-        'ceilometer': {
-            'path': 'v2/capabilities', 'expect': [200], 'auth': True,
-            'name': 'ceilometer-api'},
-        'swift': {'path': 'healthcheck', 'expect': [200], 'name': 'swift-api'},
-        'swift_s3': {
-            'path': 'healthcheck', 'expect': [200], 'name': 'swift-s3-api'},
+        'ceilometer':
+            { 'path': 'capabilities', 'expect': [200], 'name': 'telemetry', 'auth': True},
+        'swift':
+            {'path': 'healthcheck', 'expect': [200], 'name': 'swift'},
+        'swift_s3':
+            { 'path': 'healthcheck', 'expect': [200], 'name': 'swift-s3'},
+        'placement':
+            { 'path': '', 'expect': [200], 'name': 'placement', 'auth': True}
     }
 
     def __init__(self, *args, **kwargs):
@@ -62,12 +71,16 @@ class APICheckPlugin(openstack.CollectdPlugin):
         self.timeout = 2
         self.max_retries = 1
 
-    def _service_url(self, endpoint, path):
-        url = urlparse(endpoint)
-        u = '%s://%s' % (url.scheme, url.netloc)
-        if path != '/':
-            u = '%s/%s' % (u, path)
-        return u
+    def compose_service_url(self, endpoint, path):
+        u = urlparse(endpoint)
+        # Durty hack to handle the case of heat-cfn api
+        if path == '/':
+            url = '%s://%s' % (u.scheme, u.netloc)
+        else:
+            url = u.geturl()
+            if len(path) != 0:
+                url = '%s/%s' % (url, path)
+        return url 
 
     def check_api(self):
         """ Check the status of all the API services.
@@ -78,21 +91,23 @@ class APICheckPlugin(openstack.CollectdPlugin):
         catalog = self.service_catalog
         for service in catalog:
             name = service['name']
+            self.logger.debug(
+                "Service catalog name '%s' at '%s'" % (service['name'], service['url']))
             if name not in self.CHECK_MAP:
                 self.logger.notice(
                     "No check found for service '%s', skipping it" % name)
                 status = self.UNKNOWN
                 check = {}
             else:
-                self.logger.info(
-                    "Check status of service '%s'" % name)
                 check = self.CHECK_MAP[name]
-                url = self._service_url(service['url'], check['path'])
+                url = self.compose_service_url(service['url'], check['path'])
+                self.logger.info(
+                    "Check status of service '%s' at '%s'" % (name, url))
                 r = self.raw_get(url, token_required=check.get('auth', False))
 
                 if r is None or r.status_code not in check['expect']:
                     def _status(ret):
-                        return 'N/A' if r is None else r.status_code
+                        return 'None' if r is None else r.status_code
 
                     self.logger.notice(
                         "Service %s check failed "
@@ -147,4 +162,3 @@ else:
     collectd.register_config(config_callback)
     collectd.register_notification(notification_callback)
     collectd.register_read(read_callback, INTERVAL)
-
