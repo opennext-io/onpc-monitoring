@@ -73,7 +73,7 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     def compose_service_url(self, endpoint, path):
         u = urlparse(endpoint)
-        # Durty hack to handle the case of heat-cfn api
+        # Dirty hack to handle the case of heat-cfn api
         if path == '/':
             url = '%s://%s' % (u.scheme, u.netloc)
         else:
@@ -91,8 +91,7 @@ class APICheckPlugin(openstack.CollectdPlugin):
         catalog = self.service_catalog
         for service in catalog:
             name = service['name']
-            self.logger.debug(
-                "Service catalog name '%s' at '%s'" % (service['name'], service['url']))
+            
             if name not in self.CHECK_MAP:
                 self.logger.notice(
                     "No check found for service '%s', skipping it" % name)

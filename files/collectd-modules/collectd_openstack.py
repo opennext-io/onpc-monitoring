@@ -120,11 +120,6 @@ class OSClient(object):
                 # behavior of picking the first one.
                 endpoint = item['endpoints'][0]
 
-            self.logger.debug("Got service endpoint '{}'".format(
-                endpoint
-            )
-            )
-
             if 'internalURL' not in endpoint and 'publicURL' not in endpoint:
                 self.logger.warning(
                     "Skipping service '{}' with no valid URL".format(
