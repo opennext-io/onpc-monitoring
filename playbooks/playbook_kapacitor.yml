@@ -36,13 +36,6 @@
     - role: kapacitor
 
   post_tasks:
-    - name: Drop Kapacitor scripts templates and vars
-      copy:
-        src: "files/kapacitor/tick"
-        dest: "{{ kapacitor_tick_work_dir }}"
-        mode: 0644
-        backup: yes
-      tags: [kapacitor-tick]
     - name: Create utils directory 
       file:
         path: "/opt/kapacitor/utils"
@@ -55,7 +48,7 @@
         dest: /opt/kapacitor/utils
         mode: 0755
       with_fileglob:
-        - "files/kapacitor/utils/*.sh"
+        - "../files/kapacitor/utils/*.sh"
       tags: [kapacitor-utils]
 
   vars_files:
