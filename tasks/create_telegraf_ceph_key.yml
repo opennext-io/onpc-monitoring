@@ -71,4 +71,13 @@
   when:
     - "'ceph-mon' in group_names"
     - "groups['ceph-mon'] | length > 1"
+
+- name: Add group write permission to Ceph socket
+  file:
+    dest: "/var/run/ceph/ceph-mon.{{ inventory_hostname }}.asok"
+    state: touch
+    mode: "g+w"
+  when:
+    - "'ceph-mon' in group_names"
+    - "groups['ceph-mon'] | length > 1"
    
