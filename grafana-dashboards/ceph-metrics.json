@@ -53,7 +53,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1534418509490,
+  "iteration": 1534418509515,
   "links": [],
   "panels": [
     {
@@ -169,7 +169,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Health Status",
       "type": "singlestat",
@@ -2256,7 +2256,7 @@
       }
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2264,652 +2264,8 @@
         "y": 16
       },
       "id": 67,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {},
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 15
-          },
-          "id": 86,
-          "interval": "1m",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "minSpan": 12,
-          "nullPointMode": "null as zero",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeatDirection": "h",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$col",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "none"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "ceph_pool_stats",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"read_op_per_sec\") AS \"Read IOPs\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "read_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "read"
-                    ],
-                    "type": "alias"
-                  }
-                ],
-                [
-                  {
-                    "params": [
-                      "write_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "write"
-                    ],
-                    "type": "alias"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "name",
-                  "operator": "=~",
-                  "value": "/^$pool$/"
-                }
-              ]
-            },
-            {
-              "alias": "$col",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "none"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "ceph_pool_stats",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"write_op_per_sec\") AS \"Write IOPs\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
-              "refId": "B",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "read_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "read"
-                    ],
-                    "type": "alias"
-                  }
-                ],
-                [
-                  {
-                    "params": [
-                      "write_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "write"
-                    ],
-                    "type": "alias"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "name",
-                  "operator": "=~",
-                  "value": "/^$pool$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "PGs IOPs",
-          "tooltip": {
-            "msResolution": true,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "transparent": false,
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "iops",
-              "label": "read / write IOPs",
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {},
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 15
-          },
-          "id": 87,
-          "interval": "1m",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "minSpan": 12,
-          "nullPointMode": "null as zero",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeatDirection": "h",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$col",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "none"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "ceph_pool_stats",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"read_bytes_sec\") AS \"Read bytes sec\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "read_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "read"
-                    ],
-                    "type": "alias"
-                  }
-                ],
-                [
-                  {
-                    "params": [
-                      "write_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "write"
-                    ],
-                    "type": "alias"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "name",
-                  "operator": "=~",
-                  "value": "/^$pool$/"
-                }
-              ]
-            },
-            {
-              "alias": "$col",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "none"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "ceph_pool_stats",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"write_bytes_sec\") AS \"Write bytes sec\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
-              "refId": "B",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "read_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "read"
-                    ],
-                    "type": "alias"
-                  }
-                ],
-                [
-                  {
-                    "params": [
-                      "write_op_per_sec"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [
-                      95
-                    ],
-                    "type": "percentile"
-                  },
-                  {
-                    "params": [
-                      "write"
-                    ],
-                    "type": "alias"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "name",
-                  "operator": "=~",
-                  "value": "/^$pool$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "PGs IOs",
-          "tooltip": {
-            "msResolution": true,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "transparent": false,
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "Bps",
-              "label": "read / write bytes",
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "fill": 1,
-          "gridPos": {
-            "h": 6,
-            "w": 24,
-            "x": 0,
-            "y": 24
-          },
-          "id": 69,
-          "interval": "1m",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"num_pg\") AS \"Total\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_state",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"count\") FROM \"ceph_pgmap_state\" WHERE $timeFilter GROUP BY time($interval), \"state\" fill(null)",
-              "rawQuery": true,
-              "refId": "B",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Placement Groups by State",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "transparent": true,
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "Placement Groups Stats",
-      "type": "row"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 17
-      },
-      "id": 20,
       "panels": [],
-      "repeat": null,
-      "title": "Pools Stats",
+      "title": "Placement Groups Stats",
       "type": "row"
     },
     {
@@ -2926,7 +2282,886 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 17
+      },
+      "id": 86,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "minSpan": 12,
+      "nullPointMode": "null as zero",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"read_op_per_sec\") AS \"Read IOPs\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        },
+        {
+          "alias": "$col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"write_op_per_sec\") AS \"Write IOPs\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "PGs IOPs",
+      "tooltip": {
+        "msResolution": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": false,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "iops",
+          "label": "read / write IOPs",
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 87,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "minSpan": 12,
+      "nullPointMode": "null as zero",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"read_bytes_sec\") AS \"Read bytes sec\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        },
+        {
+          "alias": "$col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"write_bytes_sec\") AS \"Write bytes sec\" FROM \"ceph_pgmap\" WHERE  $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "PGs IOs",
+      "tooltip": {
+        "msResolution": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": false,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": "read / write bytes",
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 20,
+      "panels": [],
+      "repeat": null,
+      "title": "Pools Stats",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 27
+      },
+      "id": 69,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"num_pg\") AS \"Total\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_state",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"count\") FROM \"ceph_pgmap_state\" WHERE $timeFilter GROUP BY time($interval), \"state\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Placement Groups by State",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 27
+      },
+      "id": 73,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "minSpan": 12,
+      "nullPointMode": "null as zero",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_name: $col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"read_bytes_sec\") AS \"Read bytes\" FROM \"ceph_pool_stats\" WHERE \"name\" =~ /^$pool$/  AND  $timeFilter GROUP BY time($interval), \"name\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        },
+        {
+          "alias": "$tag_name: $col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "ceph_pool_stats",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean( \"write_bytes_sec\") AS \"Write bytes\" FROM \"ceph_pool_stats\" WHERE \"name\" =~ /^$pool$/ AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "read_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "read"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "write_op_per_sec"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  95
+                ],
+                "type": "percentile"
+              },
+              {
+                "params": [
+                  "write"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "name",
+              "operator": "=~",
+              "value": "/^$pool$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pools IOs",
+      "tooltip": {
+        "msResolution": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": false,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "iops",
+          "label": "read / write bytes",
+          "logBase": 1,
+          "max": null,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 36
       },
       "id": 3,
       "interval": "1m",
@@ -3161,35 +3396,31 @@
       "fill": 1,
       "grid": {},
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 36
       },
-      "id": 73,
-      "interval": "1m",
+      "id": 84,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
-        "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
-      "minSpan": 12,
-      "nullPointMode": "null as zero",
+      "nullPointMode": "connected",
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "repeatDirection": "h",
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
@@ -3212,84 +3443,10 @@
               "type": "fill"
             }
           ],
-          "measurement": "ceph_pool_stats",
+          "measurement": "ceph_pool_usage",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT mean(\"read_bytes_sec\") AS \"Read bytes\" FROM \"ceph_pool_stats\" WHERE \"name\" =~ /^$pool$/  AND  $timeFilter GROUP BY time($interval), \"name\" fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "read_op_per_sec"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  95
-                ],
-                "type": "percentile"
-              },
-              {
-                "params": [
-                  "read"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "write_op_per_sec"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  95
-                ],
-                "type": "percentile"
-              },
-              {
-                "params": [
-                  "write"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "name",
-              "operator": "=~",
-              "value": "/^$pool$/"
-            }
-          ]
-        },
-        {
-          "alias": "$tag_name: $col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pool_stats",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean( \"write_bytes_sec\") AS \"Write bytes\" FROM \"ceph_pool_stats\" WHERE \"name\" =~ /^$pool$/ AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
+          "query": "SELECT mean(\"percent_used\") AS \"Percent used\" FROM \"ceph_pool_usage\" WHERE \"name\" =~ /^$pool$/ AND $timeFilter GROUP BY time($interval), \"name\" fill(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -3297,19 +3454,17 @@
             [
               {
                 "params": [
-                  "read_op_per_sec"
+                  "bytes_used"
                 ],
                 "type": "field"
               },
               {
-                "params": [
-                  95
-                ],
-                "type": "percentile"
+                "params": [],
+                "type": "mean"
               },
               {
                 "params": [
-                  "read"
+                  "used"
                 ],
                 "type": "alias"
               }
@@ -3317,19 +3472,17 @@
             [
               {
                 "params": [
-                  "write_op_per_sec"
+                  "max_avail"
                 ],
                 "type": "field"
               },
               {
-                "params": [
-                  95
-                ],
-                "type": "percentile"
+                "params": [],
+                "type": "mean"
               },
               {
                 "params": [
-                  "write"
+                  "available"
                 ],
                 "type": "alias"
               }
@@ -3347,14 +3500,14 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Pools IOs",
+      "title": "Pools Usage Percent",
       "tooltip": {
         "msResolution": true,
         "shared": true,
         "sort": 0,
-        "value_type": "individual"
+        "value_type": "cumulative"
       },
-      "transparent": false,
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -3365,8 +3518,8 @@
       },
       "yaxes": [
         {
-          "format": "iops",
-          "label": "read / write bytes",
+          "format": "percent",
+          "label": "",
           "logBase": 1,
           "max": null,
           "min": 0,
@@ -3400,7 +3553,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 45
       },
       "id": 9,
       "legend": {
@@ -3555,161 +3708,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 35
-      },
-      "id": 84,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$tag_name: $col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "none"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pool_usage",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT mean(\"percent_used\") AS \"Percent used\" FROM \"ceph_pool_usage\" WHERE \"name\" =~ /^$pool$/ AND $timeFilter GROUP BY time($interval), \"name\" fill(none)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "bytes_used"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "used"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "max_avail"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              },
-              {
-                "params": [
-                  "available"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "name",
-              "operator": "=~",
-              "value": "/^$pool$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Pools Usage Percent",
-      "tooltip": {
-        "msResolution": true,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": 0,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 43
+        "y": 53
       },
       "id": 85,
       "legend": {
@@ -3855,7 +3854,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 61
       },
       "id": 75,
       "panels": [
@@ -4328,404 +4327,403 @@
       "type": "row"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 62
       },
       "id": 80,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 24,
-            "x": 0,
-            "y": 13
-          },
-          "id": 82,
-          "interval": "1m",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"refresh_latency.avgtime\") AS \"Refresh\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"begin_latency.avgtime\") AS \"Begin\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "B",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"collect_latency.avgtime\") AS \"Collect\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "C",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"commit_latency.avgtime\") AS \"Commit\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "D",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"new_pn_latency.avgtime\") AS \"New PN\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "H",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"get_latency.avgtime\") AS \"Get\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "E",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"complete_latency.avgtime\") AS \"Complete\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "F",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$tag_collection: $col",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT mean(\"store_state__latency.avgtime\") AS \"Store state\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
-              "rawQuery": true,
-              "refId": "I",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Latencies",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
+      "panels": [],
       "title": "Latencies",
       "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 63
+      },
+      "id": 82,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"refresh_latency.avgtime\") AS \"Refresh\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"begin_latency.avgtime\") AS \"Begin\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"collect_latency.avgtime\") AS \"Collect\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"commit_latency.avgtime\") AS \"Commit\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"new_pn_latency.avgtime\") AS \"New PN\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"get_latency.avgtime\") AS \"Get\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"complete_latency.avgtime\") AS \"Complete\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_collection: $col",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT mean(\"store_state__latency.avgtime\") AS \"Store state\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval), \"collection\" fill(null)",
+          "rawQuery": true,
+          "refId": "I",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Latencies",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "1m",
@@ -4814,5 +4812,5 @@
   "timezone": "browser",
   "title": "Ceph Cluster Dashboard",
   "uid": "HI6C7p5mk",
-  "version": 22
+  "version": 23
 }

@@ -14,6 +14,7 @@
 # limitations under the License.
 
 kapacitor_tasks: [
+  { id: "ceph_health_status_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_health_status_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "ceph_osd_out_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_osd_out_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "ceph_degraded_object_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_degraded_object_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "ceph_misplaced_object_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_misplaced_object_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
