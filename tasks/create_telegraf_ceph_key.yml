@@ -62,7 +62,6 @@
   when:
     - "'ceph-mon' in group_names"
     - "groups['ceph-mon'] | length > 1"
-    
 
 - name: Add group read permission to telegraf client keyring
   file:

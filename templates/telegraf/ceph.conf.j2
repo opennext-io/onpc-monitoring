@@ -3,6 +3,20 @@
 # Do NOT modify this file by hand!
 
 {% if inventory_hostname in groups['ceph-mon'] %}
+
+# Collects Ceph health status with exec since this metric is missing
+# from the Ceph plugin 
+[[inputs.exec]]
+  commands = ["ceph health"]
+
+  ## measurement name suffix (for separating different commands)
+  name_suffix = "_health_status"
+  name_override = "ceph"
+  data_format = "value"
+  interval = "1m"
+  data_type = "string"
+  interval = '1m'
+
 # Collects performance metrics from the MON and OSD nodes in a Ceph storage cluster.
 [[inputs.ceph]]
   ## This is the recommended interval to poll.  Too frequent and you will lose
