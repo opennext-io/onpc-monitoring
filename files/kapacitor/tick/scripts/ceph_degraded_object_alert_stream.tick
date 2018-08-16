@@ -45,7 +45,7 @@ var data = total
 
 // Thresholds
 var alert = data 
-  |eval(lambda: float(("degraded.value")/float("total.value") * 100))
+  |eval(lambda: float("degraded.value") / float("total.value") * 100.0)
     .as('stat')
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd/degraded_objects')

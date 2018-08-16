@@ -22,7 +22,7 @@ var rawdata = stream
   |from()
     .database('telegraf')
     .retentionPolicy('autogen')
-    .measurement('ceph')
+    .measurement('ceph_osdmap')
     .groupBy('region')
 
 var in = rawdata
@@ -39,7 +39,7 @@ var data = in
 
 // Thresholds
 var alert = data 
-  |eval(lambda: float(("up.value")/float("in.value") * 100))
+  |eval(lambda: float("up.value") / float("in.value") * 100.0)
     .as('stat')
   |alert()
     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd/cluster_status')
