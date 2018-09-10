@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.1.3"
+      "version": "5.2.2"
     },
     {
       "type": "panel",
@@ -59,7 +59,7 @@
   "gnetId": 1443,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1530527546647,
+  "iteration": 1536082114734,
   "links": [],
   "panels": [
     {
@@ -811,7 +811,7 @@
             "#962d82",
             "rgba(245, 54, 54, 0.9)"
           ],
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -923,7 +923,7 @@
             "rgba(244, 126, 30, 0.89)",
             "rgba(245, 54, 54, 0.9)"
           ],
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "format": "short",
           "gauge": {
             "maxValue": 10,
@@ -2213,7 +2213,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -2472,7 +2472,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -2595,7 +2595,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 8,
@@ -2884,7 +2884,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -3012,7 +3012,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -3240,7 +3240,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -3562,7 +3562,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -3783,7 +3783,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "InfluxDB",
+          "datasource": "${DS_INFLUXDB}",
           "fill": 1,
           "gridPos": {
             "h": 6,
@@ -4375,8 +4375,8 @@
       "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
-        "h": 6,
-        "w": 12,
+        "h": 7,
+        "w": 24,
         "x": 0,
         "y": 23
       },
@@ -4651,7 +4651,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 30
       },
       "id": 40,
       "panels": [],
@@ -4667,10 +4667,10 @@
       "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 6,
+        "w": 24,
         "x": 0,
-        "y": 30
+        "y": 31
       },
       "id": 5,
       "interval": "$interval",
@@ -4830,171 +4830,8 @@
       "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "id": 29,
-      "interval": "$interval",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$tag_name : $col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT derivative(mean(\"writes\"), 1s) AS \"write iops\" FROM \"diskio\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "$tag_name : $col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "hide": false,
-          "interval": "$Interval",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT derivative(mean(\"reads\"), 1s) AS \"read iops\" FROM \"diskio\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Disk IOPs",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
-      "fill": 1,
-      "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 37
       },
@@ -5148,6 +4985,169 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 29,
+      "interval": "$interval",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_name : $col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT derivative(mean(\"writes\"), 1s) AS \"write iops\" FROM \"diskio\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "$tag_name : $col",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "interval": "$Interval",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT derivative(mean(\"reads\"), 1s) AS \"read iops\" FROM \"diskio\" WHERE \"host\" =~ /^$host$/  AND $timeFilter GROUP BY time($interval), \"name\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Disk IOPs",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "aliasColors": {
         "/:used_percent": "#E0752D"
       },
@@ -5158,9 +5158,9 @@
       "fill": 1,
       "gridPos": {
         "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 37
+        "w": 24,
+        "x": 0,
+        "y": 52
       },
       "id": 26,
       "interval": "1m",
@@ -5490,5 +5490,5 @@
   "timezone": "browser",
   "title": "Hosts Metrics",
   "uid": "UQTN6aziz",
-  "version": 9
+  "version": 2
 }

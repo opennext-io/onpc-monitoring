@@ -53,7 +53,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1534418509515,
+  "iteration": 1535621900478,
   "links": [],
   "panels": [
     {
@@ -72,13 +72,14 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": false,
+      "colorValue": true,
       "colors": [
         "#299c46",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
       "datasource": "${DS_INFLUXDB}",
+      "decimals": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -88,8 +89,8 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 4,
-        "w": 5,
+        "h": 10,
+        "w": 8,
         "x": 0,
         "y": 1
       },
@@ -193,252 +194,6 @@
         "#d44a3a"
       ],
       "datasource": "${DS_INFLUXDB}",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 3,
-        "x": 5,
-        "y": 1
-      },
-      "hideTimeOverride": true,
-      "id": 89,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT last(\"full\") FROM \"ceph_osdmap\" WHERE $timeFilter fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1m",
-      "title": "Full OSDs",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        },
-        {
-          "op": "=",
-          "text": "false",
-          "value": "0"
-        },
-        {
-          "op": "=",
-          "text": "true",
-          "value": "1"
-        }
-      ],
-      "valueName": "total"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_INFLUXDB}",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 3,
-        "x": 8,
-        "y": 1
-      },
-      "hideTimeOverride": true,
-      "id": 90,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT last(\"nearfull\") FROM \"ceph_osdmap\" WHERE $timeFilter fill(null)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1m",
-      "title": "Near Full OSDs",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        },
-        {
-          "op": "=",
-          "text": "false",
-          "value": "0"
-        },
-        {
-          "op": "=",
-          "text": "True",
-          "value": "1"
-        }
-      ],
-      "valueName": "total"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_INFLUXDB}",
       "format": "decbytes",
       "gauge": {
         "maxValue": 100,
@@ -450,7 +205,7 @@
       "gridPos": {
         "h": 2,
         "w": 4,
-        "x": 11,
+        "x": 8,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -529,7 +284,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Cluster Available Capacity",
       "type": "singlestat",
@@ -564,7 +319,7 @@
       "gridPos": {
         "h": 2,
         "w": 4,
-        "x": 15,
+        "x": 12,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -643,7 +398,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Cluster Used Capacity",
       "type": "singlestat",
@@ -678,7 +433,7 @@
       "gridPos": {
         "h": 2,
         "w": 3,
-        "x": 19,
+        "x": 16,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -757,9 +512,123 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Objects",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "short",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 19,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 54,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"num_pg\") FROM \"ceph\" WHERE $timeFilter fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Placement Groups",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -792,10 +661,11 @@
       "gridPos": {
         "h": 2,
         "w": 2,
-        "x": 5,
-        "y": 3
+        "x": 22,
+        "y": 1
       },
-      "id": 58,
+      "hideTimeOverride": true,
+      "id": 59,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -848,7 +718,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"num_mon\") FROM \"ceph\" WHERE $timeFilter fill(null)",
+          "query": "SELECT last(\"num_pool\") FROM \"ceph\" WHERE $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -869,8 +739,10 @@
           "tags": []
         }
       ],
-      "thresholds": "1,3",
-      "title": "Monitors",
+      "thresholds": "",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Pools",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -885,11 +757,11 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": true,
+      "colorValue": false,
       "colors": [
-        "#d44a3a",
+        "#299c46",
         "rgba(237, 129, 40, 0.89)",
-        "#299c46"
+        "#d44a3a"
       ],
       "datasource": "${DS_INFLUXDB}",
       "format": "none",
@@ -903,10 +775,11 @@
       "gridPos": {
         "h": 2,
         "w": 3,
-        "x": 7,
+        "x": 8,
         "y": 3
       },
-      "id": 88,
+      "hideTimeOverride": true,
+      "id": 89,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -959,7 +832,131 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"num_mon_quorum\") FROM \"ceph\" WHERE $timeFilter fill(null)",
+          "query": "SELECT last(\"full\") FROM \"ceph_osdmap\" WHERE $timeFilter fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Full OSDs",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        },
+        {
+          "op": "=",
+          "text": "false",
+          "value": "0"
+        },
+        {
+          "op": "=",
+          "text": "true",
+          "value": "1"
+        }
+      ],
+      "valueName": "total"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 11,
+        "y": 3
+      },
+      "hideTimeOverride": true,
+      "id": 50,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select last(\"num_osds\") from \"ceph_osdmap\" WHERE $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -980,8 +977,10 @@
           "tags": []
         }
       ],
-      "thresholds": "1,3",
-      "title": "Monitors Quorum",
+      "thresholds": "",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "OSDs",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1014,7 +1013,7 @@
       "gridPos": {
         "h": 2,
         "w": 2,
-        "x": 10,
+        "x": 13,
         "y": 3
       },
       "hideTimeOverride": true,
@@ -1093,7 +1092,8 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
+      "timeShift": null,
       "title": "OSDs IN",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1127,7 +1127,7 @@
       "gridPos": {
         "h": 2,
         "w": 2,
-        "x": 12,
+        "x": 15,
         "y": 3
       },
       "hideTimeOverride": true,
@@ -1206,7 +1206,8 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
+      "timeShift": null,
       "title": "OSDs UP",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1240,7 +1241,7 @@
       "gridPos": {
         "h": 2,
         "w": 3,
-        "x": 14,
+        "x": 17,
         "y": 3
       },
       "hideTimeOverride": true,
@@ -1319,7 +1320,8 @@
         }
       ],
       "thresholds": "1,2",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
+      "timeShift": null,
       "title": "OSDs DOWN",
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1331,6 +1333,130 @@
         }
       ],
       "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 8,
+        "y": 5
+      },
+      "hideTimeOverride": true,
+      "id": 90,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"nearfull\") FROM \"ceph_osdmap\" WHERE $timeFilter fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Near Full OSDs",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        },
+        {
+          "op": "=",
+          "text": "false",
+          "value": "0"
+        },
+        {
+          "op": "=",
+          "text": "True",
+          "value": "1"
+        }
+      ],
+      "valueName": "total"
     },
     {
       "cacheTimeout": null,
@@ -1352,11 +1478,12 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 3,
-        "x": 0,
+        "w": 2,
+        "x": 11,
         "y": 5
       },
-      "id": 59,
+      "hideTimeOverride": true,
+      "id": 58,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -1409,7 +1536,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"num_pool\") FROM \"ceph\" WHERE $timeFilter fill(null)",
+          "query": "SELECT last(\"num_mon\") FROM \"ceph\" WHERE $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1430,8 +1557,124 @@
           "tags": []
         }
       ],
-      "thresholds": "",
-      "title": "Number of Pools",
+      "thresholds": "1,3",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Monitors",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#d44a3a",
+        "rgba(237, 129, 40, 0.89)",
+        "#299c46"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 13,
+        "y": 5
+      },
+      "hideTimeOverride": true,
+      "id": 88,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"num_mon_quorum\") FROM \"ceph\" WHERE $timeFilter fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "1,3",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Quorum",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1453,120 +1696,6 @@
         "#d44a3a"
       ],
       "datasource": "${DS_INFLUXDB}",
-      "format": "short",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 3,
-        "x": 3,
-        "y": 5
-      },
-      "hideTimeOverride": true,
-      "id": 54,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT last(\"num_pg\") FROM \"ceph\" WHERE $timeFilter fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": "",
-      "timeFrom": "1m",
-      "timeShift": null,
-      "title": "Placement Groups",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_INFLUXDB}",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -1577,12 +1706,11 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 2,
-        "x": 6,
+        "w": 8,
+        "x": 15,
         "y": 5
       },
-      "hideTimeOverride": true,
-      "id": 50,
+      "id": 96,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -1617,54 +1745,16 @@
         "show": false
       },
       "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "select last(\"num_osds\") from \"ceph_osdmap\" WHERE $timeFilter fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
+      "targets": [],
       "thresholds": "",
-      "timeFrom": "1m",
-      "title": "OSDs",
+      "title": "",
+      "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
         {
           "op": "=",
-          "text": "N/A",
+          "text": "",
           "value": "null"
         }
       ],
@@ -1694,7 +1784,7 @@
         "h": 4,
         "w": 4,
         "x": 8,
-        "y": 5
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 18,
@@ -1758,9 +1848,113 @@
         }
       ],
       "thresholds": "0.01,0.25",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Degraded Objects",
+      "transparent": true,
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "decimals": null,
+      "editable": true,
+      "error": false,
+      "format": "percentunit",
+      "gauge": {
+        "maxValue": 1,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 17,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ceph_pgmap",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT  (last(\"num_object_misplaced\") / last(\"num_object\")) * 100 FROM \"ceph\" WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "misplaced_ratio"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "0.01,0.25",
+      "timeFrom": "2m",
+      "timeShift": null,
+      "title": "Misplaced Objects",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1794,8 +1988,8 @@
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 12,
-        "y": 5
+        "x": 15,
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 45,
@@ -1873,7 +2067,7 @@
         }
       ],
       "thresholds": "50,80",
-      "timeFrom": "1m",
+      "timeFrom": "2m",
       "timeShift": null,
       "title": "Cluster Used Percent",
       "type": "singlestat",
@@ -1888,380 +2082,277 @@
       "valueName": "current"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_INFLUXDB}",
-      "decimals": null,
-      "editable": true,
-      "error": false,
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 1,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 16,
-        "y": 5
-      },
-      "hideTimeOverride": true,
-      "id": 17,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "dsType": "influxdb",
-          "groupBy": [],
-          "hide": false,
-          "measurement": "ceph_pgmap",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  (last(\"num_object_misplaced\") / last(\"num_object\")) * 100 FROM \"ceph\" WHERE $timeFilter",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "misplaced_ratio"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": "0.01,0.25",
-      "timeFrom": "1m",
-      "timeShift": null,
-      "title": "Misplaced Objects",
-      "transparent": true,
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
-    },
-    {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 11
       },
       "id": 65,
-      "panels": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_INFLUXDB}",
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {},
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "id": 10,
+          "interval": "1m",
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "alias": "ceph_pgmap.derivative",
+              "bars": true,
+              "lines": false
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "$col",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "0"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "measurement": "ceph_pgmap",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "query": "SELECT  mean(\"num_object\") AS \"Total\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
+              "refId": "C",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "degraded_objects"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": []
+            },
+            {
+              "alias": "$col",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "0"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "measurement": "ceph_pgmap",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "query": "SELECT  mean(\"num_object_degraded\") AS \"Degraded\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "degraded_objects"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": []
+            },
+            {
+              "alias": "$col",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "0"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "measurement": "ceph_pgmap",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "query": "SELECT  mean(\"num_object_misplaced\") AS \"Misplaced\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
+              "refId": "B",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "degraded_objects"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": []
+            },
+            {
+              "alias": "$col",
+              "dsType": "influxdb",
+              "groupBy": [
+                {
+                  "params": [
+                    "$interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "0"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "measurement": "ceph_pgmap",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "query": "SELECT  mean(\"num_object_unfound\") AS \"Unfound\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
+              "rawQuery": true,
+              "refId": "D",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "degraded_objects"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": []
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Objects by state",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "transparent": true,
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 10000,
+              "min": -10000,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
       "title": "Objects Stats",
       "type": "row"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
-      "editable": true,
-      "error": false,
-      "fill": 1,
-      "grid": {},
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 10
-      },
-      "id": 10,
-      "interval": "1m",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "ceph_pgmap.derivative",
-          "bars": true,
-          "lines": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pgmap",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  mean(\"num_object\") AS \"Total\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
-          "rawQuery": true,
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "degraded_objects"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pgmap",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  mean(\"num_object_degraded\") AS \"Degraded\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "degraded_objects"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pgmap",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  mean(\"num_object_misplaced\") AS \"Misplaced\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
-          "rawQuery": true,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "degraded_objects"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
-          "alias": "$col",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "ceph_pgmap",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT  mean(\"num_object_unfound\") AS \"Unfound\" FROM \"ceph\" WHERE $timeFilter GROUP BY time($interval)",
-          "rawQuery": true,
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "degraded_objects"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Objects by state",
-      "tooltip": {
-        "msResolution": false,
-        "shared": true,
-        "sort": 0,
-        "value_type": "cumulative"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": 10000,
-          "min": -10000,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 12
       },
       "id": 67,
       "panels": [],
@@ -2282,7 +2373,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 13
       },
       "id": 86,
       "interval": "1m",
@@ -2518,7 +2609,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 13
       },
       "id": 87,
       "interval": "1m",
@@ -2746,7 +2837,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 22
       },
       "id": 20,
       "panels": [],
@@ -2765,7 +2856,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 23
       },
       "id": 69,
       "interval": "1m",
@@ -2775,7 +2866,7 @@
         "current": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -2925,7 +3016,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 23
       },
       "id": 73,
       "interval": "1m",
@@ -3158,10 +3249,10 @@
       "fill": 1,
       "grid": {},
       "gridPos": {
-        "h": 9,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 32
       },
       "id": 3,
       "interval": "1m",
@@ -3396,10 +3487,10 @@
       "fill": 1,
       "grid": {},
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 36
+        "h": 6,
+        "w": 23,
+        "x": 0,
+        "y": 42
       },
       "id": 84,
       "legend": {
@@ -3553,7 +3644,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 48
       },
       "id": 9,
       "legend": {
@@ -3708,7 +3799,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 53
+        "y": 56
       },
       "id": 85,
       "legend": {
@@ -3854,7 +3945,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 64
       },
       "id": 75,
       "panels": [
@@ -3872,7 +3963,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 12
+            "y": 24
           },
           "id": 15,
           "interval": "1m",
@@ -4028,7 +4119,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 12
+            "y": 24
           },
           "id": 76,
           "interval": "1m",
@@ -4182,7 +4273,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 12
+            "y": 24
           },
           "id": 77,
           "interval": "1m",
@@ -4332,7 +4423,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 62
+        "y": 65
       },
       "id": 80,
       "panels": [],
@@ -4350,7 +4441,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 66
       },
       "id": 82,
       "interval": "1m",
@@ -4810,7 +4901,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Ceph Cluster Dashboard",
+  "title": "Ceph Cluster Metrics",
   "uid": "HI6C7p5mk",
-  "version": 23
+  "version": 31
 }
