@@ -20,7 +20,7 @@
   Import "openstack_check_apis"
 
   <Module "openstack_check_apis">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -32,7 +32,7 @@
   Import "openstack_cinder"
 
   <Module "openstack_cinder">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -44,7 +44,7 @@
   Import "openstack_cinder_services"
 
   <Module "openstack_cinder_services">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -56,7 +56,7 @@
   Import "openstack_glance"
 
   <Module "openstack_glance">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -68,7 +68,7 @@
   Import "openstack_keystone"
 
   <Module "openstack_keystone">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -80,7 +80,7 @@
   Import "openstack_neutron"
 
   <Module "openstack_neutron">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -92,7 +92,7 @@
   Import "openstack_neutron_agents"
 
   <Module "openstack_neutron_agents">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -104,7 +104,7 @@
   Import "openstack_nova"
 
   <Module "openstack_nova">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -116,7 +116,7 @@
   Import "openstack_nova_services"
 
   <Module "openstack_nova_services">
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     MaxRetries "3"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
@@ -129,7 +129,7 @@
 
   <Module "openstack_compute">
     CpuAllocationRatio "{{ nova_cpu_allocation_ratio }}"
-    KeystoneUrl "{{ keystone_service_internaluri }}/v2.0"
+    KeystoneUrl "{{ keystone_service_internaluri }}"
     Password "{{ monitoring_user_password }}"
     Tenant "{{ monitoring_tenant_name }}"
     Timeout "5"

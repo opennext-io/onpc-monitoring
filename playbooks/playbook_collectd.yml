@@ -64,7 +64,7 @@
     # Copy all python modules in place
     - name: collectd-configure | Copy python modules
       copy:
-        src: files/collectd-modules
+        src: ../files/collectd-modules
         dest: "{{ collectd_plugins_dir }}"
       notify: collectd restart
       tags: [collectd-modules]

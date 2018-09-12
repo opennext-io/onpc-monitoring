@@ -36,7 +36,7 @@
           - src: "/openstack/log/{{ inventory_hostname }}-grafana"
             dest: "{{ grafana_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-    - name: Create DB for service
+    - name: Create DB for the service
       mysql_db:
         login_user: "{{ galera_root_user }}"
         login_password: "{{ galera_root_password }}"
@@ -79,7 +79,7 @@
       tags: [grafana-dashboard]
     - name: Copy selected dashboards
       copy:
-        src: "grafana-dashboards/{{ item.name }}.json"
+        src: "../grafana-dashboards/{{ item.name }}.json"
         dest: "/tmp/dashboards/{{ item.name }}.json"
       with_items: "{{ onpc_grafana_dashboards }}"
       delegate_to: localhost

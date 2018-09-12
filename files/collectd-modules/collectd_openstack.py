@@ -80,17 +80,27 @@ class OSClient(object):
         data = json.dumps({
             "auth":
             {
-                'tenantName': self.tenant_name,
-                'passwordCredentials':
-                {
-                    'username': self.username,
-                    'password': self.password
+                "identity": {
+                    "methods": ["password"],
+                    "password": {
+                        "user": {
+                            "name": self.username,
+                            "domain": { "id": "default" },
+                            "password": self.password
+                        }
+                    }
+                },
+                "scope": {
+                    "project": {
+                        "name": self.tenant_name,
+                        "domain": { "id": "default" }
+                    }
                 }
-            }
+            }    
         })
         self.logger.info("Trying to get token from '%s'" % self.keystone_url)
         r = self.make_request('post',
-                              '%s/tokens' % self.keystone_url, data=data,
+                              '%s/v3/auth/tokens' % self.keystone_url, data=data,
                               token_required=False)
         if not r:
             raise KeystoneException("Cannot get a valid token from %s" %
@@ -102,44 +112,31 @@ class OSClient(object):
 
         data = r.json()
         self.logger.debug("Got response from Keystone: '%s'" % data)
-        self.token = data['access']['token']['id']
-        self.tenant_id = data['access']['token']['tenant']['id']
+        self.token = r.headers['X-Subject-Token'] 
+        self.logger.debug("Got token '%s'" % self.token)
+        self.tenant_id = data['token']['project']['id']
         self.valid_until = dateutil.parser.parse(
-            data['access']['token']['expires']) - self.EXPIRATION_TOKEN_DELTA
+            data['token']['expires_at']) - self.EXPIRATION_TOKEN_DELTA
         self.service_catalog = []
-        for item in data['access']['serviceCatalog']:
+        for item in data['token']['catalog']:
             endpoint = False
-            if self.region:
-                for e in item['endpoints']:
-                    if self.region == e['region']:
-                        endpoint = e
-                if not endpoint:
-                    continue
-            else:
-                # If no region is defined, I guess we'll just keep the old
-                # behavior of picking the first one.
-                endpoint = item['endpoints'][0]
+	    for e in item['endpoints']:
+		if self.region and self.region == e['region'] and e['interface'] == 'internal':
+		    endpoint = e
+	    if not endpoint:
+		continue
 
-            if 'internalURL' not in endpoint and 'publicURL' not in endpoint:
-                self.logger.warning(
-                    "Skipping service '{}' with no valid URL".format(
-                        endpoint["name"]
-                    )
-                )
-                continue
-
-            self.service_catalog.append({
-                'name': item['name'],
-                'region': endpoint['region'],
-                'url': endpoint.get('internalURL', endpoint.get('publicURL')),
-            })
+	    self.service_catalog.append({
+		'name': item['name'],
+		'region': endpoint['region'],
+		'url': endpoint['url']
+	    })
 
             self.logger.debug("Stored service endpoint '{}'".format(
                 self.service_catalog[-1]
             )
             )
 
-        self.logger.debug("Got token '%s'" % self.token)
         return self.token
 
     def make_request(self, verb, url, data=None, token_required=True,

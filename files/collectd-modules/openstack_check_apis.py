@@ -38,13 +38,13 @@ class APICheckPlugin(openstack.CollectdPlugin):
         'keystone':
             {'path': '', 'expect': [300], 'name': 'keystone'},
         'heat':
-            {'path': 'build_info', 'expect': [200], 'name': 'heat', 'auth': True},
+            {'path': '/', 'expect': [300], 'name': 'heat', 'auth': True},
         'heat-cfn':
             {'path': '/', 'expect': [300], 'name': 'heat-cfn'},
         'glance':
-            {'path': '', 'expect': [300], 'name': 'glance'},
+            {'path': 'healthcheck', 'expect': [200], 'name': 'glance'},
         'cinder':
-            {'path': 'limits', 'expect': [200], 'name': 'cinder', 'auth': True},
+            {'path': '/', 'expect': [300], 'name': 'cinder', 'auth': True},
         'cinderv2':
             {'path': 'limits', 'expect': [200], 'name': 'cinderv2', 'auth': True},
         'cinderv3':
@@ -61,7 +61,9 @@ class APICheckPlugin(openstack.CollectdPlugin):
         'swift_s3':
             { 'path': 'healthcheck', 'expect': [200], 'name': 'swift-s3'},
         'placement':
-            { 'path': '', 'expect': [200], 'name': 'placement', 'auth': True}
+            { 'path': '', 'expect': [200], 'name': 'placement', 'auth': True},
+        'magnum':
+            { 'path': '', 'expect': [200], 'name': 'magnum'}
     }
 
     def __init__(self, *args, **kwargs):
@@ -73,7 +75,6 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     def compose_service_url(self, endpoint, path):
         u = urlparse(endpoint)
-        # Dirty hack to handle the case of heat-cfn api
         if path == '/':
             url = '%s://%s' % (u.scheme, u.netloc)
         else:
