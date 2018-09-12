@@ -49,7 +49,7 @@ class CinderServiceStatsPlugin(openstack.CollectdPlugin):
         # State can be: 'up', 'down' or 'disabled'
         aggregated_workers = defaultdict(Counter)
 
-        for worker in self.iter_workers('cinder'):
+        for worker in self.iter_workers('cinderv3'):
             host = worker['host'].split('.')[0]
             service = self.cinder_re.sub('', worker['service'])
             state = worker['state']
