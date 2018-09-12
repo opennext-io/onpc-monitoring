@@ -56,3 +56,5 @@ onpc_grafana_dashboards:
     datasource: InfluxDB
   - name: openstack-swift-proxy-metrics
     datasource: InfluxDB
+  - name: ceph-metrics
+    datasource: InfluxDB
