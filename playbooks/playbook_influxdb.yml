@@ -65,7 +65,7 @@
       tags: [influxdb-install]
     - name: Drop in influxdb config file
       template:
-        src: templates/influxdb/influxdb.conf.j2
+        src: ../templates/influxdb/influxdb.conf.j2
         dest: /etc/influxdb/influxdb.conf
       tags: [influxdb-configure]
     - name: Enable and restart influxdb

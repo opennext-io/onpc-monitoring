@@ -45,11 +45,11 @@
         - wget
       tags: [influxdb-relay_dependencies]
     - name: Install GOLang
-      script: files/influxdb_relay/deploy_go.sh
+      script: ../files/influxdb_relay/deploy_go.sh
       changed_when: false
       tags: [influxdb-relay_depedencencies]
     - name: Download and install influx-relay
-      script: files/influxdb_relay/deploy_influxdbrelay.sh
+      script: ../files/influxdb_relay/deploy_influxdbrelay.sh
       changed_when: false
       tags: [influxdb-relay_install]
     - name: Drop influx relay toml file
