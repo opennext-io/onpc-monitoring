@@ -53,9 +53,4 @@
     - name: Telegraf restart
       service: name=telegraf state=restarted
 
-  vars_files:
-    - ../vars/main.yml
-    - ../vars/telegraf.yml
-    - ../vars/influxdb.yml
-    - ../vars/collectd.yml
 

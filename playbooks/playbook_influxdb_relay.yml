@@ -81,7 +81,3 @@
         - "'influxdb_relay' in group_names"
         - "groups['influxdb_relay'] | length > 1"
       tags: [influxdb-relay_enable_haproxy]
-
-  vars_files:
-    - ../vars/main.yml
-    - ../vars/influxdb.yml

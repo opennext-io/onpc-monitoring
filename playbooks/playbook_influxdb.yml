@@ -122,7 +122,3 @@
   handlers:
     - name: InfluxDB restart
       service: name=influxdb state=restarted
-
-  vars_files:
-    - ../vars/main.yml
-    - ../vars/influxdb.yml

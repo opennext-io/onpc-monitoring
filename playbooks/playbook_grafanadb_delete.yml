@@ -32,6 +32,3 @@
         login_host: "{{ galera_address|default('127.0.0.1') }}"
         name: "{{ grafana_db_name }}"
         state: "absent"
-
-  vars_files:
-    - ../vars/grafana.yml

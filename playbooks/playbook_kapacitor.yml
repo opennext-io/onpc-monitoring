@@ -50,12 +50,3 @@
       with_fileglob:
         - "../files/kapacitor/utils/*.sh"
       tags: [kapacitor-utils]
-
-  vars_files:
-    - ../vars/main.yml
-    - ../vars/influxdb.yml
-    - ../vars/kapacitor.yml
-    - ../vars/kapacitor_tasks.yml
-    - ../vars/kapacitor_templates.yml
-    - ../vars/kapacitor_handlers.yml
-

@@ -116,6 +116,3 @@
         - "groups['grafana'] | length > 1"
       tags: [grafana-enable-haproxy]
 
-  vars_files:
-    - ../vars/grafana.yml
-    - ../vars/influxdb.yml
