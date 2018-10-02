@@ -1,0 +1,51 @@
+---
+# Copyright 2018, OpenNect SAS
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Deploy Sensu Server
+  hosts: "sensu_all"
+  gather_facts: true
+  user: root
+  environment: "{{ onpc_environment_variables | default({}) }}"
+  pre_tasks:
+    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+      vars:
+        log_dirs:
+          - src: "/openstack/log/{{ inventory_hostname }}-sensu"
+            dest: "{{ sensu_logs_dir }}"
+    - include: /opt/openstack-ansible/playbooks/common-tasks/rabbitmq-vhost-user.yml
+      static: no
+      vars:
+        user: "{{ rabbitmq_sensu_user_name }}"
+        password: "{{ rabbitmq_sensu_password }}"
+        vhost: "{{ rabbitmq_sensu_vhost }}"
+        _rabbitmq_host_group: "{{ rabbitmq_sensu_host_group }}"
+      when:
+        - inventory_hostname == groups['sensu_all'][0]
+        - groups[rabbitmq_sensu_host_group] | length > 0
+    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+   
+  roles:
+    - role: sensu.sensu
+      sensu_master: true
+      rabbitmq_server: true
+      rabbitmq_host: "{{ sensu_rabbitmq_host }}"
+      rabbitmq_port: "{{ sensu_rabbitmq_port }}"
+      rabbitmq_sensu_user_name: "{{ sensu_rabbitmq_user_name }}"
+      rabbitmq_sensu_password: "{{ sensu_rabbitmq_user_password }}"
+      rabbitmq_sensu_vhost: "{{ sensu_rabbitmq_vhost }}"
+      redis_server: true
+      redis_host: "{{ sensu_redis_host }}"
+      redis_password: "{{ sensu_redis_passord }}"

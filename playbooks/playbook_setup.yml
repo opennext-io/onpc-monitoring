@@ -53,7 +53,7 @@
         login_project_name: "{{ keystone_admin_tenant_name }}"
         user_name: "{{ monitoring_user_name }}"
         tenant_name: "{{ monitoring_tenant_name }}"
-        password: "{{ monitoring_user_password }}"
+        password: "{{ monitoring_user_password_secret }}"
         insecure: "{{ keystone_service_adminuri_insecure }}"
       register: add_service
       until: add_service|success

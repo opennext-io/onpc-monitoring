@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy kapacitor
+- name: Deploy Kapacitor
   hosts: "kapacitor"
   gather_facts: true
   user: root

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Delete Grafana DB
-  hosts: "galera"
+  hosts: "galera[0]"
   gather_facts: true
   user: root
   tasks:

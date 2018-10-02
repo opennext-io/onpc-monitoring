@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy grafana
-  hosts: "grafana "
+- name: Deploy Grafana
+  hosts: "grafana_all"
   gather_facts: true
   user: root
   environment: "{{onpc_environment_variables }}"

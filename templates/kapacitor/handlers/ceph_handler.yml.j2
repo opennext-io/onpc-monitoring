@@ -6,4 +6,12 @@ id: "{{ ceph_handler_id }}"
 kind: publish
 options:
   topics:
+{% if slack_alerts_enabled | to_json %}
     - slack
+{% endif %}
+{% if sensu_alerts_enabled | to_json %}
+    - sensu
+{% endif %}
+{% if kapacitor_log_alerts_enabled | to_json %}
+{%  - log %}
+{% endif %}
