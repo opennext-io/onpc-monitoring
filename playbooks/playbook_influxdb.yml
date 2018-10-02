@@ -19,7 +19,7 @@
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
-  tasks:
+  pre_tasks:
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_admin-back
@@ -47,6 +47,9 @@
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
             dest: "{{ influxdb_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+
+  # This tasks shoud be moved into a role...  
+  tasks:  
     - name: Import InfluxDB GPG signing key 
       apt_key:
         url: "https://repos.influxdata.com/influxdb.key"
@@ -101,7 +104,16 @@
         - "GRANT ALL ON {{ influxdb_db_name }} TO {{ influxdb_db_metric_user }}"
       when: result.stdout.find(influxdb_db_name) == -1
       tags: [influxdb-configure]
-      notify: InfluxDB restart 
+      notify: InfluxDB restart
+  
+  roles:
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: influxdb_log_rotate
+      rsyslog_client_log_dir: "{{ influxdb_logs_dir }}"
+      rsyslog_client_config_name: "99-influxdb-rsyslog-client.conf"
+      tags: [influxdb-rsyslog]
+
+  post_tasks:
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_admin-back

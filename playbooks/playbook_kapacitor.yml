@@ -34,6 +34,11 @@
   
   roles:
     - role: kapacitor
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: kapacitor_log_rotate
+      rsyslog_client_log_dir: "{{ kapacitor_logs_dir }}"
+      rsyslog_client_config_name: "99-kapacitor-rsyslog-client.conf"
+      tags: [kapacitor-rsyslog]
 
   post_tasks:
     - name: Create utils directory 

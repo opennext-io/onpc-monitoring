@@ -66,7 +66,12 @@
       http_proxy: "{{ onpc_environment_variables.http_proxy }}"
       https_proxy: "{{ onpc_environment_variables.https_proxy }}"
       no_proxy: "{{ onpc_environment_variables.no_proxy }}"
-      tags: [grafana-install] 
+      tags: [grafana-install]
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: grafana_log_rotate
+      rsyslog_client_log_dir: "{{ grafana_logs_dir }}"
+      rsyslog_client_config_name: "99-grafana-rsyslog-client.conf"
+      tags: [grafana-rsyslog]
   
   post_tasks:
     - name: Create local grafana dashboard directory

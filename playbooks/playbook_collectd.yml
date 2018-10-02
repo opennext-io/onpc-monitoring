@@ -59,7 +59,12 @@
         mode: 0664
 
   roles:
-    - collectd
+    - role: collectd
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: collectd_log_rotate
+      rsyslog_client_log_dir: "{{ collectd_logs_dir }}"
+      rsyslog_client_config_name: "99-collectd-rsyslog-client.conf"
+      tags: [collectd-rsyslog]
 
   post_tasks:
     # Copy all python modules in place

@@ -32,6 +32,11 @@
   roles:
     - role: telegraf
       tags: [telegraf-install]
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: telegraf_log_rotate
+      rsyslog_client_log_dir: "{{ telegraf_logs_dir }}"
+      rsyslog_client_config_name: "99-telegraf-rsyslog-client.conf"
+      tags: [telegraf-rsyslog]
   
   post_tasks:
     # Use post tasks to install plugins

@@ -49,3 +49,8 @@
       redis_server: true
       redis_host: "{{ sensu_redis_host }}"
       redis_password: "{{ sensu_redis_passord }}"
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: sensu_log_rotate
+      rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
+      rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
+      tags: [sensu-rsyslog]
