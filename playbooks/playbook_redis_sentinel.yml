@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy Redis cluster for Sensu
-  hosts: "redis"
+- name: Deploy Redis Sentinel cluster
+  hosts: "sentinel"
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
@@ -23,23 +23,22 @@
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
-          - src: "/openstack/log/{{ inventory_hostname }}-redis"
+          - src: "/openstack/log/{{ inventory_hostname }}-redis_sentinel"
             dest: "{{ redis_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   roles:
     - role: redis
-      when:
-        - "'redis' in group_names"
-        - inventory_hostname == groups['redis'][0]
-    - role: redis
-      redis_slaveof: "{{ hostvars[groups['redis'][0]]['ansible_host'] }} {{ redis_port }}"
-      when:
-        - "'redis' in group_names"
-        - inventory_hostname != groups['redis'][0]
+      redis_sentinel: true
+      redis_sentinel_monitors:
+        - name: "{{ groups['redis'][0] }}"
+          host: "{{ hostvars[groups['redis'][0]]['ansible_host'] }}"
+          port: "{{ redis_port }}"
+          quorum: 2
     - role: "rsyslog_client"
-      rsyslog_client_log_rotate_file: redis_log_rotate
+      rsyslog_client_log_rotate_file: redis_sentinel_log_rotate
       rsyslog_client_log_dir: "{{ redis_logs_dir }}"
-      rsyslog_client_config_name: "99-redis-rsyslog-client.conf"
-      tags: [redis-rsyslog]
+      rsyslog_client_config_name: "99-redis-sentinel-rsyslog-client.conf"
+      tags: [redis_sentinel-rsyslog]
+
 
       
