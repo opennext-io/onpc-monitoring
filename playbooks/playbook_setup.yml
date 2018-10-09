@@ -59,6 +59,7 @@
       until: add_service|success
       retries: 5
       delay: 10
+      no_log: true
 
       # Add a role to the user
     - name: Ensure monitoring user to admin role
@@ -76,6 +77,7 @@
       until: add_service|success
       retries: 5
       delay: 10
+      no_log: true
 
 - name: Give monitoring user permissions on rabbitmq vhosts
   hosts: rabbitmq[0]

@@ -25,6 +25,7 @@
         login_host: "{{ galera_address|default('127.0.0.1') }}"
         name: "{{ grafana_db_user }}"
         state: "absent"
+      no_log: true
     - name: Delete Grafana DB
       mysql_db:
         login_user: "{{ galera_root_user }}"
@@ -32,3 +33,4 @@
         login_host: "{{ galera_address|default('127.0.0.1') }}"
         name: "{{ grafana_db_name }}"
         state: "absent"
+      no_log: true

@@ -32,6 +32,7 @@
         password: "{{ sensu_rabbitmq_user_password }}"
         vhost: "{{ sensu_rabbitmq_vhost }}"
         _rabbitmq_host_group: "{{ sensu_rabbitmq_host_group }}"
+      no_log: true
       when:
         - "inventory_hostname == groups['sensu'][0]"
         - "groups[rabbitmq_sensu_host_group] | length > 0"
@@ -40,6 +41,7 @@
     - role: sensu
       sensu_master: true
       rabbitmq_server: false
+      rabbitmq_enable_ssl: "{{ sensu_rabbitmq_enable_ssl }}"
       rabbitmq_host: "{{ sensu_rabbitmq_host }}"
       rabbitmq_port: "{{ sensu_rabbitmq_port }}"
       rabbitmq_sensu_user_name: "{{ sensu_rabbitmq_user_name }}"
