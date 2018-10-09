@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy Sensu Cluster
-  hosts: "sensu_all"
+  hosts: "sensu_masters"
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
@@ -33,13 +33,9 @@
         vhost: "{{ sensu_rabbitmq_vhost }}"
         _rabbitmq_host_group: "{{ sensu_rabbitmq_host_group }}"
       when:
-        - "inventory_hostname == groups['sensu_all'][0]"
+        - "inventory_hostname == groups['sensu'][0]"
         - "groups[rabbitmq_sensu_host_group] | length > 0"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-    - debug:
-      - var: inventory_hostname
-    - debug:
-      - var: groups['sensu_all'][0]
   roles:
     - role: sensu
       sensu_master: true
@@ -53,7 +49,17 @@
       redis_host: "{{ sensu_redis_host }}"
       redis_password: "{{ sensu_redis_passord }}"
       when:
-        - "inventory_hostname == groups['sensu_all'][0]"
+        - "'sensu' in group_names"
+    - role: "rsyslog_client"
+      rsyslog_client_log_rotate_file: sensu_log_rotate
+      rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
+      rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
+      tags: [sensu-rsyslog]
+- name: Deploy Sensu Client
+  hosts: "hosts:kapacitor"
+  gather_facts: true
+  user: root
+  roles:
     - role: sensu
       sensu_master: false
       rabbitmq_server: false
@@ -65,9 +71,6 @@
       redis_server: false
       redis_host: "{{ sensu_redis_host }}"
       redis_password: "{{ sensu_redis_passord }}"
-      when:
-        - "'sensu' in group_names"
-        - "inventory_hostname != groups['sensu_all'][0]"
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
