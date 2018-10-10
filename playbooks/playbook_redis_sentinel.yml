@@ -32,7 +32,7 @@
       redis_sentinel_monitors:
         - name: "{{ redis_master }}"
           host: "{{ hostvars[groups['redis'][0]]['ansible_host'] }}"
-          port: "{{ ansible_local.redis.port }}"
+          port: "{{ redis_port }}"
           quorum: 2
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: redis_sentinel_log_rotate
