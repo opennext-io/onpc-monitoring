@@ -24,15 +24,15 @@
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-redis_sentinel"
-            dest: "{{ redis_logs_dir }}"
+            dest: "{{ redis_sentinel_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   roles:
     - role: redis
       redis_sentinel: true
       redis_sentinel_monitors:
-        - name: "{{ groups['redis'][0] }}"
+        - name: "{{ redis_master }}"
           host: "{{ hostvars[groups['redis'][0]]['ansible_host'] }}"
-          port: "{{ redis_port }}"
+          port: "{{ ansible_local.redis.port }}"
           quorum: 2
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: redis_sentinel_log_rotate
