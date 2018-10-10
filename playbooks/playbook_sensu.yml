@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy Sensu Cluster
-  hosts: "sensu_masters"
+  hosts: "sensu"
   gather_facts: true
   user: root
   environment: "{{ onpc_environment_variables | default({}) }}"
@@ -49,7 +49,6 @@
       rabbitmq_sensu_vhost: "{{ sensu_rabbitmq_vhost }}"
       redis_server: false
       redis_host: "{{ sensu_redis_host }}"
-      redis_password: "{{ sensu_redis_passord }}"
       when:
         - "'sensu' in group_names"
     - role: "rsyslog_client"
@@ -72,7 +71,6 @@
       rabbitmq_sensu_vhost: "{{ sensu_rabbitmq_vhost }}"
       redis_server: false
       redis_host: "{{ sensu_redis_host }}"
-      redis_password: "{{ sensu_redis_passord }}"
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
