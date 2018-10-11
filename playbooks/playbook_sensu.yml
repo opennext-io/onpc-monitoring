@@ -40,6 +40,7 @@
   roles:
     - role: sensu
       sensu_master: true
+      sensu_include_dashboard: true
       rabbitmq_server: false
       rabbitmq_enable_ssl: "{{ sensu_rabbitmq_enable_ssl }}"
       rabbitmq_host: "{{ sensu_rabbitmq_host }}"
