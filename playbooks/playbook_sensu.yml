@@ -66,6 +66,7 @@
     - role: sensu
       sensu_master: false
       rabbitmq_server: false
+      rabbitmq_enable_ssl: "{{ sensu_rabbitmq_enable_ssl }}"
       rabbitmq_host: "{{ sensu_rabbitmq_host }}"
       rabbitmq_port: "{{ sensu_rabbitmq_port }}"
       rabbitmq_sensu_user_name: "{{ sensu_rabbitmq_user_name }}"
