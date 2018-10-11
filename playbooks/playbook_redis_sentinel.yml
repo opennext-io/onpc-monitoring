@@ -30,7 +30,7 @@
     - role: redis
       redis_sentinel: true
       redis_sentinel_monitors:
-        - name: "{{ redis_master }}"
+        - name: "{{ redis_master_name }}"
           host: "{{ hostvars[groups['redis'][0]]['ansible_host'] }}"
           port: "{{ redis_port }}"
           quorum: 2
