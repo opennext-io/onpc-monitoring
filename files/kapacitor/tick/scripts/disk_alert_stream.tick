@@ -39,8 +39,9 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/disk')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "path" }} vdisk space in use is {{ index .Fields "stat" | printf "%0.2f" }}%')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/disk')
+    .id('disk-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Disk usage for "{{ index .Tags "path" }}" = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)

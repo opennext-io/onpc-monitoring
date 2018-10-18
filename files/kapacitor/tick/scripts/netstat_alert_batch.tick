@@ -48,8 +48,9 @@ var data = tcp_close_wait
 
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
-    .message('{{ .ID }}: [{{ .Level }}] tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
+    .id('netstat-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
     .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= info)
     .warn(lambda: "tcp_established.value" >= warn OR "tcp_time_wait.value" >= warn OR "tcp_close_wait.value" >= warn)
     .crit(lambda: "tcp_established.value" >= crit OR "tcp_time_wait.value" >= crit OR "tcp_close_wait.value" >= crit)

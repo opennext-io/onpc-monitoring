@@ -64,7 +64,7 @@ var data = bytes_recv
 
 var alert = data
   |alert()
-    .id('{{ index .Tags "host"}}/net_stats')
+    .id('net_stats-alert')
     .message('{{ .ID }}: bytes_sent:{{ index .Fields "bytes_sent.value"}} bytes_recv:{{ index .Fields "bytes_recv.value"}} max_speed:{{ index .Fields "max_speed.value" }}')
     .info(lambda: "bytes_recv.value"+"bytes_sent.value" > "max_speed.value"*0.125*1000000.0*info)
     .warn(lambda: "bytes_recv.value"+"bytes_sent.value" > "max_speed.value"*0.125*1000000.0*warn)

@@ -13,8 +13,8 @@
 //
 
 // Parameters
-var info = 0.0
-var warn = 25.0
+var info = 100.0
+var warn = 75.0
 var crit = 50.0
 
 // Dataframe
@@ -29,25 +29,26 @@ var in = rawdata
   |last('num_in_osds')
     .as('value')
 
-var total = rawdata
-  |last('num_osds')
+var up = rawdata
+  |last('num_up_osds')
     .as('value')
 
 var data = in
-  |join(total)
-    .as('in', 'total')
+  |join(up)
+    .as('in', 'up')
 
 // Thresholds
 var alert = data 
-  |eval(lambda: float("in.value") / float("total.value") * 100.0)
+  |eval(lambda: float("up.value") / float("in.value") * 100.0)
     .as('stat')
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd_out')
-    .message('{{ .ID }}: [{{ .Level }}] Count of Ceph OSDs out is {{ index .Fields "stat" | printf "%0.2f" }}%')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd/cluster_status')
+    .id('ceph-osd-up-alert')
+    .message('{{ .ID }}: [{{ .Level }}] Ceph OSDs cluster UP = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" <= info)
     .warn(lambda: "stat" <= warn)
     .crit(lambda: "stat" <= crit)
     .topic('ceph')
-//  .log('/var/log/kapacitor/ceph_osd_out_alert.log')
+//  .log('/var/log/kapacitor/ceph_osd_up_alert.log')
     
     

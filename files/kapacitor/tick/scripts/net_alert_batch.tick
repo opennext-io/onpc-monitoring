@@ -56,8 +56,9 @@ var data = err_in
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/net')
-    .message('{{ .ID }}: [{{ .Level }}] err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/net')
+    .id('network-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
     .info(lambda: "err_in.value" > info OR "err_out.value" > info OR "drop_in.value" > info OR "drop_out.value" >= info)
     .warn(lambda: "err_in.value" > warn OR "err_out.value" > warn OR "drop_in.value" > warn OR "drop_out.value" >= warn)
     .crit(lambda: "err_in.value" > crit OR "err_out.value" > crit OR "drop_in.value" > crit OR "drop_out.value" >= crit)

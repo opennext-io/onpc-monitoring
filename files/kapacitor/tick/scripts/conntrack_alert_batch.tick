@@ -30,8 +30,9 @@ var data = batch
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
-    .message('{{ .ID }}: [{{ .Level }}] TCP connections in use is  {{ index .Fields "stat" | printf "%0.2f" }}%')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/conntrack')
+    .id('conntrack-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: TCP connections in use = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)

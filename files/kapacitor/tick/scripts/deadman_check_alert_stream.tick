@@ -25,8 +25,8 @@ stream
     .measurement('openstack_check_apis_value')
     .groupBy('instance', 'region')
   |deadman(1.0, 2m)
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "instance" }}/deadman_check')
-    .message('{{ .ID }}: [{{ .Level }}] Stopped receiving API checks from Collectd and/or Telegraf }}')
+    .id('collectd-deadman_checks-alert')
+    .message('{{ .ID }}: [{{ .Level }}] Stopped receiving service checks from Collectd {{ index .Tags "instance" }}')
     .topic('monitoring')
     .stateChangesOnly()
 

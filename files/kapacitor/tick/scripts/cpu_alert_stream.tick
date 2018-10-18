@@ -38,8 +38,9 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
-    .message('{{ .ID }}: [{{ .Level }}] Total CPU usage is {{ index .Fields "stat" | printf "%0.2f" }}%')
+//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/cpu')
+    .id('cpu-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: CPU usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
