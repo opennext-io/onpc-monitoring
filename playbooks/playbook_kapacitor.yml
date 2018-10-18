@@ -34,6 +34,16 @@
   
   roles:
     - role: kapacitor
+      kapacitor_sensu_alerts_handlers: "{{ sensu_alerts_handlers }}"
+      kapacitor_sensu_enabled: "{{ sensu_alerts_enabled }}"
+      kapacitor_slack_enabled: "{{ slack_alerts_enabled }}"
+      kapacitor_slack_channel: "{{ slack_alerts_channel }}"
+      kapacitor_slack_url: "{{ slack_webhooks_url }}"
+      kapacitor_tick_script_dir: "../files/kapacitor/tick/scripts"
+      kapacitor_tick_template_dir: "../files/kapacitor/tick/templates"
+      kapacitor_tick_var_dir: "../files/kapacitor/tick/vars"
+      kapacitor_tick_handler_dir: "../templates/kapacitor/handlers"
+      
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: kapacitor_log_rotate
       rsyslog_client_log_dir: "{{ kapacitor_logs_dir }}"
