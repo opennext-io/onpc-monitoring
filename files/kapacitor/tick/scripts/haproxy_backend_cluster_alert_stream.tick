@@ -55,7 +55,7 @@ var alert = data
         .as('stat')
     |alert()
  //     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "proxy" }}/cluster')
-      .id('{{ haproxy-backend-cluster-alert')
+      .id('haproxy-backend-cluster-alert')
       .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: Backend cluster availability = {{ index .Fields "stat" }}%')
       .info(lambda: "stat" <= info)
       .warn(lambda: "stat" <= warn)

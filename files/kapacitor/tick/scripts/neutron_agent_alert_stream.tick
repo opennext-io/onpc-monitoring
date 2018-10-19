@@ -27,7 +27,7 @@ stream
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/neutron/{{ index .Tags "instance" }}/state')
-    .id('{{ neutron-{{ index .Tags "instance" }}-alert')
+    .id('neutron-{{ index .Tags "instance" }}-alert')
     .message('{{ .ID }}: [{{ .Level }}] "{{ index .Tags "host" }}/{{ index .Tags "instance" }}: Agent state = "{{ index .Tags "type_instance" }}"')
     .warn(lambda: "stat" > 0)
     .topic('openstack')
