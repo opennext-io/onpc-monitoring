@@ -47,7 +47,7 @@ var alert = data
     .keep()
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/qtime')
-    .id('haproxy-backend-qtime-alert')
+    .id('haproxy-{{ index .Tags "proxy" }}-qtime-alert')
     .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: queue time = {{ index .Fields "stat" | printf "%0.2f" }} ms, stddev = {{ index .Fields "sigma" | printf "%0.2f" }}')
 //  Alarms on stddev is too noisy. Need to find a better way...
 //  .info(lambda: "sigma" >= infoSig OR "stat" >= info)

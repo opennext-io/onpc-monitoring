@@ -53,7 +53,7 @@ var alert = data
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions')
-    .id('haproxy-sessions-alert')
+    .id('haproxy-{{ index .Tags "proxy" }}-session-alert')
     .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "type" }}/{{index .Tags "proxy" }}: HAProxy sessions usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)

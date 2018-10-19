@@ -28,7 +28,7 @@ stream
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/state')
-    .id('haproxy-backend-state-alert')
+    .id('haproxy-{{ index .Tags "proxy" }}-state-alert')
     .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: Availability state = {{ index .Fields "stat" }}')
     .warn(lambda: "stat" != 'UP')
     .topic('haproxy')

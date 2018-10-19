@@ -48,7 +48,7 @@ var alert = data
     .keep()
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/rtime')
-    .id('haproxy-backend-rtime')
+    .id('haproxy-{{ index .Tags "proxy" }}-rtime-alert')
     .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: response time = {{ index .Fields "stat" | printf "%0.2f" }} ms, stddev = {{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
