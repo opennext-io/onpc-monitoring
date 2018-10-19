@@ -48,7 +48,7 @@ var alert = data
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}/qcur')
     .id('haproxy-{{ index .Tags "proxy" }}-qcur-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: queue size = {{ index .Fields "stat" | printf "%0.2f" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "proxy" }}: queue size = {{ index .Fields "stat" | printf "%0.2f" }}, stddev={{ index .Fields "sigma" | printf "%0.2f" }}')
     .info(lambda: "sigma" >= infoSig OR "stat" >= info)
     .warn(lambda: "sigma" >= warnSig OR "stat" >= warn)
     .crit(lambda: "sigma" >= critSig OR "stat" >= crit)

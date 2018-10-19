@@ -59,7 +59,7 @@ var alert = data
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/backend_errors')
     .id('haproxy-{{ index .Tags "proxy" }}-errors-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "proxy" }}: econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
     .info(lambda: "econ.value" >= info OR "dresp.value" >= info OR "eresp.value" >= info)
     .warn(lambda: "econ.value" >= warn OR "dresp.value" >= warn OR "eresp.value" >= warn)
     .crit(lambda: "econ.value" >= crit OR "dresp.value" >= crit OR "eresp.value" >= crit)

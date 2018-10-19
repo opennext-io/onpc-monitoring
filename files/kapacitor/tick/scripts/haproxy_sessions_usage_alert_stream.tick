@@ -54,7 +54,7 @@ var alert = data
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions')
     .id('haproxy-{{ index .Tags "proxy" }}-session-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "type" }}/{{index .Tags "proxy" }}: HAProxy sessions usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{index .Tags "proxy" }}: HAProxy sessions usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)

@@ -29,7 +29,7 @@ stream
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "proxy" }}/state')
       .id('haproxy-{{ index .Tags "proxy" }}-state-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: Availability state = {{ index .Fields "stat" }}')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "proxy" }}: Availability state = {{ index .Fields "stat" }}')
     .warn(lambda: "stat" != 'OPEN')
     .topic('haproxy')
  // .log('/var/log/kapacitor/haproxy_frontend_state_alert.log')
