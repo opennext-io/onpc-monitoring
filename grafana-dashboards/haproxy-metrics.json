@@ -59,7 +59,7 @@
   "gnetId": 1234,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1536754520217,
+  "iteration": 1539941941207,
   "links": [],
   "panels": [
     {
@@ -905,7 +905,7 @@
       "decimals": null,
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 24,
         "x": 0,
         "y": 8
@@ -917,7 +917,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -1026,10 +1026,10 @@
       "description": "Number of HTTP requests / sec",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 15
       },
       "id": 1,
       "interval": "1m",
@@ -1038,7 +1038,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -1184,7 +1184,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 23
       },
       "hideTimeOverride": false,
       "id": 38,
@@ -1313,7 +1313,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 35
       },
       "id": 20,
       "interval": "60s",
@@ -1801,7 +1801,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 44
       },
       "id": 19,
       "interval": "60s",
@@ -1923,7 +1923,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 53
       },
       "id": 2,
       "interval": "1m",
@@ -2081,7 +2081,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 61
       },
       "id": 18,
       "interval": "60s",
@@ -2090,7 +2090,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -2205,7 +2205,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 67
+        "y": 69
       },
       "id": 4,
       "interval": "1m",
@@ -2372,7 +2372,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 67
+        "y": 69
       },
       "id": 26,
       "interval": "1m",
@@ -2537,7 +2537,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 74
+        "y": 76
       },
       "id": 36,
       "panels": [],
@@ -2554,7 +2554,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 75
+        "y": 77
       },
       "id": 25,
       "links": [],
@@ -2710,7 +2710,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 86
+        "y": 88
       },
       "id": 43,
       "interval": "1m",
@@ -2832,7 +2832,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 93
+        "y": 95
       },
       "id": 30,
       "interval": "60s",
@@ -3320,7 +3320,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 102
+        "y": 104
       },
       "id": 31,
       "interval": "1m",
@@ -3442,7 +3442,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 113
+        "y": 115
       },
       "id": 5,
       "interval": "1m",
@@ -3596,7 +3596,7 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
@@ -3606,7 +3606,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 121
+        "y": 123
       },
       "id": 32,
       "interval": "1m",
@@ -3623,7 +3623,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
@@ -3722,177 +3722,14 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
-      "description": "Number of times a connection was retried",
-      "fill": 1,
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 128
-      },
-      "id": 27,
-      "interval": "1m",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null as zero",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$tag_proxy",
-          "application": {
-            "filter": ""
-          },
-          "dsType": "influxdb",
-          "functions": [],
-          "group": {
-            "filter": ""
-          },
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "proxy"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "host": {
-            "filter": ""
-          },
-          "item": {
-            "filter": ""
-          },
-          "measurement": "haproxy",
-          "mode": 0,
-          "options": {
-            "showDisabledItems": false
-          },
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"wretr\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "eresp"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "last"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "host",
-              "operator": "=~",
-              "value": "/^$host$/"
-            },
-            {
-              "condition": "AND",
-              "key": "proxy",
-              "operator": "=~",
-              "value": "/^$proxy$/"
-            },
-            {
-              "condition": "AND",
-              "key": "sv",
-              "operator": "=~",
-              "value": "/^$sv$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Backend connection retries rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 12,
-        "y": 128
+        "x": 0,
+        "y": 130
       },
+      "hideTimeOverride": true,
       "id": 33,
       "interval": "1m",
       "legend": {
@@ -4054,7 +3891,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 134
+        "y": 130
       },
       "id": 45,
       "interval": "1m",
@@ -4066,7 +3903,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
@@ -4208,140 +4045,20 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
-      "description": "Number of requests that encountered an error attempting to connect to a backend server",
-      "fill": 1,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 0,
-        "y": 135
-      },
-      "id": 6,
-      "interval": "1m",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "connected",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "$tag_proxy",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"econ\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Backend requests errors rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
-      "description": "Rate of requests whose responses yielded an error",
+      "description": "Number of times a connection was retried",
       "fill": 1,
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 140
+        "y": 136
       },
-      "id": 8,
+      "hideTimeOverride": false,
+      "id": 27,
       "interval": "1m",
       "legend": {
         "alignAsTable": true,
@@ -4351,16 +4068,15 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
-        "sortDesc": true,
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -4413,7 +4129,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"eresp\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "query": "SELECT non_negative_derivative(mean(\"wretr\"), 10s) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -4455,10 +4171,10 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Backend failed requests rate",
+      "title": "Backend connection retries rate",
       "tooltip": {
         "shared": true,
-        "sort": 1,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -4494,7 +4210,7 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
@@ -4504,8 +4220,9 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 140
+        "y": 136
       },
+      "hideTimeOverride": false,
       "id": 28,
       "interval": "1m",
       "legend": {
@@ -4516,12 +4233,12 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -4577,7 +4294,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"wredis\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(mean(\"wredis\"), 10s) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -4662,16 +4379,17 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
-      "description": "Responses denied due to security raisons (ACL-restricted)",
+      "description": "Number of requests that encountered an error attempting to connect to a backend server",
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 0,
-        "y": 147
+        "y": 143
       },
-      "id": 44,
-      "interval": "",
+      "hideTimeOverride": false,
+      "id": 6,
+      "interval": "1m",
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -4680,7 +4398,293 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_proxy",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT non_negative_derivative(mean(\"econ\"), 10s) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Backend requests errors rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "description": "Rate of requests whose responses yielded an error",
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 143
+      },
+      "id": 8,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_proxy",
+          "application": {
+            "filter": ""
+          },
+          "dsType": "influxdb",
+          "functions": [],
+          "group": {
+            "filter": ""
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "proxy"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "host": {
+            "filter": ""
+          },
+          "item": {
+            "filter": ""
+          },
+          "measurement": "haproxy",
+          "mode": 0,
+          "options": {
+            "showDisabledItems": false
+          },
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT non_negative_derivative(mean(\"eresp\"), 10s) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "eresp"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "proxy",
+              "operator": "=~",
+              "value": "/^$proxy$/"
+            },
+            {
+              "condition": "AND",
+              "key": "sv",
+              "operator": "=~",
+              "value": "/^$sv$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Backend failed requests rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 1,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "description": "Responses denied due to security raisons (ACL-restricted)",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 150
+      },
+      "id": 44,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
@@ -4741,7 +4745,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT non_negative_derivative(mean(\"dresp\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "query": "SELECT non_negative_derivative(mean(\"dresp\"), 1s) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -4829,10 +4833,10 @@
       "description": "Current number of requests unassigned in queue",
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 12,
-        "y": 147
+        "y": 150
       },
       "id": 13,
       "legend": {
@@ -4843,7 +4847,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
@@ -5170,5 +5174,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 2
+  "version": 5
 }

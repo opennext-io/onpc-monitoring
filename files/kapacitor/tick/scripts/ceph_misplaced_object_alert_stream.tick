@@ -13,7 +13,7 @@
 //
 
 // Parameters
-var info = 0.0
+var info = 5.0
 var warn = 25.0
 var crit = 50.0
 var period = 5m 
