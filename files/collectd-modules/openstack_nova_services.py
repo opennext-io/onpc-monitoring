@@ -67,7 +67,7 @@ class NovaServiceStatsPlugin(openstack.CollectdPlugin):
             }
 
         for service in set(aggregated_workers.keys()).union(
-                ('compute', 'scheduler', 'conductor', 'cert', 'consoleauth')):
+                ('compute', 'scheduler', 'conductor', 'consoleauth')):
 
             total = sum(aggregated_workers[service].values())
 
