@@ -18,7 +18,7 @@
   hosts: "grafana_all"
   gather_facts: true
   user: root
-  environment: "{{deployment_environment_variables | default({}) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     # Disable grafana haproxy backend to avoid false positive alerts.
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
@@ -65,9 +65,9 @@
 
   roles:
     - role: grafana
-      http_proxy: "{{ deployment_environment_variables.http_proxy | default("") }}"
-      https_proxy: "{{ deployment_environment_variables.https_proxy | default("") }}"
-      no_proxy: "{{ deployment_environment_variables.no_proxy | default("") }}"
+      http_proxy: "{{ deployment_environment_variables.http_proxy | default('') }}"
+      https_proxy: "{{ deployment_environment_variables.https_proxy | default('') }}"
+      no_proxy: "{{ deployment_environment_variables.no_proxy | default('') }}"
       tags: [grafana-install]
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: grafana_log_rotate
