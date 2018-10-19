@@ -17,7 +17,7 @@
   hosts: "sentinel"
   gather_facts: true
   user: root
-  environment: "{{ onpc_environment_variables | default({}) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml

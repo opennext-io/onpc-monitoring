@@ -17,7 +17,7 @@
   hosts: "influxdb_relay"
   gather_facts: true
   user: root
-  environment: "{{ onpc_environment_variables | default({}) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:

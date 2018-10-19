@@ -16,7 +16,7 @@
 - name: Deploy Collectd
   hosts: "collectd_all"
   user: root
-  environment: "{{ onpc_environment_variables | default({}) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - name: Install python pip
       package:
@@ -42,7 +42,7 @@
 - hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
   user: root
-  environment: "{{ onpc_environment_variables | default({}) }}"
+  environment: "{{ deployment_environment_variables | default({}) }}"
     
   pre_tasks:
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"

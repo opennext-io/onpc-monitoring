@@ -18,7 +18,7 @@
 #- name: Install required python pip packages
 #  hosts: collectd 
 #  user: root
-#  environment: "{{ onpc_environment_variables | default({}) }}"
+#  environment: "{{ deployment_environment_variables | default({}) }}"
 #  tasks:
 #    - name: Install python pip
 #      package:
