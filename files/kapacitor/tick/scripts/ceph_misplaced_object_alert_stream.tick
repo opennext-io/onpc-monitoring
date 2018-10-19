@@ -51,9 +51,9 @@ var alert = data
 //   .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd/misplaced_objects')
     .id('ceph-osd-misplaced-objects-alert')
     .message('{{ .ID }}: [{{ .Level }}] Ceph misplaced objects = {{ index .Fields "stat" | printf "%0.2f" }}%')
-    .info(lambda: "stat" <= info)
-    .warn(lambda: "stat" <= warn)
-    .crit(lambda: "stat" <= crit)
+    .info(lambda: "stat" >= info)
+    .warn(lambda: "stat" >= warn)
+    .crit(lambda: "stat" >= crit)
     .topic('ceph')
 //  .log('/var/log/kapacitor/ceph_misplaced_objects_alert.log')
     
