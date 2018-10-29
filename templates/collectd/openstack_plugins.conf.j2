@@ -21,10 +21,8 @@
 
   <Module "openstack_check_apis">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -33,10 +31,8 @@
 
   <Module "openstack_cinder">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -45,10 +41,8 @@
 
   <Module "openstack_cinder_services">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -57,10 +51,8 @@
 
   <Module "openstack_glance">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -69,10 +61,8 @@
 
   <Module "openstack_keystone">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -81,10 +71,8 @@
 
   <Module "openstack_neutron">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -93,10 +81,8 @@
 
   <Module "openstack_neutron_agents">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -105,10 +91,8 @@
 
   <Module "openstack_nova">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -117,10 +101,8 @@
 
   <Module "openstack_nova_services">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    MaxRetries "3"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>
@@ -132,7 +114,6 @@
     KeystoneUrl "{{ keystone_service_internaluri }}"
     Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
-    Timeout "5"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
   </Module>

@@ -61,7 +61,7 @@ class CinderStatsPlugin(openstack.CollectdPlugin):
 
     def itermetrics(self):
 
-        def groupby(d):
+        def groupby(d):          
             return d.get('status', 'unknown').lower()
 
         def count_size_bytes(d):

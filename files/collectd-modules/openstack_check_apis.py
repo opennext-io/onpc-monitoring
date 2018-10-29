@@ -33,10 +33,10 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     states = {0: 'okay', 1: 'failed', 2: 'unknown'}
 
-    # TODO(all): sahara, murano
+    # TODO all other OSA standard services i.e. sahara, murano, ...
     CHECK_MAP = {
         'keystone':
-            {'path': '', 'expect': [300], 'name': 'keystone'},
+            {'path': '', 'expect': [200], 'name': 'keystone'},
         'heat':
             {'path': '/', 'expect': [300], 'name': 'heat', 'auth': True},
         'heat-cfn':
@@ -70,8 +70,8 @@ class APICheckPlugin(openstack.CollectdPlugin):
         super(APICheckPlugin, self).__init__(*args, **kwargs)
         self.plugin = PLUGIN_NAME
         self.interval = INTERVAL
-        self.timeout = 2
-        self.max_retries = 1
+        self.timeout = 20
+        self.max_retries = 3
 
     def compose_service_url(self, endpoint, path):
         u = urlparse(endpoint)

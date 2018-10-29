@@ -98,12 +98,12 @@ class OSClient(object):
                 }
             }    
         })
-        self.logger.info("Trying to get token from '%s'" % self.keystone_url)
+        self.logger.info("Trying to get token from '%s/v3/auth/tokens'" % self.keystone_url)
         r = self.make_request('post',
                               '%s/v3/auth/tokens' % self.keystone_url, data=data,
                               token_required=False)
         if not r:
-            raise KeystoneException("Cannot get a valid token from %s" %
+            raise KeystoneException("Cannot get a valid token from %s/v3/auth/tokens" %
                                     self.keystone_url)
 
         if r.status_code < 200 or r.status_code > 299:
@@ -111,7 +111,7 @@ class OSClient(object):
                                     (self.keystone_url, r.status_code))
 
         data = r.json()
-        self.logger.debug("Got response from Keystone: '%s'" % data)
+        self.logger.info("Got response from Keystone: '%s'" % data)
         self.token = r.headers['X-Subject-Token'] 
         self.logger.debug("Got token '%s'" % self.token)
         self.tenant_id = data['token']['project']['id']
@@ -187,7 +187,7 @@ class CollectdPlugin(base.Base):
         # The timeout/max_retries are defined according to the observations on
         # 200 nodes environments with 600 VMs. See #1554502 for details.
         self.timeout = 20
-        self.max_retries = 2
+        self.max_retries = 3
         self.username = None
         self.password = None
         self.tenant_name = None
@@ -204,9 +204,6 @@ class CollectdPlugin(base.Base):
     def _build_url(self, service, resource):
         s = (self.get_service(service) or {})
         url = s.get('url')
-        # V3 API must be used in order to obtain keystone data in multi-domain envs
-        if service == 'keystone' and (resource in ['projects', 'users', 'roles']):
-            url += '/v3/'
         if url:
             if url[-1] != '/':
                 url += '/'
