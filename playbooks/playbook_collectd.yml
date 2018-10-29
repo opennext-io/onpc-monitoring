@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy Collectd
-  hosts: "collectd_all"
+  hosts: "collectd"
   user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
@@ -38,6 +38,11 @@
         - python_dateutil
         - requests
         - simplejson
+    - name: Create log directory 
+      file:
+        path: "{{ collectd_logs_dir }}"
+        state: directory
+        mode: 0664
 
 - hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
@@ -52,11 +57,6 @@
           - src: "/openstack/log/{{ inventory_hostname }}-collectd"
             dest: "{{ collectd_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-    - name: Create log directory 
-      file:
-        path: "{{ collectd_logs_dir }}"
-        state: directory
-        mode: 0664
 
   roles:
     - role: collectd
