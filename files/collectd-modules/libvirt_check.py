@@ -43,7 +43,7 @@ class LibvirtCheckPlugin(base.Base):
     def read_callback(self):
         try:
             cnx = libvirt.openReadOnly(self.uri)
-            cnx.numOfDefinedDomains()
+            cnx.numOfDomains()
             self.dispatch_check_metric(self.OK)
         except libvirt.libvirtError as e:
             msg = 'Fail to query libvirt ({}): {}'.format(self.uri, e)

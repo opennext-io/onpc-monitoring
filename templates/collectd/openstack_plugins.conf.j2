@@ -31,7 +31,7 @@
 
   <Module "openstack_cinder">
     KeystoneUrl "{{ keystone_service_internaluri }}"
-    Password "{{ monitoring_user_password_secret_secret }}"
+    Password "{{ monitoring_user_password_secret }}"
     Tenant "{{ monitoring_tenant_name }}"
     Username "{{ monitoring_user_name }}"
     Region "{{ service_region }}"
