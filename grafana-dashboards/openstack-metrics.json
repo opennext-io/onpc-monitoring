@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1540880172183,
+  "iteration": 1540896954979,
   "links": [],
   "panels": [
     {
@@ -1169,7 +1169,7 @@
       "colorValue": false,
       "colors": [
         "#299c46",
-        "rgba(237, 129, 40, 0.89)",
+        "#bf1b00",
         "#d44a3a"
       ],
       "datasource": "${DS_INFLUXDB}",
@@ -1283,18 +1283,8 @@
         },
         {
           "op": "=",
-          "text": "WARN",
-          "value": "1"
-        },
-        {
-          "op": "=",
           "text": "FAIL",
-          "value": "2"
-        },
-        {
-          "op": "=",
-          "text": "UNKN",
-          "value": "3"
+          "value": "1"
         }
       ],
       "valueName": "avg"
@@ -5670,5 +5660,5 @@
   "timezone": "browser",
   "title": "OpenStack Metrics",
   "uid": "OwRmDQzik",
-  "version": 6
+  "version": 7
 }

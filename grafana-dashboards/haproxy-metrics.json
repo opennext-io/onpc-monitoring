@@ -59,7 +59,7 @@
   "gnetId": 1234,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1539941941207,
+  "iteration": 1540889182609,
   "links": [],
   "panels": [
     {
@@ -445,7 +445,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
+        "w": 5,
         "x": 13,
         "y": 1
       },
@@ -551,7 +551,7 @@
         "#bf1b00"
       ],
       "datasource": "${DS_INFLUXDB}",
-      "decimals": 2,
+      "decimals": 0,
       "description": "Frontend requests errors 1m rate of change over the last15 minutes.",
       "format": "percent",
       "gauge": {
@@ -663,7 +663,7 @@
         "#bf1b00"
       ],
       "datasource": "${DS_INFLUXDB}",
-      "decimals": 2,
+      "decimals": 0,
       "description": "Frontend denied requests 1m rate of change over the last 15 minutes.",
       "format": "percent",
       "gauge": {
@@ -1019,7 +1019,7 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
@@ -1046,7 +1046,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -2106,7 +2106,12 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "galera-front-1",
+          "yaxis": 1
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -2202,7 +2207,7 @@
       "description": "Requests denied because of security concerns.\n- For tcp this is because of a matched tcp\n  request content rule.\n- For http this is because of a matched http\n  request or tarpit rule.",
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 12,
         "x": 0,
         "y": 69
@@ -2217,7 +2222,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -2384,7 +2389,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "sortDesc": true,
         "total": false,
@@ -2556,7 +2561,9 @@
         "x": 0,
         "y": 77
       },
+      "hideTimeOverride": true,
       "id": 25,
+      "interval": "1m",
       "links": [],
       "pageSize": null,
       "repeat": null,
@@ -2694,6 +2701,8 @@
           "tags": []
         }
       ],
+      "timeFrom": "5m",
+      "timeShift": null,
       "title": "Backends Current Status",
       "transform": "table",
       "type": "table"
@@ -3453,7 +3462,7 @@
         "hideEmpty": true,
         "hideZero": true,
         "max": true,
-        "min": false,
+        "min": true,
         "rightSide": true,
         "show": true,
         "total": false,
@@ -3740,7 +3749,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -3903,7 +3912,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4068,7 +4077,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4233,7 +4242,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4398,7 +4407,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4497,7 +4506,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_INFLUXDB}",
@@ -4519,13 +4528,13 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "sortDesc": true,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
@@ -4684,7 +4693,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4833,7 +4842,7 @@
       "description": "Current number of requests unassigned in queue",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 12,
         "y": 150
@@ -4847,7 +4856,7 @@
         "hideZero": true,
         "max": true,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
@@ -4988,7 +4997,6 @@
       }
     }
   ],
-  "refresh": "20s",
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
@@ -5143,7 +5151,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-24h",
     "to": "now-10s"
   },
   "timepicker": {
@@ -5174,5 +5182,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 5
+  "version": 10
 }

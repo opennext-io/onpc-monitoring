@@ -17,9 +17,9 @@
 // Enable: kapacitor enable haproxy_backend_cluster_alert_stream
 //
 
-var info = 100.0
-var warn = 75.0
-var crit = 50.0
+var info = 33.0
+var warn = 66.0
+var crit = 99.0
 
 var period = 1m
 var every = 1m
@@ -48,17 +48,16 @@ var down = rawdata
 var data = total
     |join(down)
         .as('total', 'down')
-    |log()
 
 var alert = data
-    |eval(lambda: 100.0 - ((float("down.value") / float("total.value") * 100.0)))
+    |eval(lambda: (float("down.value") / float("total.value") * 100.0))
         .as('stat')
     |alert()
  //     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "proxy" }}/cluster')
       .id('haproxy-{{ index .Tags "proxy" }}-cluster-alert')
-      .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: cluster availability state = {{ index .Fields "stat" }}%')
-      .info(lambda: "stat" <= info)
-      .warn(lambda: "stat" <= warn)
-      .crit(lambda: "stat" <= crit)
+      .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: cluster availability state = {{ index .Fields "stat" | printf "%0.f" }}%')
+      .info(lambda: "stat" >= info)
+      .warn(lambda: "stat" >= warn)
+      .crit(lambda: "stat" >= crit)
       .topic('haproxy')
 //    .log('/var/log/kapacitor/haproxy_backend_cluster_alert.log')
