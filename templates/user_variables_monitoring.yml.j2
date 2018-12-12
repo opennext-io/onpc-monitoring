@@ -1,0 +1,388 @@
+# {{ ansible_managed }}
+---
+# Copyright (c) 2018, OpenNext SAS
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+## OpenStack user and tenant use by monitoring
+monitoring_user_name: monitor
+monitoring_tenant_name: service
+monitoring_user_role_name: admin
+
+## Collectd variables
+#
+collectd_use_ppa: no
+collectd_version: 5.8.0
+collectd_default_plugins: []
+collectd_prefix: "/etc/collectd"
+collectd_interval: 60
+collectd_logs_dir: "/var/log/collectd"
+collectd_logrotate: no
+{%- raw %}
+collectd_types_db_path: "{{ '/usr/share/collectd/types.db' if collectd_use_ppa else collectd_prefix + '/share/collectd/types.db' }}"
+collectd_hostname: "\"{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}\""
+collectd_logpath: "{{ collectd_logs_dir }}/collectd.log"
+{% endraw %}
+
+## Grafana variables
+#
+grafana_version: latest
+{%- raw %}
+grafana_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
+grafana_address: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
+{%- endraw %}
+grafana_port: 8089
+grafana_db_name: grafana
+grafana_db_user: grafana
+grafana_logs_dir: "/var/log/grafana"
+grafana_data_dir: "/var/lib/grafana"
+
+# Grafana database vars
+grafana_database:
+  type: mysql
+{%- raw %}
+  host: "{{ galera_address|default('127.0.0.1') }}:3306"
+  password: "{{ grafana_db_password_secret }}"
+  name: "{{ grafana_db_name }}"
+  user: "{{ grafana_db_user }}"
+{% endraw %}
+
+# Grafana security vars
+grafana_security:
+  admin_user: admin
+{%- raw %}
+  admin_password: "{{ grafana_admin_password_secret }}"
+{% endraw %}
+
+grafana_datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    isDefault: true
+{%- raw %}
+    database: "{{ influxdb_db_name }}"
+    url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"    
+    user: "{{ influxdb_db_metric_user }}"
+    password: "{{influxdb_db_metric_password }}"
+{%- endraw %}
+grafana_plugins: ['grafana-clock-panel']
+grafana_dashboards: []
+
+# ONPC dashboards settings
+onpc_grafana_dashboards:
+  - name: container-metrics
+    datasource: InfluxDB
+  - name: hypervisor-metrics
+    datasource: InfluxDB
+  - name: mysql-metrics
+    datasource: InfluxDB
+  - name: rabbitmq-metrics
+    datasource: InfluxDB
+  - name: haproxy-metrics
+    datasource: InfluxDB
+  - name: influxdb-metrics
+    datasource: InfluxDB
+  - name: openstack-metrics
+    datasource: InfluxDB
+  - name: host-metrics
+    datasource: InfluxDB
+  - name: memcached-metrics
+    datasource: InfluxDB
+  - name: openstack-swift-proxy-metrics
+    datasource: InfluxDB
+  - name: ceph-metrics
+    datasource: InfluxDB
+
+## InfluxDB variables
+#
+influxdb_log_level: info
+influxdb_admin_port: 8083
+influxdb_port: 8086
+influxdb_relay_port: 8096
+influxdb_db_name: telegraf
+influxdb_db_retention: 30d
+influxdb_db_retention_policy: openstack
+influxdb_db_replication: 1
+influxdb_db_metric_user: openstack
+influxdb_db_root_name: root
+{%- raw %}
+influxdb_db_metric_password: "{{ influxdb_db_metric_password_secret }}"
+influxdb_db_root_password: "{{ influxdb_db_root_password_secret }}"
+{%- endraw %}
+influxdb_prefix: "/var/lib/influxdb"
+influxdb_logs_dir: "/var/log/influxdb" 
+influxdb_cache_max_memory_size: 1073741824
+influxdb_cache_snapshot_memory_size: 26214400
+
+# WAL dir could use tempfs instead on reduce disk iops
+{%- raw %}
+influxdb_wal_dir: "{{ influxdb_prefix }}/wal"
+influxdb_meta_dir: "{{ influxdb_prefix }}/meta"
+influxdb_data_dir: "{{ influxdb_prefix }}/data"
+influxdb_container_bind_mounts:
+  - bind_dir_path: "{{ influxdb_data_dir }}"
+    mount_path: "/openstack/{{ inventory_hostname }}/influxdb"
+{% endraw %}
+
+## Kapacitor variables
+#
+kapacitor_port: 9092
+kapacitor_data_dir: "/var/lib/kapacitor"
+kapacitor_logs_dir: "/var/log/kapacitor"
+kapacitor_logging_level: ERROR
+{%- raw %}
+kapacitor_logging_file: "{{ kapacitor_logs_dir }}/kapacitor.log"
+{%- endraw %}
+kapacitor_log_alerts_enabled: false
+{%- raw %}
+kapacitor_container_bind_mounts:
+  - bind_dir_path: "{{ kapacitor_data_dir }}"
+    mount_path: "/openstack/{{ inventory_hostname }}/kapacitor"
+{%- endraw %}
+
+kapacitor_influx:
+{%- raw %}
+  - name: "{{ ansible_hostname }}"
+    enabled: true
+    default: true
+#   urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
+    urls: ["http://localhost:{{ influxdb_port }}"]
+    kapacitor-hostname: "{{ ansible_hostname }}"
+{%- endraw %}   
+    username: ""
+    password: ""
+    ssl-ca: ""
+    ssl-cert: ""
+    ssl-key: ""
+    insecure-skip-verify: false
+    subscription-mode: server
+    timeout: "0s"
+    disable-subscriptions: false
+    subscription-protocol: http
+    http-port: 0
+    udp-bind: ""
+    udp-buffer: 1000
+    udp-read-buffer: 0
+    startup-timeout: "5m0s"
+    subscriptions-sync-interval: "1m0s"
+
+## Kapacitor variables
+#
+# Configure global deadman
+kapacitor_deadman_global: true
+kapacitor_deadman_interval: "90s"
+kapacitor_deadman_threshold: 1.0
+
+# Kapacitor variables for Slack  
+kapacitor_slack_default: false
+kapacitor_slack_global: false
+kapacitor_slack_username: kapacitor
+kapacitor_slack_state_changes_only: false
+kapacitor_slack_workspace: OpenNext
+
+# Kapacitor variables for Sensu
+kapacitor_sensu_addr: "127.0.0.1:3030"
+kapacitor_sensu_source: Kapacitor
+
+# Kapacitor topics and handlers variables
+haproxy_handler_id: haproxy_alerts_publisher
+haproxy_handler_topic: haproxy
+monitoring_handler_id: montoring_alerts_publisher
+monitoring_handler_topic: monitoring
+openstack_handler_id: openstack_alerts_publisher
+openstack_handler_topic: openstack
+slack_handler_id: slack_alerts_forwarder
+slack_handler_topic: slack
+sensu_handler_id: sensu_alerts_forwarder
+sensu_handler_topic: sensu
+log_handler_id: log_alerts_forwarder
+log_handler_topic: log
+system_handler_id: system_alerts_publisher
+system_handler_topic: system
+network_handler_id: network_alerts_publisher
+network_handler_topic: network
+ceph_handler_id: ceph_alerts_publisher
+ceph_handler_topic: ceph
+kapacitor_handlers: [
+{%- raw %}
+  { topic: "{{ haproxy_handler_topic }}", id: "{{ haproxy_handler_id}}", enabled: true },
+  { topic: "{{ monitoring_handler_topic }}", id: "{{ monitoring_handler_id}}", enabled: true },
+  { topic: "{{ openstack_handler_topic }}", id: "{{ openstack_handler_id }}", enabled: true },
+  { topic: "{{ slack_handler_topic }}", id: "{{ slack_handler_id }}", enabled: "{{ slack_alerts_enabled }}" },
+  { topic: "{{ sensu_handler_topic }}", id: "{{ sensu_handler_id }}", enabled: "{{ sensu_alerts_enabled }}" },
+  { topic: "{{ log_handler_topic }}", id: "{{ log_handler_id }}", enabled: "{{ kapacitor_log_alerts_enabled }}" },
+  { topic: "{{ system_handler_topic }}", id: "{{ system_handler_id }}", enabled: true },
+  { topic: "{{ network_handler_topic }}", id: "{{ network_handler_id }}", enabled: true },
+  { topic: "{{ ceph_handler_topic }}", id: "{{ ceph_handler_id }}", enabled: true }
+{%- endraw %}
+]
+
+kapacitor_tasks: [
+{%- raw %}
+  { id: "ceph_health_status_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_health_status_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_osd_in_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_osd_in_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_degraded_object_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_degraded_object_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_misplaced_object_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_misplaced_object_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_osd_up_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_osd_up_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_mon_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_mon_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "ceph_storage_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_storage_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "cinder_volume_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_volume_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "cinder_worker_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_worker_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "cinder_worker_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_worker_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "compute_vcpus_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vcpus_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "compute_vdisk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vdisk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "compute_vram_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vram_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "conntrack_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/conntrack_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "deadman_check", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/deadman_check_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
+  { id: "disk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/disk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_error_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_error_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_qcur_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_qcur_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_qtime_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_qtime_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_rtime_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_rtime_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_frontend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_frontend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_sessions_usage_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_sessions_usage_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "interface_speed_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/interface_speed_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
+  { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "mem_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/mem_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "net_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/net_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "netstat_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/netstat_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "neutron_agent_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/neutron_agent_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "neutron_agent_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/neutron_agent_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "nova_worker_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/nova_worker_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "nova_worker_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/nova_worker_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "openstack_apis_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/openstack_apis_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true }
+{%- endraw %}
+]
+
+# Kapacitor template example:
+{%- raw %}
+#   { id: "example", type: "stream", tick: "{{ kapacitor_tick_template_dest_dir }}/example.tick"},
+{%- endraw %}
+kapacitor_templates: [
+]
+
+## Telegraf variables
+#
+
+# Global variables
+telegraf_agent_version: latest
+telegraf_agent_metric_batch_size: 1024
+telegraf_agent_metric_buffer_limit: 10240
+telegraf_agent_quiet: true
+telegraf_agent_interval: 10
+telegraf_db_name: telegraf
+telegraf_prometheus_enabled: false
+telegraf_logs_dir: "/var/log/telegraf"
+{% raw %}
+telegraf_agent_logfile: "{{ telegraf_logs_dir }}/telegraf.log"
+telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
+{% endraw %}
+
+# TODO: make this dynamic
+telegraf_plugins_list: [ outputs, galera, haproxy, influxdb, listener, memcached, rabbitmq, swift, system, ceph ]
+{%- raw %}
+telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"
+telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
+telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}"
+telegraf_influxdb_targets:
+      - "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}"
+{% endraw %}
+
+# Global tags
+telegraf_global_tags:
+{%- raw %}
+  - tag_name: node_type
+    tag_value: "{{ 'container' if inventory_hostname in groups['all_containers'] else 'host' }}"
+  - tag_name: region
+    tag_value: "{{ service_region }}"
+  - tag_name: environment
+    tag_value: "{{ onpc_environment_name }}"
+{% endraw %}
+telegraf_agent_output: []
+telegraf_plugins_default: []
+
+# Telegraf cephx key details
+telegraf_cephx:
+  name: client.admin
+  caps: 
+    mon: "allow *"
+    osd: "allow *"
+    mgr: "allow *"
+    mds: "allow *"
+
+## Sensu varliables
+#
+# Use Sensu for alerts
+# Sensu alerts should be defined in the vars section of the top level inventory on infra-master
+# node like in:
+# [all:vars]
+# sensu_alert={ 'handlers': ['<handler1>', '<handler2>'] }
+{% set sensu = sensu_alert | default({}) %}
+{% if sensu.get('handlers', []) | length > 0 %}
+sensu_alerts_enabled: true
+sensu_alerts_handlers: "{{ sensu.get('handlers') }}"
+{% else %}
+sensu_alerts_enabled: false
+sensu_alerts_handlers: []
+{% endif %}
+sensu_rabbitmq_user_name: sensu
+sensu_rabbitmq_vhost: "/sensu"
+sensu_rabbitmq_port: 5672
+sensu_deploy_rabbitmq_server: false
+sensu_deploy_redis_server: false
+sensu_api_port: 4567
+sensu_api_user_name: admin
+sensu_logs_dir: "/var/log/sensu"
+sensu_rabbitmq_enable_ssl: false
+{% raw %}
+sensu_client_subscriptions: ['host']
+sensu_rabbitmq_user_password: "{{ sensu_rabbitmq_password_secret }}"
+sensu_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
+sensu_rabbitmq_host: "{{ hostvars[groups['rabbitmq_all'][0]]['ansible_host'] }}"
+sensu_redis_host: "{{ internal_lb_vip_address }}"
+#sensu_api_host: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
+sensu_api_host: "{{ internal_lb_vip_address }}"
+sensu_api_password: "{{ sensu_admin_password_secret }}"
+{% endraw %}
+
+uchiwa_dc_name: OpenNext
+uchiwa_path: "/etc/uchiwa"
+uchiwa_users:
+  - username: admin
+{%- raw %}
+    password: "{{ sensu_admin_password_secret }}"
+{%- endraw %}
+uchiwa_port: 3000
+
+## Redis variables
+redis_logs_dir: "/var/log/redis"
+{% raw %}
+redis_logfile: "{{ redis_logs_dir }}/redis.log"
+redis_sentinel_logfile: "{{ redis_logs_dir }}/sentinel.log"
+redis_sentinels: |-
+  {% set _var=[] %}
+  {% for host in groups['sentinel'] %}
+  {%   set _ = _var.append({
+        'host': hostvars[host]['ansible_host'],
+        'port': redis_sentinel_port
+       })
+  %}
+  {% endfor %}
+  {{ _var | list }}
+{% endraw %}
+redis_syslog_enabled: "no"
+redis_sentinel_port: 26379
+redis_master_name: master01
+redis_port: 6379
