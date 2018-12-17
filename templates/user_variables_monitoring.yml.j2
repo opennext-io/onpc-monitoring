@@ -118,7 +118,7 @@ influxdb_db_root_name: root
 {%- raw %}
 influxdb_db_metric_password: "{{ influxdb_db_metric_password_secret }}"
 influxdb_db_root_password: "{{ influxdb_db_root_password_secret }}"
-{%- endraw %}
+{% endraw %}
 influxdb_prefix: "/var/lib/influxdb"
 influxdb_logs_dir: "/var/log/influxdb" 
 influxdb_cache_max_memory_size: 1073741824
