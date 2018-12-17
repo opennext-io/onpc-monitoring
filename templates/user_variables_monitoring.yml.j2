@@ -40,7 +40,7 @@ grafana_version: latest
 {%- raw %}
 grafana_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
 grafana_address: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
-{%- endraw %}
+{% endraw %}
 grafana_port: 8089
 grafana_db_name: grafana
 grafana_db_user: grafana
@@ -74,7 +74,7 @@ grafana_datasources:
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"    
     user: "{{ influxdb_db_metric_user }}"
     password: "{{influxdb_db_metric_password }}"
-{%- endraw %}
+{% endraw %}
 grafana_plugins: ['grafana-clock-panel']
 grafana_dashboards: []
 
@@ -142,13 +142,13 @@ kapacitor_logs_dir: "/var/log/kapacitor"
 kapacitor_logging_level: ERROR
 {%- raw %}
 kapacitor_logging_file: "{{ kapacitor_logs_dir }}/kapacitor.log"
-{%- endraw %}
+{% endraw %}
 kapacitor_log_alerts_enabled: false
 {%- raw %}
 kapacitor_container_bind_mounts:
   - bind_dir_path: "{{ kapacitor_data_dir }}"
     mount_path: "/openstack/{{ inventory_hostname }}/kapacitor"
-{%- endraw %}
+{% endraw %}
 
 kapacitor_influx:
 {%- raw %}
@@ -158,7 +158,7 @@ kapacitor_influx:
 #   urls: ["{% for host in groups['influxdb'] %}http://{{ hostvars[host]['ansible_host'] }}:{{ influxdb_port }}{% if not loop.last %}, {% endif %}{% endfor %}"]
     urls: ["http://localhost:{{ influxdb_port }}"]
     kapacitor-hostname: "{{ ansible_hostname }}"
-{%- endraw %}   
+{% endraw %}   
     username: ""
     password: ""
     ssl-ca: ""
@@ -224,7 +224,7 @@ kapacitor_handlers: [
   { topic: "{{ system_handler_topic }}", id: "{{ system_handler_id }}", enabled: true },
   { topic: "{{ network_handler_topic }}", id: "{{ network_handler_id }}", enabled: true },
   { topic: "{{ ceph_handler_topic }}", id: "{{ ceph_handler_id }}", enabled: true }
-{%- endraw %}
+{% endraw %}
 ]
 
 kapacitor_tasks: [
@@ -263,13 +263,13 @@ kapacitor_tasks: [
   { id: "nova_worker_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/nova_worker_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "nova_worker_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/nova_worker_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "openstack_apis_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/openstack_apis_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true }
-{%- endraw %}
+{% endraw %}
 ]
 
 # Kapacitor template example:
 {%- raw %}
 #   { id: "example", type: "stream", tick: "{{ kapacitor_tick_template_dest_dir }}/example.tick"},
-{%- endraw %}
+{% endraw %}
 kapacitor_templates: [
 ]
 
@@ -285,7 +285,7 @@ telegraf_agent_interval: 10
 telegraf_db_name: telegraf
 telegraf_prometheus_enabled: false
 telegraf_logs_dir: "/var/log/telegraf"
-{% raw %}
+{%- raw %}
 telegraf_agent_logfile: "{{ telegraf_logs_dir }}/telegraf.log"
 telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
 {% endraw %}
@@ -322,6 +322,17 @@ telegraf_cephx:
     mgr: "allow *"
     mds: "allow *"
 
+## Slack variables
+{% set slack = onpc_slack_alert | default({}) %}
+{% if slack.get('alert-channel', '') | length > 0 and slack.get('uuid', '') | length > 0 %}
+slack_alerts_enabled: true
+slack_alerts_channel: "#{{ slack.get('alert-channel') }}"
+# Note: should be stored in Ansible Vault
+slack_webhooks_url: "https://hooks.slack.com/services/{{ slack.get('uuid') }}"
+{% else %}
+slack_alerts_enabled: false
+{% endif %}
+
 ## Sensu varliables
 #
 # Use Sensu for alerts
@@ -346,8 +357,8 @@ sensu_api_port: 4567
 sensu_api_user_name: admin
 sensu_logs_dir: "/var/log/sensu"
 sensu_rabbitmq_enable_ssl: false
-{% raw %}
 sensu_client_subscriptions: ['host']
+{%- raw %}
 sensu_rabbitmq_user_password: "{{ sensu_rabbitmq_password_secret }}"
 sensu_rabbitmq_host_group: "{{ rabbitmq_host_group }}"
 sensu_rabbitmq_host: "{{ hostvars[groups['rabbitmq_all'][0]]['ansible_host'] }}"
@@ -363,12 +374,12 @@ uchiwa_users:
   - username: admin
 {%- raw %}
     password: "{{ sensu_admin_password_secret }}"
-{%- endraw %}
+{% endraw %}
 uchiwa_port: 3000
 
 ## Redis variables
 redis_logs_dir: "/var/log/redis"
-{% raw %}
+{%- raw %}
 redis_logfile: "{{ redis_logs_dir }}/redis.log"
 redis_sentinel_logfile: "{{ redis_logs_dir }}/sentinel.log"
 redis_sentinels: |-
