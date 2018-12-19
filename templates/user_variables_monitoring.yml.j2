@@ -296,6 +296,9 @@ telegraf_plugins_list: [ outputs, galera, haproxy, influxdb, listener, memcached
 telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"
 telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
 telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}"
+
+# If you wish to install telegraf and point it at a specific target, or list of targets telegraf
+# should send metrics to set the telegraf_influxdb_targets as a list containing all targets.
 telegraf_influxdb_targets:
       - "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}"
 {% endraw %}

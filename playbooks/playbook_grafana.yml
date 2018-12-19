@@ -46,6 +46,7 @@
       delegate_to: "{{ groups['galera_all'][0] }}"
       no_log: true
       tags: [grafana-database]
+
     - name: Grant access to the DB for the service
       mysql_user:
         login_user: "{{ galera_root_user }}"
@@ -69,6 +70,7 @@
       https_proxy: "{{ deployment_environment_variables.https_proxy | default('') }}"
       no_proxy: "{{ deployment_environment_variables.no_proxy | default('') }}"
       tags: [grafana-install]
+
     - role: "rsyslog_client"
       rsyslog_client_log_rotate_file: grafana_log_rotate
       rsyslog_client_log_dir: "{{ grafana_logs_dir }}"
@@ -84,6 +86,7 @@
       run_once: yes
       delegate_to: localhost
       tags: [grafana-dashboard]
+
     - name: Copy selected dashboards
       copy:
         src: "../grafana-dashboards/{{ item.name }}.json"
@@ -92,6 +95,7 @@
       delegate_to: localhost
       run_once: yes
       tags: [grafana-dashboards]
+
     - name: Set the correct data source name in the dashboard
       replace:
         path: "/tmp/dashboards/{{ item.name }}.json"
@@ -101,6 +105,7 @@
       run_once: yes
       with_items: "{{ onpc_grafana_dashboards }}"
       tags: [grafana-dashboards]
+
     - name: Import grafana dashboards
       uri:
         url: "{{ grafana_url }}/api/dashboards/db"
@@ -114,6 +119,7 @@
       with_fileglob:
         - /tmp/dashboards/*
       tags: [grafana-dashboards]
+
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: grafana-back

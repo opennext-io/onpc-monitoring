@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- import_playbook playbook_init.yml
-- import_playbook playbook_redis.yml
-- import_playbook playbook_redis_sentinel.yml
-- import_playbook playbook_sensu.yml
-- import_playbook playbook_collectd.yml
-- import_playbook playbook_influxdb.yml
-- import_playbook playbook_influxdb_relay.yml
-- import_playbook playbook_influxdb_relay.yml
-- import_playbook playbook_telegraf.yml
-- import_playbook playbook_kapacitor.yml
-- import_playbook playbook_grafana.yml
+- import_playbook: playbook_init.yml
+- import_playbook: playbook_redis.yml
+- import_playbook: playbook_redis_sentinel.yml
+- import_playbook: playbook_sensu.yml
+- import_playbook: playbook_collectd.yml
+- import_playbook: playbook_influxdb.yml
+- import_playbook: playbook_influxdb_relay.yml
+- import_playbook: playbook_influxdb_relay.yml
+- import_playbook: playbook_telegraf.yml
+- import_playbook: playbook_kapacitor.yml
+- import_playbook: playbook_grafana.yml
 
