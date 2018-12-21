@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy Sensu Cluster
+- name: Deploy Sensu server cluster
   hosts: "sensu"
   gather_facts: true
   become: true
@@ -51,12 +51,14 @@
       rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
       tags: [sensu-rsyslog]
 - name: Deploy Sensu Client
-  hosts: "hosts:kapacitor"
+  hosts: "all"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   roles:
     - role: sensu
       sensu_master: false
+      sensu_include_dashboard: false
       rabbitmq_server: false
       rabbitmq_enable_ssl: "{{ sensu_rabbitmq_enable_ssl }}"
       rabbitmq_host: "{{ sensu_rabbitmq_host }}"

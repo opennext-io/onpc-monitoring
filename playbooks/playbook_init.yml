@@ -55,30 +55,29 @@ cat playbook_init.yml
       delay: 10
       no_log: true
 
-- name: Give monitoring user permissions on rabbitmq vhosts
+- name: Configure RabbitMQ for monitoring user
   hosts: rabbitmq[0]
   become: true
   become_user: root
   tasks:
+    - name: Configure Rabbitmq vhost for sensu
+      rabbitmq_vhost:
+        name: "{{ sensu_rabbitmq_vhost }}"
+        state: "present"
+    - name: Configure Rabbitmq user for sensu
+      rabbitmq_user:
+        user: "{{ sensu_rabbitmq_user_name }}"
+        password: "{{ sensu_rabbitmq_user_password }}"
+        vhost: "{{ sensu_rabbitmq_vhost }}"
+        configure_priv: ".*"
+        read_priv: ".*"
+        write_priv: ".*"
+        state: "present"
+      no_log: True
     - name: Collect list of rabbitmq vhosts
       shell: "rabbitmqctl list_vhosts"
       register: rabbitmq_vhosts
     - name: attribute permissions for monitoring user on rabbitmq vhosts
       shell: 'rabbitmqctl set_permissions -p {{ item }} monitoring "^$" ".*" "^$" '
       with_items: "{{ rabbitmq_vhosts.stdout_lines | select('match', '^(/)') | list }}"
-    - block:
-      - name: Configure Rabbitmq vhost for sensu
-        rabbitmq_vhost:
-          name: "{{ sensu_rabbitmq_vhost }}"
-          state: "present"
-      - name: Configure Rabbitmq user for sensu
-        rabbitmq_user:
-          user: "{{ sensu_rabbitmq_user_name }}"
-          password: "{{ sensu_rabbitmq_user_password }}"
-          vhost: "{{ sensu_rabbitmq_vhost }}"
-          configure_priv: ".*"
-          read_priv: ".*"
-          write_priv: ".*"
-          state: "present"
-        no_log: True
-      when: "'sensu' in group_names"
+    
