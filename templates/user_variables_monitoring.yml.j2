@@ -326,12 +326,14 @@ telegraf_cephx:
     mds: "allow *"
 
 ## Slack variables
-{% set slack = onpc_slack_alert | default({}) %}
-{% if slack.get('alert-channel', '') | length > 0 and slack.get('uuid', '') | length > 0 %}
+# Use Slack for alerts
+# Slack alerts should be defined in the onpc-bootstrap project in vars/main.yml
+{% set _slack = onpc_slack_alerts | default({}) %}
+{% if _slack.get('alert-channel', '') | length > 0 and _slack.get('uuid', '') | length > 0 %}
 slack_alerts_enabled: true
-slack_alerts_channel: "#{{ slack.get('alert-channel') }}"
-# Note: should be stored in Ansible Vault
-slack_webhooks_url: "https://hooks.slack.com/services/{{ slack.get('uuid') }}"
+slack_alerts_channel: "#{{ _slack.get('alert-channel') }}"
+# Note: should be stored in Ansible Vault for security
+slack_webhooks_url: "https://hooks.slack.com/services/{{ _slack.get('uuid') }}"
 {% else %}
 slack_alerts_enabled: false
 {% endif %}
@@ -343,16 +345,12 @@ slack_alerts_enabled: false
 rabbitmq_monitoring_userid: monitoring
 
 ## Sensu varliables
-#
 # Use Sensu for alerts
-# Sensu alerts should be defined in the vars section of the top level inventory on infra-master
-# node like in:
-# [all:vars]
-# sensu_alert={ 'handlers': ['<handler1>', '<handler2>'] }
-{% set sensu = sensu_alert | default({}) %}
-{% if sensu.get('handlers', []) | length > 0 %}
+# Sensu alerts should be defined in the onpc-bootstrap project in vars/main.yml
+{% set _sensu = onpc_sensu_alerts | default({}) %}
+{% if _sensu.get('handlers', []) | length > 0 %}
 sensu_alerts_enabled: true
-sensu_alerts_handlers: "{{ sensu.get('handlers') }}"
+sensu_alerts_handlers: "{{ _sensu.get('handlers') }}"
 {% else %}
 sensu_alerts_enabled: false
 sensu_alerts_handlers: []
