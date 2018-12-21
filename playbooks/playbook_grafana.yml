@@ -15,9 +15,10 @@
 # limitations under the License.
 
 - name: Deploy Grafana
-  hosts: "grafana_all"
+  hosts: "grafana"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     # Disable grafana haproxy backend to avoid false positive alerts.
@@ -30,6 +31,8 @@
         - "groups['grafana'] | length > 1"
       tags: [grafana-disable-haproxy]
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+      when:
+        - "inventory_hostname in groups['all_containers']"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:

@@ -17,10 +17,13 @@
   hosts: "all"
   gather_facts: true
   become: true
+  become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
 
   pre_tasks:
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+      when:
+        - "inventory_hostname in groups['all_containers']"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:

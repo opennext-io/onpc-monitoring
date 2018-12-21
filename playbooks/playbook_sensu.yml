@@ -16,26 +16,18 @@
 - name: Deploy Sensu Cluster
   hosts: "sensu"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+      when:
+        - "inventory_hostname in groups['all_containers']"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-sensu"
             dest: "{{ sensu_logs_dir }}"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/rabbitmq-vhost-user.yml
-      static: no
-      vars:
-        user: "{{ sensu_rabbitmq_user_name }}"
-        password: "{{ sensu_rabbitmq_user_password }}"
-        vhost: "{{ sensu_rabbitmq_vhost }}"
-        _rabbitmq_host_group: "{{ sensu_rabbitmq_host_group }}"
-      no_log: true
-      when:
-        - "inventory_hostname == groups['sensu'][0]"
-        - "groups[rabbitmq_sensu_host_group] | length > 0"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   roles:
     - role: sensu

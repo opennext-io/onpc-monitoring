@@ -20,7 +20,6 @@
 - import_playbook: playbook_collectd.yml
 - import_playbook: playbook_influxdb.yml
 - import_playbook: playbook_influxdb_relay.yml
-- import_playbook: playbook_influxdb_relay.yml
 - import_playbook: playbook_telegraf.yml
 - import_playbook: playbook_kapacitor.yml
 - import_playbook: playbook_grafana.yml

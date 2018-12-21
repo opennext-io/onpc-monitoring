@@ -16,7 +16,8 @@
 - name: Delete Grafana DB
   hosts: "galera[0]"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   tasks:
     - name: Remove Grafana user 
       mysql_user:

@@ -293,7 +293,7 @@ telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
 # TODO: make this dynamic
 telegraf_plugins_list: [ outputs, galera, haproxy, influxdb, listener, memcached, rabbitmq, swift, system, ceph ]
 {%- raw %}
-telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version|version_compare('0.10.0', '<') else '/etc/telegraf' }}"
+telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version is version_compare('0.10.0', '<') else '/etc/telegraf' }}"
 telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
 telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}"
 
@@ -311,7 +311,7 @@ telegraf_global_tags:
   - tag_name: region
     tag_value: "{{ service_region }}"
   - tag_name: environment
-    tag_value: "{{ onpc_environment_name }}"
+    tag_value: "{{ openstack_domain }}"
 {% endraw %}
 telegraf_agent_output: []
 telegraf_plugins_default: []
@@ -335,6 +335,12 @@ slack_webhooks_url: "https://hooks.slack.com/services/{{ slack.get('uuid') }}"
 {% else %}
 slack_alerts_enabled: false
 {% endif %}
+
+# RabbitMQ management plugin is enabled by default, the guest user has been
+# removed for security reasons and a new userid 'monitoring' has been created
+# with the 'monitoring' user tag. In order to modify the userid, uncomment the
+# following and change 'monitoring' to your userid of choice.
+rabbitmq_monitoring_userid: monitoring
 
 ## Sensu varliables
 #

@@ -16,10 +16,13 @@
 - name: Deploy Kapacitor
   hosts: "kapacitor"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+      when:
+        - "inventory_hostname in groups['all_containers']"
     - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
@@ -36,9 +39,9 @@
     - role: kapacitor
       kapacitor_sensu_alerts_handlers: "{{ sensu_alerts_handlers }}"
       kapacitor_sensu_enabled: "{{ sensu_alerts_enabled }}"
-      kapacitor_slack_enabled: "{{ slack_alerts_enabled }}"
-      kapacitor_slack_channel: "{{ slack_alerts_channel }}"
-      kapacitor_slack_url: "{{ slack_webhooks_url }}"
+      kapacitor_slack_enabled: "{{ slack_alerts_enabled | default(False) }}"
+      kapacitor_slack_channel: "{{ slack_alerts_channel | default('') }}"
+      kapacitor_slack_url: "{{ slack_webhooks_url | default('') }}"
       kapacitor_tick_script_dir: "../files/kapacitor/tick/scripts"
       kapacitor_tick_template_dir: "../files/kapacitor/tick/templates"
       kapacitor_tick_var_dir: "../files/kapacitor/tick/vars"

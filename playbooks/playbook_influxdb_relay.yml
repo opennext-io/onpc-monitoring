@@ -16,7 +16,8 @@
 - name: Deploy Influxdb Relay
   hosts: "influxdb_relay"
   gather_facts: true
-  user: root
+  become: true
+  become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
     - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
