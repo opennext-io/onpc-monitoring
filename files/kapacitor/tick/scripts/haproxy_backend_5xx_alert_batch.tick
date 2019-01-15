@@ -28,7 +28,7 @@ var rawdata = batch
     .every(every)
     .groupBy('region', 'host', 'proxy', 'sv')
 
-var http_5xx = rawdata
+var data = rawdata
   |derivative('http_response.5xx')
     .as('value')
     .nonNegative()

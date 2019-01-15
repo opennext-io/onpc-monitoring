@@ -30,6 +30,10 @@
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
             dest: "{{ telegraf_logs_dir }}"
     - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include: tasks/create_telegraf_ceph_key.yml
+      when:
+        - "'ceph-mon' in group_names"
+        - "groups['ceph-mon'] | length > 1"
   
   roles:
     - role: telegraf
