@@ -38,7 +38,7 @@ var http_5xx = rawdata
 var alert = data
   |alert()
     .id('haproxy-{{ index .Tags "proxy" }}-5xx-errors-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: HAProxy backend HTTP errors rate of change = {{ index .Fields "http_5xx.value" }}')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "sv" }}: HAProxy backend HTTP errors rate of change = {{ index .Fields "http_5xx.value" }}')
     .warn(lambda: "http_5xx.value" > 0)
     .topic('haproxy')
 //  .log('/var/log/kapacitor/haproxy_backend_error_alert.log')
