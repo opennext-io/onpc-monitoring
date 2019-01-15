@@ -23,7 +23,7 @@ var every = 1m
 var unit = 10s
 
 var rawdata = batch
-  |query('''SELECT http_response.5xx FROM "telegraf"."autogen"."haproxy" WHERE type = 'server' ''')
+  |query('''SELECT "http_response.5xx" FROM "telegraf"."autogen"."haproxy" WHERE type = 'server' ''')
     .period(period)
     .every(every)
     .groupBy('region', 'host', 'proxy', 'sv')
