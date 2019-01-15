@@ -10,13 +10,12 @@
 // ENABLE: kapacitor enable netstat_alert_batch
 
 // Parameters
-
-var info = 10
-var warn = 30
-var crit = 90
+var info = 2
+var warn = 2.5
+var crit = 3
 var period = 1m 
 var every = 1m 
-var unit = 1s
+var unit = 10s
 
 var rawdata = batch
   |query('''SELECT tcp_established, tcp_time_wait, tcp_close_wait FROM "telegraf"."autogen"."netstat" ''')
@@ -48,11 +47,10 @@ var data = tcp_close_wait
 
 var alert = data
   |alert()
-//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/netstat')
     .id('netstat-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
-    .info(lambda: "tcp_established.value" >= info OR "tcp_time_wait.value" >= info OR "tcp_close_wait.value" >= info)
-    .warn(lambda: "tcp_established.value" >= warn OR "tcp_time_wait.value" >= warn OR "tcp_close_wait.value" >= warn)
-    .crit(lambda: "tcp_established.value" >= crit OR "tcp_time_wait.value" >= crit OR "tcp_close_wait.value" >= crit)
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Network anomalies rate of change for tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
+    .info(lambda: sigma("tcp_established.value") >= info OR sigma("tcp_time_wait.value") >= info OR sigma("tcp_close_wait.value") >= info)
+    .warn(lambda: sigma("tcp_established.value") >= warn OR sigma("tcp_time_wait.value") >= warn OR sigma("tcp_close_wait.value") >= warn)
+    .crit(lambda: sigma("tcp_established.value") >= crit OR sigma("tcp_time_wait.value") >= crit OR sigma("tcp_close_wait.value") >= crit)
     .topic('network')
 //  .log('/var/log/kapacitor/netstat_alert_batch.log')

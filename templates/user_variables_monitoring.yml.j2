@@ -179,6 +179,7 @@ kapacitor_influx:
 ## Kapacitor variables
 #
 # Configure global deadman
+kapacitor_reporting_enabled: false
 kapacitor_deadman_global: true
 kapacitor_deadman_interval: "90s"
 kapacitor_deadman_threshold: 1.0
@@ -227,6 +228,11 @@ kapacitor_handlers: [
 {% endraw %}
 ]
 
+# Note PP: Disabled 'cinder_volume_alert' because in its current state, it's not indicative of
+# of a problem. What need to be evaluated is the total size of backend storage size
+# available in cinder storage pools instead. See
+# https://developer.openstack.org/api-ref/block-storage/v3/?expanded=list-all-back-end-storage-pools-detail#list-all-back-end-storage-pools )
+#
 kapacitor_tasks: [
 {%- raw %}
   { id: "ceph_health_status_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_health_status_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
@@ -236,7 +242,7 @@ kapacitor_tasks: [
   { id: "ceph_osd_up_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_osd_up_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "ceph_mon_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_mon_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "ceph_storage_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/ceph_storage_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "cinder_volume_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_volume_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "cinder_volume_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_volume_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
   { id: "cinder_worker_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_worker_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "cinder_worker_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/cinder_worker_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "compute_vcpus_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vcpus_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
@@ -247,6 +253,7 @@ kapacitor_tasks: [
   { id: "disk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/disk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_error_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_error_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "haproxy_backend_5xx_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_5xx_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_qcur_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_qcur_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_qtime_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_qtime_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_rtime_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_rtime_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },

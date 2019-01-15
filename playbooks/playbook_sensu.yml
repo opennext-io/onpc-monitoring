@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Deploy Sensu server cluster
-  hosts: "sensu"
+  hosts: sensu
   gather_facts: true
   become: true
   become_user: root
@@ -45,13 +45,13 @@
       # redis_host: "{{ sensu_redis_host }}"
       when:
         - "'sensu' in group_names"
-    - role: "rsyslog_client"
+    - role: rsyslog_client
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
       rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
       tags: [sensu-rsyslog]
 - name: Deploy Sensu Client
-  hosts: "all"
+  hosts: "all:!sensu"
   gather_facts: true
   become: true
   become_user: root
@@ -69,7 +69,7 @@
       redis_server: false
       # redis_host not used anymore (redis_sentinels used instead)
       # redis_host: "{{ sensu_redis_host }}"
-    - role: "rsyslog_client"
+    - role: rsyslog_client
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
       rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"

@@ -1,46 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_INFLUXDB",
-      "label": "InfluxDB",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.2.4"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,8 +16,8 @@
   "editable": true,
   "gnetId": 1234,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1540889182609,
+  "id": 9,
+  "iteration": 1547478219396,
   "links": [],
   "panels": [
     {
@@ -85,7 +43,7 @@
         "#eab839",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "HTTP 5xx request errors 1 minute rate of change over the last 15 minutes",
       "format": "percent",
       "gauge": {
@@ -204,7 +162,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of connections awaiting assignment to a backend server over the last 15 minutes",
       "format": "short",
       "gauge": {
@@ -315,7 +273,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of backend which status is different than 'UP'",
       "format": "short",
       "gauge": {
@@ -388,7 +346,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT count(\"noup\") FROM (SELECT last(\"status\") as \"noup\" FROM \"haproxy\" WHERE \"type\" = 'server' AND \"status\" !~ /UP/ AND $timeFilter GROUP BY \"sv\", \"proxy\") fill(null)",
+          "query": "SELECT count(\"noup\") FROM (SELECT last(\"status\") as \"noup\" FROM \"haproxy\" WHERE \"type\" = 'server' AND \"status\" !~ /UP/ AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY \"sv\", \"proxy\") fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -433,7 +391,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "The average requests queue time 1 minute derivative over the last 15 minutes.",
       "format": "ms",
       "gauge": {
@@ -550,7 +508,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "decimals": 0,
       "description": "Frontend requests errors 1m rate of change over the last15 minutes.",
       "format": "percent",
@@ -662,7 +620,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "decimals": 0,
       "description": "Frontend denied requests 1m rate of change over the last 15 minutes.",
       "format": "percent",
@@ -774,7 +732,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of frontends which status is different than 'OPEN'",
       "format": "short",
       "gauge": {
@@ -846,7 +804,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT count(\"noup\") FROM (SELECT last(status) as \"noup\" FROM \"haproxy\" WHERE \"type\" = 'frontend' AND \"status\" != 'OPEN' AND $timeFilter GROUP BY \"proxy\", \"host\") fill(null)",
+          "query": "SELECT count(\"noup\") FROM (SELECT last(status) as \"noup\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/  AND \"type\" = 'frontend' AND \"status\" != 'OPEN' AND $timeFilter GROUP BY \"proxy\") fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -901,7 +859,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "decimals": null,
       "fill": 1,
       "gridPos": {
@@ -979,6 +937,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Sessions usage",
       "tooltip": {
@@ -1019,10 +978,10 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of HTTP requests / sec",
       "fill": 1,
       "gridPos": {
@@ -1046,7 +1005,7 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -1137,6 +1096,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "HTTP requests rate",
       "tooltip": {
@@ -1177,7 +1137,7 @@
     },
     {
       "columns": [],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "A status different than 'OPEN' should be acted upon",
       "fontSize": "100%",
       "gridPos": {
@@ -1272,7 +1232,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"frontend\", \"status\", \"host\" FROM (SELECT last(status) as \"status\", \"proxy\" as \"frontend\", \"sv\" as \"sv\", \"host\" as \"host\" FROM \"haproxy\" WHERE \"type\" = 'frontend' AND $timeFilter AND \"host\" =~ /^$host$/ GROUP BY \"host\", \"proxy\" fill(null))",
+          "query": "SELECT \"frontend\", \"status\", \"host\" FROM (SELECT last(status) as \"status\", \"proxy\" as \"frontend\", \"sv\" as \"sv\", \"host\" as \"host\" FROM \"haproxy\" WHERE \"type\" = 'frontend' AND $timeFilter AND \"host\" =~ /^$host$/ GROUP BY \"proxy\" fill(null))",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -1303,10 +1263,10 @@
       "aliasColors": {
         "request errors / sec: horizon-front-1": "#890f02"
       },
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of HTTP responses / sec",
       "fill": 1,
       "gridPos": {
@@ -1330,7 +1290,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -1467,7 +1427,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.2xx\")) AS \"http 2xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" ",
+          "query": "SELECT derivative(last(\"http_response.2xx\")) AS \"http 2xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval),  \"proxy\"",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -1751,8 +1711,9 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "HTTP responses",
+      "title": "HTTP responses code",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1794,7 +1755,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of bytes sent  /sec",
       "fill": 1,
       "gridPos": {
@@ -1873,6 +1834,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Bytes sent rate",
       "tooltip": {
@@ -1916,7 +1878,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of sessions created per second",
       "fill": 1,
       "gridPos": {
@@ -2031,6 +1993,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Sessions rate",
       "tooltip": {
@@ -2074,7 +2037,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of bytes received / sec",
       "fill": 1,
       "gridPos": {
@@ -2158,6 +2121,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Bytes received rate",
       "tooltip": {
@@ -2203,7 +2167,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Requests denied because of security concerns.\n- For tcp this is because of a matched tcp\n  request content rule.\n- For http this is because of a matched http\n  request or tarpit rule.",
       "fill": 1,
       "gridPos": {
@@ -2324,6 +2288,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Requests denied rate",
       "tooltip": {
@@ -2370,7 +2335,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Request errors. Some of the possible causes are:\n- early termination from the client, before the\n  request has been sent.\n- read error from the client\n   - client timeout\n   - client closed connection\n   - various bad requests from the client.\n   - request was tarpitted.",
       "fill": 1,
       "gridPos": {
@@ -2498,6 +2463,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Requests errors rate",
       "tooltip": {
@@ -2552,7 +2518,7 @@
     },
     {
       "columns": [],
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "A status different than 'UP' should be acted upon",
       "fontSize": "100%",
       "gridPos": {
@@ -2680,7 +2646,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"proxy\", \"status\", \"check_status\", \"sv\"  FROM (SELECT last(status) as \"status\", \"proxy\" as \"proxy\", \"check_status\" as \"check_status\", \"sv\" as \"sv\" FROM \"haproxy\" WHERE \"type\" = 'server'  AND $timeFilter AND \"host\" =~ /^$host$/ GROUP BY \"sv\", \"proxy\" fill(null))",
+          "query": "SELECT \"proxy\", \"status\", \"check_status\", \"sv\"  FROM (SELECT last(status) as \"status\", \"proxy\" as \"proxy\", \"check_status\" as \"check_status\", \"sv\" as \"sv\" FROM \"haproxy\" WHERE \"type\" = 'server'  AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY \"sv\", \"proxy\" fill(null))",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -2712,7 +2678,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "decimals": null,
       "fill": 1,
       "gridPos": {
@@ -2790,6 +2756,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Sessions usage",
       "tooltip": {
@@ -2832,10 +2799,10 @@
       "aliasColors": {
         "request errors / sec: horizon-front-1": "#890f02"
       },
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "fill": 1,
       "gridPos": {
         "h": 9,
@@ -2858,7 +2825,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -3279,8 +3246,9 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "HTTP responses rate",
+      "title": "HTTP responses code",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -3322,7 +3290,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of bytes received by the backends / sec",
       "fill": 1,
       "gridPos": {
@@ -3401,6 +3369,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Byes received rate",
       "tooltip": {
@@ -3444,7 +3413,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Average backend response time (in ms) for the last 1,024 requests",
       "fill": 1,
       "gridPos": {
@@ -3565,6 +3534,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Average response time",
       "tooltip": {
@@ -3605,10 +3575,10 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of bytes sent / sec by the backends",
       "fill": 1,
       "gridPos": {
@@ -3632,7 +3602,7 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
@@ -3687,6 +3657,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Bytes sent rate",
       "tooltip": {
@@ -3730,7 +3701,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "fill": 1,
       "gridPos": {
         "h": 6,
@@ -3851,6 +3822,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Average queue time",
       "tooltip": {
@@ -3894,7 +3866,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "fill": 1,
       "gridPos": {
         "h": 6,
@@ -4014,6 +3986,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Average queue size",
       "tooltip": {
@@ -4057,7 +4030,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of times a connection was retried",
       "fill": 1,
       "gridPos": {
@@ -4179,6 +4152,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Backend connection retries rate",
       "tooltip": {
@@ -4222,7 +4196,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of times a request was redispatched to a different backend",
       "fill": 1,
       "gridPos": {
@@ -4344,6 +4318,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Backend redispatchs rate",
       "tooltip": {
@@ -4387,7 +4362,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Number of requests that encountered an error attempting to connect to a backend server",
       "fill": 1,
       "gridPos": {
@@ -4466,6 +4441,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Backend requests errors rate",
       "tooltip": {
@@ -4509,7 +4485,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Rate of requests whose responses yielded an error",
       "fill": 1,
       "gridPos": {
@@ -4631,6 +4607,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Backend failed requests rate",
       "tooltip": {
@@ -4674,7 +4651,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Responses denied due to security raisons (ACL-restricted)",
       "fill": 1,
       "gridPos": {
@@ -4795,6 +4772,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Backend responses denied rate",
       "tooltip": {
@@ -4838,7 +4816,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_INFLUXDB}",
+      "datasource": "InfluxDB",
       "description": "Current number of requests unassigned in queue",
       "fill": 1,
       "gridPos": {
@@ -4958,6 +4936,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Number of requests unassigned",
       "tooltip": {
@@ -5008,8 +4987,13 @@
     "list": [
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_INFLUXDB}",
+        "current": {
+          "tags": [],
+          "text": "aio1",
+          "value": "aio1"
+        },
+        "datasource": "InfluxDB",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Hosts",
@@ -5019,6 +5003,7 @@
         "query": "SHOW TAG VALUES FROM \"haproxy\" WITH KEY = \"host\"",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": null,
         "tags": [],
@@ -5028,8 +5013,13 @@
       },
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_INFLUXDB}",
+        "current": {
+          "tags": [],
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "InfluxDB",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Frontends",
@@ -5039,6 +5029,7 @@
         "query": "SHOW TAG VALUES FROM \"haproxy\" WITH KEY = \"proxy\"",
         "refresh": 1,
         "regex": "/front/",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": null,
         "tags": [],
@@ -5048,8 +5039,12 @@
       },
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_INFLUXDB}",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "InfluxDB",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Backends",
@@ -5059,6 +5054,7 @@
         "query": "SHOW TAG VALUES FROM \"haproxy\" WITH KEY = \"proxy\"",
         "refresh": 1,
         "regex": "/back/",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": null,
         "tags": [],
@@ -5071,8 +5067,9 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "text": "1m",
-          "value": "1m"
+          "tags": [],
+          "text": "10s",
+          "value": "10s"
         },
         "hide": 0,
         "label": "Interval",
@@ -5084,7 +5081,7 @@
             "value": "$__auto_interval_interval"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "10s",
             "value": "10s"
           },
@@ -5094,7 +5091,7 @@
             "value": "30s"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "1m",
             "value": "1m"
           },
@@ -5146,12 +5143,13 @@
         ],
         "query": "10s, 30s, 1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
         "refresh": 2,
+        "skipUrlSync": false,
         "type": "interval"
       }
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-15m",
     "to": "now-10s"
   },
   "timepicker": {
@@ -5182,5 +5180,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 10
+  "version": 2
 }

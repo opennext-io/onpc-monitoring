@@ -23,38 +23,22 @@ var every = 1m
 var unit = 10s
 
 var rawdata = batch
-  |query('''SELECT econ, dresp, eresp FROM "telegraf"."autogen"."haproxy" WHERE type = 'server' ''')
+  |query('''SELECT http_response.5xx FROM "telegraf"."autogen"."haproxy" WHERE type = 'server' ''')
     .period(period)
     .every(every)
     .groupBy('region', 'host', 'proxy', 'sv')
 
-var econ = rawdata
-  |derivative('econ')
+var http_5xx = rawdata
+  |derivative('http_response.5xx')
     .as('value')
     .nonNegative()
     .unit(unit)
-    
-var dresp = rawdata
-  |derivative('dresp')
-    .as('value')
-    .nonNegative()
-    .unit(unit)
-
-var eresp = rawdata
-  |derivative('eresp')
-    .as('value')
-    .nonNegative()
-    .unit(unit)
-
-var data = econ 
-  |join(dresp, eresp)
-    .as('econ', 'dresp', 'eresp')
 
 // Thresholds
 var alert = data
   |alert()
-    .id('haproxy-{{ index .Tags "proxy" }}-errors-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "sv" }}: HAProxy errors rate of change for econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
-    .warn(lambda: "econ.value" >= warn OR "dresp.value" >= warn OR "eresp.value" > 0)
+    .id('haproxy-{{ index .Tags "proxy" }}-5xx-errors-alert')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "sv" }}/{{ index .Tags "proxy" }}: HAProxy backend HTTP errors rate of change = {{ index .Fields "http_5xx.value" }}')
+    .warn(lambda: "http_5xx.value" > 0)
     .topic('haproxy')
 //  .log('/var/log/kapacitor/haproxy_backend_error_alert.log')

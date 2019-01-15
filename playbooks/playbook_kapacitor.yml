@@ -47,7 +47,7 @@
       kapacitor_tick_var_dir: "../files/kapacitor/tick/vars"
       kapacitor_tick_handler_dir: "../templates/kapacitor/handlers"
       
-    - role: "rsyslog_client"
+    - role: rsyslog_client
       rsyslog_client_log_rotate_file: kapacitor_log_rotate
       rsyslog_client_log_dir: "{{ kapacitor_logs_dir }}"
       rsyslog_client_config_name: "99-kapacitor-rsyslog-client.conf"
