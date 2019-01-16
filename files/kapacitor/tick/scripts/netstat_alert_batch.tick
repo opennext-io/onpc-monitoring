@@ -13,8 +13,8 @@
 var info = 2
 var warn = 2.5
 var crit = 3
-var period = 1m 
-var every = 1m 
+var period = 2m 
+var every = 2m 
 var unit = 1s
 
 var rawdata = batch
