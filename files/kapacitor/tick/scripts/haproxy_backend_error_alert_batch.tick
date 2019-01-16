@@ -54,7 +54,7 @@ var data = econ
 var alert = data
   |alert()
     .id('haproxy-{{ index .Tags "proxy" }}-errors-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{ index .Tags "sv" }}: HAProxy errors rate of change for econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
-    .warn(lambda: "econ.value" > 0 OR "dresp.value" >= 0 OR "eresp.value" > 0)
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "sv" }}: HAProxy errors. Rate of change for econ={{ index .Fields "econ.value" }} dresp={{ index .Fields "dresp.value" }} eresp={{ index .Fields "eresp.value" }}')
+    .warn(lambda: "econ.value" > 0 OR "dresp.value" > 0 OR "eresp.value" > 0)
     .topic('haproxy')
 //  .log('/var/log/kapacitor/haproxy_backend_error_alert.log')

@@ -16,7 +16,7 @@ var warn = 2.5
 var crit = 3
 var period = 1m
 var every = 1m
-var unit = 10s
+var unit = 1s
 
 // Dataframe
 var rawdata = batch
@@ -57,7 +57,7 @@ var data = err_in
 var alert = data
   |alert()
     .id('network-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Network errors rate of change for err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Network errors. Rate of change for err_in:{{ index .Fields "err_in.value" }} err_out:{{ index .Fields "err_out.value" }} drop_in:{{ index .Fields "drop_in.value" }} drop_out:{{ index .Fields "drop_out.value" }}')
     .info(lambda: sigma("err_in.value") > info OR sigma("err_out.value") > info OR sigma("drop_in.value") > info OR sigma("drop_out.value") >= info)
     .warn(lambda: sigma("err_in.value") > warn OR sigma("err_out.value") > warn OR sigma("drop_in.value") > warn OR sigma("drop_out.value") >= warn)
     .crit(lambda: sigma("err_in.value") > crit OR sigma("err_out.value") > crit OR sigma("drop_in.value") > crit OR sigma("drop_out.value") >= crit)

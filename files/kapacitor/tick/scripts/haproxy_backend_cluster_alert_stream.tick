@@ -19,6 +19,7 @@
 
 var info = 66.0
 var warn = 33.0
+var crit = 0.0
 
 var period = 1m
 var every = 1m
@@ -52,11 +53,10 @@ var alert = data
     |eval(lambda: float("up.value") / float("total.value") * 100.0)
         .as('stat')
     |alert()
- //     .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "proxy" }}/cluster')
       .id('haproxy-{{ index .Tags "proxy" }}-cluster-alert')
       .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "proxy" }}: cluster availability state = {{ index .Fields "stat" | printf "%0.f" }}%')
-      .info(lambda: "stat" >= info)
-      .warn(lambda: "stat" >= warn)
-      .crit(lambda: "stat" < warn)
+      .info(lambda: "stat" <= info)
+      .warn(lambda: "stat" <= warn)
+      .crit(lambda: "stat" == crit)
       .topic('haproxy')
 //    .log('/var/log/kapacitor/haproxy_backend_cluster_alert.log')

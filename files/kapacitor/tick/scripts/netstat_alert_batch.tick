@@ -15,7 +15,7 @@ var warn = 2.5
 var crit = 3
 var period = 1m 
 var every = 1m 
-var unit = 10s
+var unit = 1s
 
 var rawdata = batch
   |query('''SELECT tcp_established, tcp_time_wait, tcp_close_wait FROM "telegraf"."autogen"."netstat" ''')
