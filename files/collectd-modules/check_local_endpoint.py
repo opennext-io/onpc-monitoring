@@ -33,10 +33,8 @@ plugin = CheckLocalEndpoint(collectd, disable_check_metric=True)
 def config_callback(conf):
     plugin.config_callback(conf)
 
-
 def notification_callback(notification):
     plugin.notification_callback(notification)
-
 
 def read_callback():
     plugin.conditional_read_callback()

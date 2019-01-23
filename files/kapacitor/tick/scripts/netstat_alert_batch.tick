@@ -10,12 +10,11 @@
 // ENABLE: kapacitor enable netstat_alert_batch
 
 // Parameters
-var info = 2
-var warn = 2.5
-var crit = 3
-var period = 2m 
-var every = 2m 
-var unit = 1s
+var info = 2.5
+var warn = 3.0
+var crit = 3.5
+var period = 1m 
+var every = 1m 
 
 var rawdata = batch
   |query('''SELECT tcp_established, tcp_time_wait, tcp_close_wait FROM "telegraf"."autogen"."netstat" ''')
@@ -24,22 +23,16 @@ var rawdata = batch
     .groupBy('region', 'host')
 
 var tcp_established = rawdata
-  |derivative('tcp_established')
+  |mean('tcp_established')
     .as('value')
-    .nonNegative()
-    .unit(unit)
 
 var tcp_time_wait = rawdata
-  |derivative('tcp_time_wait')
+  |mean('tcp_time_wait')
     .as('value')
-    .nonNegative()
-    .unit(unit)
 
 var tcp_close_wait = rawdata
-  |derivative('tcp_close_wait')
+  |mean('tcp_close_wait')
     .as('value')
-    .nonNegative()
-    .unit(unit)
 
 var data = tcp_close_wait
   |join(tcp_time_wait, tcp_established)
@@ -48,9 +41,9 @@ var data = tcp_close_wait
 var alert = data
   |alert()
     .id('netstat-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Network anomalies rate of change for tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }} derivatives')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Possible network anomaly. tcp_established={{ index .Fields "tcp_established.value" }} tcp_time_wait={{ index .Fields "tcp_time_wait.value" }} tcp_close_wait={{ index .Fields "tcp_close_wait.value" }}')
     .info(lambda: sigma("tcp_established.value") >= info OR sigma("tcp_time_wait.value") >= info OR sigma("tcp_close_wait.value") >= info)
     .warn(lambda: sigma("tcp_established.value") >= warn OR sigma("tcp_time_wait.value") >= warn OR sigma("tcp_close_wait.value") >= warn)
-    .crit(lambda: sigma("tcp_established.value") >= crit OR sigma("tcp_time_wait.value") >= crit OR sigma("tcp_close_wait.value") >= crit)
+//    .crit(lambda: sigma("tcp_established.value") >= crit OR sigma("tcp_time_wait.value") >= crit OR sigma("tcp_close_wait.value") >= crit)
     .topic('network')
 //  .log('/var/log/kapacitor/netstat_alert_batch.log')

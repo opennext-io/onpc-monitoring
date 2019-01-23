@@ -18,7 +18,6 @@ import dateutil.parser
 import dateutil.tz
 import requests
 import simplejson as json
-
 import collectd_base as base
 
 from collections import defaultdict
@@ -28,14 +27,11 @@ from collections import defaultdict
 # in the Grafana graphs.
 INTERVAL = 60
 
-
 class KeystoneException(Exception):
     pass
 
-
 class PluginConfigurationException(Exception):
     pass
-
 
 class OSClient(object):
     """ Base class for querying the OpenStack API endpoints.
