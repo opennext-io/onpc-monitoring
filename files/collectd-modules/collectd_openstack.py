@@ -203,6 +203,9 @@ class CollectdPlugin(base.Base):
         if url:
             if url[-1] != '/':
                 url += '/'
+            # Force Keystome V3
+            if s.get('name') == 'keystone':
+                url += 'v3/'
             url = "%s%s" % (url, resource)
             self.logger.debug(
                 "Url construct for service request %s = %s" % (service, url))
