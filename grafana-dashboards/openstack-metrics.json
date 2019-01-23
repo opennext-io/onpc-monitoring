@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 8,
-  "iteration": 1545410760477,
+  "iteration": 1548254402298,
   "links": [],
   "panels": [
     {
@@ -53,7 +53,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 3.4285714285714284,
         "x": 0,
         "y": 1
       },
@@ -193,8 +193,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 2,
+        "w": 3.4285714285714284,
+        "x": 3.4285714285714284,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -229,7 +229,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -335,8 +335,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 4,
+        "w": 3.4285714285714284,
+        "x": 6.857142857142857,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -371,7 +371,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -463,7 +463,7 @@
       "colorValue": false,
       "colors": [
         "#299c46",
-        "#bf1b00",
+        "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
       "datasource": "InfluxDB",
@@ -477,8 +477,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 6,
+        "w": 3.4285714285714284,
+        "x": 10.285714285714285,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -513,7 +513,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -619,8 +619,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 8,
+        "w": 3.4285714285714284,
+        "x": 13.714285714285714,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -655,7 +655,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -761,8 +761,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 10,
+        "w": 3.4285714285714284,
+        "x": 17.142857142857142,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -797,7 +797,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -903,8 +903,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 12,
+        "w": 3.4285714285714284,
+        "x": 20.57142857142857,
         "y": 1
       },
       "hideTimeOverride": true,
@@ -939,7 +939,7 @@
       ],
       "repeat": null,
       "repeatDirection": "h",
-      "repeatIteration": 1545410760477,
+      "repeatIteration": 1548254402298,
       "repeatPanelId": 200,
       "scopedVars": {
         "api_endpoint": {
@@ -1361,7 +1361,7 @@
       "thresholds": "",
       "timeFrom": "5m",
       "timeShift": null,
-      "title": "Total used volumes",
+      "title": "Total assigned volumes",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1918,7 +1918,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "5m",
+      "timeFrom": "3m",
       "timeShift": null,
       "title": "Total number of tenants",
       "type": "singlestat",
@@ -1959,7 +1959,7 @@
       },
       "hideTimeOverride": true,
       "id": 145,
-      "interval": "5m",
+      "interval": "1m",
       "links": [],
       "mappingType": 1,
       "mappingTypes": [
@@ -2030,7 +2030,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "5m",
+      "timeFrom": "3m",
       "timeShift": null,
       "title": "Total number of roles",
       "type": "singlestat",
@@ -2142,7 +2142,7 @@
         }
       ],
       "thresholds": "",
-      "timeFrom": "5m",
+      "timeFrom": "3m",
       "timeShift": null,
       "title": "Total number of users",
       "type": "singlestat",
@@ -2684,8 +2684,8 @@
       "decimals": 0,
       "fill": 1,
       "gridPos": {
-        "h": 8,
-        "w": 17,
+        "h": 9,
+        "w": 12,
         "x": 0,
         "y": 23
       },
@@ -2803,7 +2803,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 32
       },
       "id": 32,
       "panels": [
@@ -3474,7 +3474,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 33
       },
       "id": 30,
       "panels": [
@@ -4440,7 +4440,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 34
       },
       "id": 26,
       "panels": [
@@ -5212,7 +5212,7 @@
       "type": "row"
     }
   ],
-  "refresh": "1m",
+  "refresh": "30s",
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
@@ -5283,5 +5283,5 @@
   "timezone": "browser",
   "title": "OpenStack Metrics",
   "uid": "OwRmDQzik",
-  "version": 10
+  "version": 12
 }
