@@ -22,7 +22,7 @@
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
     # Disable grafana haproxy backend to avoid false positive alerts.
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: grafana-back
         haproxy_state: disabled
@@ -30,15 +30,15 @@
         - "'grafana' in group_names"
         - "groups['grafana'] | length > 1"
       tags: [grafana-disable-haproxy]
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       when:
         - "inventory_hostname in groups['all_containers']"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-grafana"
             dest: "{{ grafana_logs_dir }}"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
     - name: Create DB for the service
       mysql_db:
         login_user: "{{ galera_root_user }}"
@@ -123,7 +123,7 @@
         - /tmp/dashboards/*
       tags: [grafana-dashboards]
 
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: grafana-back
         haproxy_state: enabled

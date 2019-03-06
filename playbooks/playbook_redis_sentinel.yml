@@ -20,15 +20,15 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       when:
         - "inventory_hostname in groups['all_containers']"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-redis_sentinel"
             dest: "{{ redis_sentinel_logs_dir }}"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   roles:
     - role: redis
       redis_sentinel: true

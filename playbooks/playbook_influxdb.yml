@@ -20,7 +20,7 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_admin-back
         haproxy_state: disabled
@@ -28,7 +28,7 @@
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
       tags: [influxdb-admin-disable-haproxy]
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb-back
         haproxy_state: disabled
@@ -36,18 +36,18 @@
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
       tags: [influxdb-disable-haproxy]
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       static: no
       vars:
         list_of_bind_mounts: "{{ influxdb_container_bind_mounts }}"
       when:
         - "inventory_hostname in groups['all_containers']"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-influxdb"
             dest: "{{ influxdb_logs_dir }}"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
 
   # Below tasks shoud be moved into a role...  
   tasks:  
@@ -117,7 +117,7 @@
       tags: [influxdb-rsyslog]
 
   post_tasks:
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_admin-back
         haproxy_state: enabled
@@ -125,7 +125,7 @@
         - "'influxdb' in group_names"
         - "groups['influxdb'] | length > 1"
       tags: [influxdb_admin-enable-haproxy]
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb-back
         haproxy_state: enabled

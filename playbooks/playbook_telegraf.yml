@@ -21,16 +21,16 @@
   environment: "{{ deployment_environment_variables | default({}) }}"
 
   pre_tasks:
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       when:
         - "inventory_hostname in groups['all_containers']"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
             dest: "{{ telegraf_logs_dir }}"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-    - include: tasks/create_telegraf_ceph_key.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include_tasks: tasks/create_telegraf_ceph_key.yml
       when:
         - "'ceph-mon' in group_names"
         - "groups['ceph-mon'] | length > 1"
@@ -46,7 +46,7 @@
   
   post_tasks:
     # Use post tasks to install plugins
-   - include: ../tasks/create_telegraf_ceph_key.yml
+   - include_tasks: ../tasks/create_telegraf_ceph_key.yml
      when:
        - "'ceph-mon' in group_names"
        - "groups['ceph-mon'] | length > 1"
@@ -63,5 +63,3 @@
   handlers:
     - name: Telegraf restart
       service: name=telegraf state=restarted
-
-

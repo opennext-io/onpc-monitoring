@@ -20,7 +20,7 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_relay-back
         haproxy_state: disabled
@@ -74,7 +74,7 @@
       service:
         name: "influxdbrelay"
         state: restarted
-    - include: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_relay-back
         haproxy_state: enabled

@@ -20,20 +20,20 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   pre_tasks:
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       when:
         - "inventory_hostname in groups['all_containers']"
-    - include: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/os-log-dir-setup.yml
       vars:
         log_dirs:
           - src: "/openstack/log/{{ inventory_hostname }}-kapacitor"
             dest: "{{ kapacitor_logs_dir }}"
-    - include: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
+    - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       static: no
       vars:
         list_of_bind_mounts: "{{ kapacitor_container_bind_mounts }}"
       tags: [kapacitor-bind-mounts]
-    - include: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
+    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
   
   roles:
     - role: kapacitor
