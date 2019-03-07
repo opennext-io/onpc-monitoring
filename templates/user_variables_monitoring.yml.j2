@@ -248,7 +248,7 @@ kapacitor_tasks: [
   { id: "compute_vcpus_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vcpus_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "compute_vdisk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vdisk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "compute_vram_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/compute_vram_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "conntrack_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/conntrack_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
+  { id: "conntrack_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/conntrack_alert_batch.tick", dbrp: "telegraf.autogen", enabled: t:qrue },
   { id: "deadman_check", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/deadman_check_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
   { id: "disk_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/disk_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
@@ -260,7 +260,6 @@ kapacitor_tasks: [
   { id: "haproxy_backend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_frontend_state_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_frontend_state_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "haproxy_sessions_usage_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_sessions_usage_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
-  { id: "interface_speed_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/interface_speed_alert_stream.tick", dbrp: "telegraf.autogen", enabled: false },
   { id: "haproxy_backend_cluster_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/haproxy_backend_cluster_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "mem_alert", type: "stream", tick: "{{ kapacitor_tick_script_dest_dir }}/mem_alert_stream.tick", dbrp: "telegraf.autogen", enabled: true },
   { id: "net_alert", type: "batch", tick: "{{ kapacitor_tick_script_dest_dir }}/net_alert_batch.tick", dbrp: "telegraf.autogen", enabled: true },
@@ -335,12 +334,11 @@ telegraf_cephx:
 ## Slack variables
 # Use Slack for alerts
 # Slack alerts should be defined in the onpc-bootstrap project in vars/main.yml
-{% set _slack = onpc_slack_alerts | default({}) %}
-{% if _slack.get('alert-channel', '') | length > 0 and _slack.get('uuid', '') | length > 0 %}
+{% if slack_alerts_channels is defined and slack_alerts_channels | length > 0 %}
 slack_alerts_enabled: true
-slack_alerts_channel: "#{{ _slack.get('alert-channel') }}"
-# Note: should be stored in Ansible Vault for security
-slack_webhooks_url: "https://hooks.slack.com/services/{{ _slack.get('uuid') }}"
+slack_alerts_channel: "#{{ slack_alerts_channels[0]['name'] }}"
+# TODOe: should use Ansible Vault for security
+slack_webhooks_url: "https://hooks.slack.com/services/{{ slack_alerts_channels[0]['uuid']) }}"
 {% else %}
 slack_alerts_enabled: false
 {% endif %}
@@ -353,11 +351,10 @@ rabbitmq_monitoring_userid: monitoring
 
 ## Sensu varliables
 # Use Sensu for alerts
-# Sensu alerts should be defined in the onpc-bootstrap project in vars/main.yml
-{% set _sensu = onpc_sensu_alerts | default({}) %}
-{% if _sensu.get('handlers', []) | length > 0 %}
+# Sensu alerts handlers should be defined in the onpc-bootstrap project in vars/main.yml
+{% if sensu_alerts_handlers is defined and sensu_alerts_handlers | length > 0 %}
 sensu_alerts_enabled: true
-sensu_alerts_handlers: "{{ _sensu.get('handlers') }}"
+sensu_alerts_handlers: "{{ sensu_alerts_handlers }}"
 {% else %}
 sensu_alerts_enabled: false
 sensu_alerts_handlers: []
