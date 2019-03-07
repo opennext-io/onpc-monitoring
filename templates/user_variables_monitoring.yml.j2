@@ -357,7 +357,10 @@ rabbitmq_monitoring_userid: monitoring
 # Sensu alerts handlers should be defined in the onpc-bootstrap project in vars/main.yml
 {% if sensu_alerts_handlers is defined and sensu_alerts_handlers | length > 0 %}
 sensu_alerts_enabled: true
-sensu_alerts_handlers: "{{ sensu_alerts_handlers }}"
+sensu_alerts_handlers:
+{% for handler in sensu_alerts_handlers %}
+  - "{{ handler }}"
+{% endfor %}
 {% else %}
 sensu_alerts_enabled: false
 sensu_alerts_handlers: []
