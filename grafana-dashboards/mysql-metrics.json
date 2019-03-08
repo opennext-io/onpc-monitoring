@@ -48,7 +48,7 @@
       }
     ]
   },
-  "description": "This dashboard provides basic performance metrics for mysql/mariadb.\r\n\r\nUses telegraf built-in plugin",
+  "description": "mysql/mariadb cluster runtime metrics",
   "editable": true,
   "gnetId": 1177,
   "graphTooltip": 0,

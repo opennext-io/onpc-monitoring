@@ -42,7 +42,7 @@
       }
     ]
   },
-  "description": "Metrics on influxdb from telegraf",
+  "description": "Influxdb time-series DB runtime metrics",
   "editable": true,
   "gnetId": 317,
   "graphTooltip": 0,

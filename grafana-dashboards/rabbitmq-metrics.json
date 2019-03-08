@@ -48,7 +48,7 @@
       }
     ]
   },
-  "description": "By OpenNext SAS",
+  "description": "RabbitMQ runtime metrics",
   "editable": true,
   "gnetId": 1443,
   "graphTooltip": 0,

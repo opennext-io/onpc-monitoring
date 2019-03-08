@@ -54,7 +54,7 @@
       }
     ]
   },
-  "description": "By OpenNext SAS",
+  "description": "Host operating system runtime metrics",
   "editable": true,
   "gnetId": 1443,
   "graphTooltip": 0,

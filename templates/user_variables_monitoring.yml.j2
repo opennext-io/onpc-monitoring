@@ -36,7 +36,7 @@ collectd_logpath: "{{ collectd_logs_dir }}/collectd.log"
 
 ## Grafana variables
 #
-grafana_version: latest
+grafana_version: 5.4.3
 {%- raw %}
 grafana_instance: "{{ ansible_fqdn | default(ansible_host) | default(inventory_hostname) }}"
 grafana_address: "{{ hostvars[inventory_hostname]['ansible_host'] | default('0.0.0.0') }}"
@@ -98,11 +98,11 @@ onpc_grafana_dashboards:
     datasource: InfluxDB
   - name: memcached-metrics
     datasource: InfluxDB
-{% if 'swift' in onpc_services_list %}  
+{%- if 'swift' in onpc_services_list %}  
   - name: openstack-swift-proxy-metrics
     datasource: InfluxDB
 {% endif %}
-{% if 'ceph' in onpc_services_list %}
+{%- if 'ceph' in onpc_services_list %}
   - name: ceph-metrics
     datasource: InfluxDB
 {% endif %}

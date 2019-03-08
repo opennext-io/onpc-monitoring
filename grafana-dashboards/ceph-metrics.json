@@ -48,7 +48,7 @@
       }
     ]
   },
-  "description": "Provided by OpenNext SAS",
+  "description": "Ceph cluster runtime metrics",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
