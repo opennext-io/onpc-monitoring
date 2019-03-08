@@ -36,13 +36,13 @@ class APICheckPlugin(openstack.CollectdPlugin):
     # TODO all other OSA standard services i.e. sahara, murano, ...
     CHECK_MAP = {
         'keystone':
-            {'path': '', 'expect': [200], 'name': 'keystone'},
+            {'path': '', 'expect': [300], 'name': 'keystone'},
         'heat':
             {'path': '/', 'expect': [300], 'name': 'heat', 'auth': True},
         'heat-cfn':
             {'path': '/', 'expect': [300], 'name': 'heat-cfn'},
         'glance':
-            {'path': 'healthcheck', 'expect': [200], 'name': 'glance'},
+            {'path': '/healthcheck', 'expect': [200], 'name': 'glance'},
         'cinder':
             {'path': '/', 'expect': [300], 'name': 'cinder', 'auth': True},
         'cinderv2':
@@ -57,9 +57,9 @@ class APICheckPlugin(openstack.CollectdPlugin):
         'ceilometer':
             { 'path': 'capabilities', 'expect': [200], 'name': 'telemetry', 'auth': True},
         'swift':
-            {'path': 'healthcheck', 'expect': [200], 'name': 'swift'},
+            {'path': '/healthcheck', 'expect': [200], 'name': 'swift'},
         'swift_s3':
-            { 'path': 'healthcheck', 'expect': [200], 'name': 'swift-s3'},
+            { 'path': '/healthcheck', 'expect': [200], 'name': 'swift-s3'},
         'placement':
             { 'path': '', 'expect': [200], 'name': 'placement', 'auth': True},
         'magnum':
@@ -75,13 +75,13 @@ class APICheckPlugin(openstack.CollectdPlugin):
 
     def compose_service_url(self, endpoint, path):
         u = urlparse(endpoint)
-        if path == '/':
-            url = '%s://%s' % (u.scheme, u.netloc)
+        if path.startswith('/'):
+            url = '%s://%s%s' % (u.scheme, u.netloc, path)
         else:
             url = u.geturl()
             if len(path) != 0:
                 url = '%s/%s' % (url, path)
-        return url 
+        return url
 
     def check_api(self):
         """ Check the status of all the API services.

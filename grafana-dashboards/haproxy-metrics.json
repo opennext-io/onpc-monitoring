@@ -17,7 +17,7 @@
   "gnetId": 1234,
   "graphTooltip": 0,
   "id": 32,
-  "iteration": 1552038066719,
+  "iteration": 1552044703690,
   "links": [],
   "panels": [
     {
@@ -4988,9 +4988,8 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
-          "text": "opennext09",
-          "value": "opennext09"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "InfluxDB",
         "definition": "",
@@ -5147,7 +5146,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now-10s"
   },
   "timepicker": {
@@ -5178,5 +5177,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 1
+  "version": 2
 }

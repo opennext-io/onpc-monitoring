@@ -83,7 +83,7 @@
     - name: collectd-configure | Plugins configuration
       template:
         src: "../templates/collectd/debenv.j2"
-        dest: "{{ collectd_plugins_prefix }}/debenv"
+        dest: "{{ collectd_plugins_dir }}/debenv"
       tags: [collectd-modules]
 
       # Drop collectd plugins configuration
