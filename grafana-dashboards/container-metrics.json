@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_INFLUXDB",
-      "label": "InfluxDB",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.2.4"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -52,8 +16,8 @@
   "editable": true,
   "gnetId": 1443,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1547654585015,
+  "id": 29,
+  "iteration": 1552036968725,
   "links": [],
   "panels": [
     {
@@ -4295,9 +4259,8 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
-          "text": "aio1-cinder-api-container-0f768cb0",
-          "value": "aio1-cinder-api-container-0f768cb0"
+          "text": "opennext04-cinder-api-container-decfe50b",
+          "value": "opennext04-cinder-api-container-decfe50b"
         },
         "datasource": "InfluxDB",
         "definition": "",
@@ -4420,5 +4383,5 @@
   "timezone": "browser",
   "title": "Container Metrics",
   "uid": "CTno-hWmk",
-  "version": 4
+  "version": 1
 }

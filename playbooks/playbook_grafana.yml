@@ -47,6 +47,7 @@
         name: "{{ grafana_db_name }}"
         state: "present"
       delegate_to: "{{ groups['galera_all'][0] }}"
+      run_once: true
       no_log: true
       tags: [grafana-database]
 
@@ -61,6 +62,7 @@
         state: "present"
         priv: "{{ grafana_db_name }}.*:ALL"
       delegate_to: "{{ groups['galera_all'][0] }}"
+      run_once: true
       with_items:
         - "localhost"
         - "%"
@@ -72,6 +74,7 @@
       http_proxy: "{{ deployment_environment_variables.http_proxy | default('') }}"
       https_proxy: "{{ deployment_environment_variables.https_proxy | default('') }}"
       no_proxy: "{{ deployment_environment_variables.no_proxy | default('') }}"
+      serial: 1
       tags: [grafana-install]
 
     - role: rsyslog_client
@@ -86,7 +89,7 @@
         path: /tmp/dashboards
         state: directory
         mode: 0755
-      run_once: yes
+      run_once: true
       delegate_to: localhost
       tags: [grafana-dashboard]
 
@@ -96,7 +99,7 @@
         dest: "/tmp/dashboards/{{ item.name }}.json"
       with_items: "{{ onpc_grafana_dashboards }}"
       delegate_to: localhost
-      run_once: yes
+      run_once: true
       tags: [grafana-dashboards]
 
     - name: Set the correct data source name in the dashboard
@@ -105,7 +108,7 @@
         regexp: '"(?:\${)?DS_[A-Z]+(?:})?"'
         replace: '"{{ item.datasource }}"'
       delegate_to: localhost
-      run_once: yes
+      run_once: true
       with_items: "{{ onpc_grafana_dashboards }}"
       tags: [grafana-dashboards]
 
@@ -118,7 +121,7 @@
         method: POST
         body_format: json
         body: '{ "dashboard": {{ lookup("file", item) }}, "overwrite": true }'
-      no_log: true
+      no_log: false 
       with_fileglob:
         - /tmp/dashboards/*
       tags: [grafana-dashboards]
@@ -131,4 +134,5 @@
         - "'grafana' in group_names"
         - "groups['grafana'] | length > 1"
       tags: [grafana-enable-haproxy]
+
 
