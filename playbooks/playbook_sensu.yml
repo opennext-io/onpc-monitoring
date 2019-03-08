@@ -45,11 +45,14 @@
       # redis_host: "{{ sensu_redis_host }}"
       when:
         - "'sensu' in group_names"
+      tags:
+        - sensu-server
     - role: rsyslog_client
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
       rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
-      tags: [sensu-rsyslog]
+      tags:
+        - sensu-rsyslog
 - name: Deploy Sensu Client
   hosts: "all:!sensu"
   gather_facts: true
@@ -67,10 +70,13 @@
       rabbitmq_sensu_password: "{{ sensu_rabbitmq_user_password }}"
       rabbitmq_sensu_vhost: "{{ sensu_rabbitmq_vhost }}"
       redis_server: false
+      tags:
+        - sensu-client
       # redis_host not used anymore (redis_sentinels used instead)
       # redis_host: "{{ sensu_redis_host }}"
     - role: rsyslog_client
       rsyslog_client_log_rotate_file: sensu_log_rotate
       rsyslog_client_log_dir: "{{ sensu_logs_dir }}"
       rsyslog_client_config_name: "99-sensu-rsyslog-client.conf"
-      tags: [sensu-rsyslog]
+      tags:
+        - sensu-rsyslog
