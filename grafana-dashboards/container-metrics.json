@@ -2318,7 +2318,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "select (mean(\"inodes_used\") / mean(\"inodes_total\") * 100.0) from disk where $timeFilter and \"host\" =~ /^$host$/ and $timeFilter group by time($interval), \"path\" fill(null)",
+          "query": "select (mean(\"inodes_used\") / mean(\"inodes_total\") * 100) from disk where $timeFilter and \"host\" =~ /^$host$/ and $timeFilter group by time($interval), \"path\" fill(null)",
           "rawQuery": true,
           "refId": "F",
           "resultFormat": "time_series",

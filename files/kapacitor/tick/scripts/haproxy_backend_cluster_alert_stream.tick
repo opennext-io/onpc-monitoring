@@ -50,7 +50,7 @@ var data = total
         .as('total', 'up')
 
 var alert = data
-    |eval(lambda: float("up.value") / float("total.value") * 100.0)
+    |eval(lambda: (float("up.value") / float("total.value")) * 100.0)
         .as('stat')
     |alert()
       .id('haproxy-{{ index .Tags "proxy" }}-cluster-alert')

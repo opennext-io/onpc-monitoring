@@ -39,7 +39,7 @@ var data = in
 
 // Thresholds
 var alert = data 
-  |eval(lambda: float("in.value") / float("total.value") * 100.0)
+  |eval(lambda: (float("in.value") / float("total.value")) * 100.0)
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/ceph/osd_out')

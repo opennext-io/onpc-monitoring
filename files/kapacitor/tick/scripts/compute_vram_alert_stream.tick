@@ -52,7 +52,7 @@ var data = available
 
 // Thresholds
 var alert = data 
-  |eval(lambda: float("in_use.value")/float("available.value") * 100.0)
+  |eval(lambda: (float("in_use.value") / float("available.value")) * 100.0)
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/compute/vram')

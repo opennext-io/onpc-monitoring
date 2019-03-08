@@ -49,7 +49,7 @@ var data = slim
     .as('slim', 'scur')
 
 var alert = data
-  |eval(lambda: float("scur.value")/float("slim.value") * 100.0)
+  |eval(lambda: (float("scur.value") / float("slim.value")) * 100.0)
     .as('stat')
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions')
