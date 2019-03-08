@@ -17,7 +17,7 @@
   "gnetId": 1234,
   "graphTooltip": 0,
   "id": 32,
-  "iteration": 1552037100609,
+  "iteration": 1552038066719,
   "links": [],
   "panels": [
     {
@@ -1811,7 +1811,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"bout\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" ",
+          "query": "SELECT non_negative_derivative(last(\"bout\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" ",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2098,7 +2098,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"bin\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"bin\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$frontend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2171,7 +2171,7 @@
       "description": "Requests denied because of security concerns.\n- For tcp this is because of a matched tcp\n  request content rule.\n- For http this is because of a matched http\n  request or tarpit rule.",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 69
@@ -2247,7 +2247,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(mean(\"dreq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "query": "SELECT non_negative_derivative(mean(\"dreq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -2339,7 +2339,7 @@
       "description": "Request errors. Some of the possible causes are:\n- early termination from the client, before the\n  request has been sent.\n- read error from the client\n   - client timeout\n   - client closed connection\n   - various bad requests from the client.\n   - request was tarpitted.",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 12,
         "y": 69
@@ -2422,7 +2422,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(mean(\"ereq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND $timeFilter GROUP BY time($interval), \"proxy\" ",
+          "query": "SELECT non_negative_derivative(mean(\"ereq\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"type\" = 'frontend' AND $timeFilter GROUP BY time($interval), \"proxy\" ",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2508,7 +2508,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 76
+        "y": 77
       },
       "id": 36,
       "panels": [],
@@ -2525,7 +2525,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 78
       },
       "hideTimeOverride": true,
       "id": 25,
@@ -2685,7 +2685,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 88
+        "y": 89
       },
       "id": 43,
       "interval": "1m",
@@ -2733,7 +2733,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT ((mean(\"scur\") / mean(\"slim\")) * 100) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND  \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
+          "query": "SELECT ((mean(\"scur\") / mean(\"slim\")) * 100)FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND  \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\" fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2808,7 +2808,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 95
+        "y": 96
       },
       "id": 30,
       "interval": "60s",
@@ -2881,7 +2881,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.1xx\")) AS \"http 1xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"http_response.1xx\")) AS \"http 1xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2962,7 +2962,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.2xx\")) AS \"http 2xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"http_response.2xx\")) AS \"http 2xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -3043,7 +3043,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.3xx\")) AS \"http 3xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"http_response.3xx\")) AS \"http 3xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -3124,7 +3124,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.4xx\")) AS \"http 4xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"http_response.4xx\")) AS \"http 4xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
@@ -3205,7 +3205,7 @@
           },
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"http_response.5xx\")) AS \"http 5xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"http_response.5xx\")) AS \"http 5xx\" FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "E",
           "resultFormat": "time_series",
@@ -3297,7 +3297,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 104
+        "y": 105
       },
       "id": 31,
       "interval": "1m",
@@ -3346,7 +3346,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT derivative(last(\"bin\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
+          "query": "SELECT non_negative_derivative(last(\"bin\")) FROM \"haproxy\" WHERE \"host\" =~ /^$host$/ AND \"proxy\" =~ /^$backend$/ AND $timeFilter GROUP BY time($interval), \"proxy\"",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -3420,7 +3420,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 115
+        "y": 116
       },
       "id": 5,
       "interval": "1m",
@@ -3585,7 +3585,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 123
+        "y": 124
       },
       "id": 32,
       "interval": "1m",
@@ -3707,7 +3707,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 130
+        "y": 131
       },
       "hideTimeOverride": true,
       "id": 33,
@@ -3872,7 +3872,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 130
+        "y": 131
       },
       "id": 45,
       "interval": "1m",
@@ -4037,7 +4037,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 136
+        "y": 137
       },
       "hideTimeOverride": false,
       "id": 27,
@@ -4203,7 +4203,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 136
+        "y": 137
       },
       "hideTimeOverride": false,
       "id": 28,
@@ -4369,7 +4369,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 143
+        "y": 144
       },
       "hideTimeOverride": false,
       "id": 6,
@@ -4492,7 +4492,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 143
+        "y": 144
       },
       "id": 8,
       "interval": "1m",
@@ -4658,7 +4658,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 150
+        "y": 151
       },
       "id": 44,
       "interval": "1m",
@@ -4823,7 +4823,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 150
+        "y": 151
       },
       "id": 13,
       "legend": {
@@ -4988,8 +4988,9 @@
       {
         "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "tags": [],
+          "text": "opennext09",
+          "value": "opennext09"
         },
         "datasource": "InfluxDB",
         "definition": "",
@@ -5146,7 +5147,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now-10s"
   },
   "timepicker": {
