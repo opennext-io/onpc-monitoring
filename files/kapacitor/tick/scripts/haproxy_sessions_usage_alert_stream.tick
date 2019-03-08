@@ -19,7 +19,7 @@
 
 var info = 60.0
 var warn = 80.0 
-var crit = 90.0
+var crit = 100.0
 var period = 5m 
 var every = 5m
 
@@ -54,7 +54,7 @@ var alert = data
   |alert()
 //    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/{{ index .Tags "type" }}/{{index .Tags "proxy" }}/sessions')
     .id('haproxy-{{ index .Tags "proxy" }}-session-alert')
-    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{index .Tags "proxy" }}: HAProxy sessions usage = {{ index .Fields "stat" | printf "%0.2f" }}%')
+    .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}/{{index .Tags "proxy" }}: HAProxy sessions usage = {{ index .Fields "stat" | printf "%0.2f" }}% [slim = {{ index .Fields "slim" | printf "%d" }} scur = {{ index .Fields "scur" | printf "%d"}}]')
     .info(lambda: "stat" >= info)
     .warn(lambda: "stat" >= warn)
     .crit(lambda: "stat" >= crit)
