@@ -13,9 +13,9 @@
 // Parameters
 
 
-var info = 60.0
-var warn = 80.0
-var crit = 90.0
+var info = 70.0
+var warn = 90.0
+var crit = 100.0
 var infoSig = 2.5
 var warnSig = 3
 var critSig = 3.5
@@ -39,7 +39,6 @@ var data = stream
 // Thresholds
 var alert = data
   |alert()
-//    .id('{{ index .Tags "environment" }}/{{ index .Tags "region" }}/{{ index .Tags "host" }}/disk')
     .id('disk-alert')
     .message('{{ .ID }}: [{{ .Level }}] {{ index .Tags "host" }}: Disk usage for "{{ index .Tags "path" }}" = {{ index .Fields "stat" | printf "%0.2f" }}%')
     .info(lambda: "stat" >= info)
