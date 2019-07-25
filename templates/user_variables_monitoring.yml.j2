@@ -98,11 +98,11 @@ onpc_grafana_dashboards:
     datasource: InfluxDB
   - name: memcached-metrics
     datasource: InfluxDB
-{%- if 'swift' in openstack_services_list %}  
+{% if 'swift' in openstack_services_list %}  
   - name: openstack-swift-proxy-metrics
     datasource: InfluxDB
 {% endif %}
-{%- if 'ceph' in openstack_services_list %}
+{% if 'ceph' in openstack_services_list %}
   - name: ceph-metrics
     datasource: InfluxDB
 {% endif %}
