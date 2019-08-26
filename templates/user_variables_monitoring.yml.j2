@@ -98,11 +98,11 @@ onpc_grafana_dashboards:
     datasource: InfluxDB
   - name: memcached-metrics
     datasource: InfluxDB
-{% if 'swift' in openstack_services_list %}  
+{% if 'swift' in onpc_services_list %}  
   - name: openstack-swift-proxy-metrics
     datasource: InfluxDB
 {% endif %}
-{% if 'ceph' in openstack_services_list %}
+{% if 'ceph' in onpc_services_list %}
   - name: ceph-metrics
     datasource: InfluxDB
 {% endif %}
@@ -231,9 +231,9 @@ kapacitor_handlers: [
 {% endraw %}
 ]
 
-# Note PP: Disabled 'cinder_volume_alert' because in its current state, it's not indicative of
-# of a problem. What need to be evaluated is the total size of backend storage size
-# available in cinder storage pools instead. See
+# TODO PP: Disabled 'cinder_volume_alert' because in current state, it's not indicative of
+# of a problem. What need to be evaluated instead is the total size of backend storage size
+# available in cinder storage pools. See
 # https://developer.openstack.org/api-ref/block-storage/v3/?expanded=list-all-back-end-storage-pools-detail#list-all-back-end-storage-pools
 #
 kapacitor_tasks: [
@@ -299,7 +299,7 @@ telegraf_agent_logfile: "{{ telegraf_logs_dir }}/telegraf.log"
 telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
 {% endraw %}
 
-# TODO: make this dynamic
+# TODO: make this more dynamic
 telegraf_plugins_list: [ outputs, galera, haproxy, influxdb, listener, memcached, rabbitmq, swift, system, ceph ]
 {%- raw %}
 telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version is version_compare('0.10.0', '<') else '/etc/telegraf' }}"
