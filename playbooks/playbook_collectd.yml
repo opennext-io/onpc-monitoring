@@ -19,18 +19,6 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
-    - name: Gather variables for each operating system
-      include_vars: "{{ item }}"
-      with_first_found:
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
-        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-        - "{{ ansible_distribution_file_variety | lower }}.yml"
-        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-        - "{{ ansible_distribution | lower }}.yml"
-        - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
-        - "{{ ansible_os_family | lower }}.yml"
-      tags: always
-    
     - name: Install the EPEL Repo for CentOS
       package:
         name: epel-release
@@ -39,35 +27,38 @@
       until: _install_epel_package is succeeded
       retries: 5
       delay: 2
-      when: ansible_os_family == 'ReadHat'
+      when: ansible_os_family == 'RedHat'
       tags: collectd-install
 
     - name: Install package dependencies
       package:
-        name: "{{ item }}"
+        name: "{{ packages }}"
         state: present
       register: _install_dep_packages
       until: _install_dep_packages is succeeded
       retries: 5
       delay: 2
-      with_items:
-        - python-pip
-        - python-pkg-resources
-        - python-setuptools
+      vars:
+        packages:
+          - python-pip
+#          - python-pkg-resources
+          - python-setuptools
       tags: collectd-install
 
     - name: Install pip dependencies
       pip: 
-        name: "{{ item }}"
+        name: "{{ packages }}"
         state: "latest"
       register: _install_pip_packages
       until: _install_pip_packages
       retries: 5
       delay: 2
-      with_items:
-        - python_dateutil
-        - requests
-        - simplejson
+      vars:
+        packages:
+          - python_dateutil
+          - requests
+          - simplejson
+
       tags: collectd-install
 
 - hosts: "collectd:{{ nova_compute_hosts }}" 
