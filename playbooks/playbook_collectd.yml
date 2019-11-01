@@ -13,44 +13,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Deploy Collectd
+- name: Install Collectd plugins dependencies
   hosts: "collectd"
   become: true
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
-    - name: Install python pip
+    - name: Install package dependencies
       package:
-        name: "{{ item }}"
-        state: latest
+        name: "{{ collectd_dependencies }}"
+        state: present
+      register: _install_dep_packages
+      until: _install_dep_packages is succeeded
+      retries: 5
+      delay: 2
+      tags: collectd-install
       with_items:
         - python-pip
         - python-pkg-resources
         - python-setuptools
-    - name: Install required pip packages
+
+    - name: Install pip dependencies
       pip: 
-        name: "{{ item }}"
+        name: "{{ collectd_pip_dependencies }}"
         state: "latest"
-      register: install_packages
-      until: install_packages|success
+      register: _install_pip_packages
+      until: _install_pip_packages
       retries: 5
       delay: 2
       with_items:
         - python_dateutil
         - requests
         - simplejson
-    - name: Create log directory 
-      file:
-        path: "{{ collectd_logs_dir }}"
-        state: directory
-        mode: 0664
 
 - hosts: "collectd:{{ nova_compute_hosts }}" 
   gather_facts: true
   become: true
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
-    
+
+  vars:
+    - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+
   pre_tasks:
     - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
       when:
@@ -98,12 +102,10 @@
         - openstack_plugins
         - libvirt_plugin
         - network_plugin
-      notify: Collectd restart
+      notify: collectd restart
       tags: [collectd-configure]
     
   handlers:
-      - name: Collectd restart
+      - name: collectd restart
         service: name=collectd state=restarted
-  
-  vars:
-    - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+
