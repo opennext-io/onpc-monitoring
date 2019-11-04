@@ -20,6 +20,7 @@
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
+    block:
     - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
       vars:
         haproxy_backend: influxdb_relay-back
@@ -82,3 +83,4 @@
         - "'influxdb_relay' in group_names"
         - "groups['influxdb_relay'] | length > 1"
       tags: [influxdb-relay_enable_haproxy]
+    when: influxdb_relay_enabled | bool == true

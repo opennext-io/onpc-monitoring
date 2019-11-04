@@ -105,11 +105,12 @@ onpc_grafana_dashboards:
 {% endif %}
 ## InfluxDB variables
 #
-influxdb_relay_port: 8096
+influxdb_relay_enabled: false
+influxdb_relay_port: "{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"
 influxdb_logs_dir: "/var/log/influxdb" 
 influxdb_databases:
   - host: localhost
-    name: telegraf
+    name: "{{ telegraf_db_name }}"
     state: present
     # Defines the retention policy
     retention_policy:
