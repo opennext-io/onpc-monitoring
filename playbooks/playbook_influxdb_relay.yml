@@ -13,74 +13,74 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-- name: Deploy Influxdb Relay
-  hosts: "influxdb_relay"
+- hosts: "influxdb_relay"
   gather_facts: true
   become: true
   become_user: root
   environment: "{{ deployment_environment_variables | default({}) }}"
   tasks:
-    block:
-    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
-      vars:
-        haproxy_backend: influxdb_relay-back
-        haproxy_state: disabled
-      when:
-        - "'influxdb_relay' in group_names"
-        - "groups['influxdb_relay'] | length > 1"
-      tags: [influxdb-relay_disable_haproxy]
-    - name: Check init system
-      command: cat /proc/1/comm
-      changed_when: false
-      register: _init_name
-      tags: [influxdb-relay-init]
-    - name: Set the name of init system
-      set_fact:
-        init_name: "{{ _init_name.stdout }}"
-      tags: [influxdb-relay_init]
-    - name: Install dependencies 
-      package:
-        name: "{{ item }}" 
-        state: "latest"
-      with_items:
-        - git
-        - wget
-      tags: [influxdb-relay_dependencies]
-    - name: Install GOLang
-      script: ../files/influxdb_relay/deploy_go.sh
-      changed_when: false
-      tags: [influxdb-relay_depedencencies]
-    - name: Download and install influx-relay
-      script: ../files/influxdb_relay/deploy_influxdbrelay.sh
-      changed_when: false
-      tags: [influxdb-relay_install]
-    - name: Drop influx relay toml file
-      template:
-        src: ../templates/influxdb/relay.toml.j2
-        dest: /opt/influxdb-relay/relay.toml
-      tags: [influxdb-relay_install]
-    - name: Drop Influx Relay upstart
-      template:
-        src: ../templates/influxdb/influxdbrelay.conf.j2
-        dest: /etc/init/influxdbrelay.conf
-      when: init_name == "init"
-      tags: [influxdb-relay_install]
-    - name: Drop Influx Relay service file
-      template:
-        src: ../templates/influxdb/influxdbrelay.service.j2
-        dest: /etc/systemd/system/influxdbrelay.service
-      when:  init_name == "systemd"
-      tags: [influxdb-relay_install]
-    - name: Enable and restart influxdb
-      service:
-        name: "influxdbrelay"
-        state: restarted
-    - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
-      vars:
-        haproxy_backend: influxdb_relay-back
-        haproxy_state: enabled
-      when:
-        - "'influxdb_relay' in group_names"
-        - "groups['influxdb_relay'] | length > 1"
-      tags: [influxdb-relay_enable_haproxy]
-    when: influxdb_relay_enabled | bool == true
+    - name: Install InfluxDB Relay if enabled
+      block:
+      - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+        vars:
+          haproxy_backend: influxdb_relay-back
+          haproxy_state: disabled
+        when:
+          - "'influxdb_relay' in group_names"
+          - "groups['influxdb_relay'] | length > 1"
+        tags: [influxdb-relay_disable_haproxy]
+      - name: Check init system
+        command: cat /proc/1/comm
+        changed_when: false
+        register: _init_name
+        tags: [influxdb-relay-init]
+      - name: Set the name of init system
+        set_fact:
+          init_name: "{{ _init_name.stdout }}"
+        tags: [influxdb-relay_init]
+      - name: Install dependencies 
+        package:
+          name: "{{ item }}" 
+          state: "latest"
+        with_items:
+          - git
+          - wget
+        tags: [influxdb-relay_dependencies]
+      - name: Install GOLang
+        script: ../files/influxdb_relay/deploy_go.sh
+        changed_when: false
+        tags: [influxdb-relay_depedencencies]
+      - name: Download and install influx-relay
+        script: ../files/influxdb_relay/deploy_influxdbrelay.sh
+        changed_when: false
+        tags: [influxdb-relay_install]
+      - name: Drop influx relay toml file
+        template:
+          src: ../templates/influxdb/relay.toml.j2
+          dest: /opt/influxdb-relay/relay.toml
+        tags: [influxdb-relay_install]
+      - name: Drop Influx Relay upstart
+        template:
+          src: ../templates/influxdb/influxdbrelay.conf.j2
+          dest: /etc/init/influxdbrelay.conf
+        when: init_name == "init"
+        tags: [influxdb-relay_install]
+      - name: Drop Influx Relay service file
+        template:
+          src: ../templates/influxdb/influxdbrelay.service.j2
+          dest: /etc/systemd/system/influxdbrelay.service
+        when:  init_name == "systemd"
+        tags: [influxdb-relay_install]
+      - name: Enable and restart influxdb
+        service:
+          name: "influxdbrelay"
+          state: restarted
+      - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/haproxy-endpoint-manage.yml
+        vars:
+          haproxy_backend: influxdb_relay-back
+          haproxy_state: enabled
+        when:
+          - "'influxdb_relay' in group_names"
+          - "groups['influxdb_relay'] | length > 1"
+        tags: [influxdb-relay_enable_haproxy]
+      when: influxdb_relay_enabled | bool == true
