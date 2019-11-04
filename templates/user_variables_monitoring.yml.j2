@@ -25,8 +25,9 @@ collectd_use_ppa: no
 collectd_default_plugins: []
 collectd_interval: 60
 collectd_version: 5.8.1
+collectd_logpath: /var/log/collectd
+collectd_types_db_path: "/usr/share/collectd/types.db"
 {%- raw %}
-collectd_types_db_path: "{{ '/usr/share/collectd/types.db' if collectd_use_ppa else collectd_prefix + '/share/collectd/types.db' }}"
 collectd_hostname: "\"{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}\""
 {% endraw %}
 
