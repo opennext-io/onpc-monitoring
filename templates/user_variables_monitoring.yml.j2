@@ -68,7 +68,7 @@ grafana_datasources:
     isDefault: true
 {%- raw %}
     database: "{{ telegraf_db_name }}"
-    url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"    
+    url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"    
     user: "{{ influxdb_db_metric_user | default(omit) }}"
     password: "{{influxdb_db_metric_password | default(omit) }}"
 {% endraw %}
