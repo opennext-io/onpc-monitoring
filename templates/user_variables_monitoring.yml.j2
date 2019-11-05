@@ -123,7 +123,11 @@ influxdb_databases:
       # Define in hour(h), days(d), weeks(w) or Infinite(INF)
       duration: 30d
       replication: 1
-
+influxdb_container_bind_mounts:
+  - bind_dir_path: /var/lib/influxdb/data
+{% raw %}
+    mount_path: "/openstack/{{ inventory_hostname }}/influxdb"
+{% endraw %}
 ## Kapacitor variables
 #
 kapacitor_port: 9092
