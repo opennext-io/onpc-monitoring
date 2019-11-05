@@ -106,7 +106,9 @@ onpc_grafana_dashboards:
 ## InfluxDB variables
 #
 influxdb_relay_enabled: false
+{% raw %}
 influxdb_relay_port: "{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"
+{% endraw %}
 influxdb_logs_dir: "/var/log/influxdb" 
 influxdb_databases:
   - host: localhost
