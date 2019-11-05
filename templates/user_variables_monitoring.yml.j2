@@ -112,7 +112,9 @@ influxdb_relay_port: "{{ (influxdb_relay_enabled | bool == true) | ternary('8096
 influxdb_logs_dir: "/var/log/influxdb" 
 influxdb_databases:
   - host: localhost
+{% raw %}
     name: "{{ telegraf_db_name }}"
+{% endraw %}
     state: present
     # Defines the retention policy
     retention_policy:
