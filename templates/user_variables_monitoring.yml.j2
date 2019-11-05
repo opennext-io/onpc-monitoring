@@ -67,10 +67,10 @@ grafana_datasources:
     access: proxy
     isDefault: true
 {%- raw %}
-    database: "{{ influxdb_db_name }}"
+    database: "{{ telegraf_db_name }}"
     url: "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_port }}"    
-    user: "{{ influxdb_db_metric_user }}"
-    password: "{{influxdb_db_metric_password }}"
+    user: "{{ influxdb_db_metric_user | default(omit) }}"
+    password: "{{influxdb_db_metric_password | default(omit) }}"
 {% endraw %}
 grafana_plugins: ['grafana-clock-panel']
 grafana_dashboards: []
@@ -106,10 +106,10 @@ onpc_grafana_dashboards:
 ## InfluxDB variables
 #
 influxdb_relay_enabled: false
-{% raw %}
-influxdb_relay_port: "{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"
-{% endraw %}
-influxdb_logs_dir: "/var/log/influxdb" 
+influxdb_relay_port: 8096
+influxdb_logs_dir: "/var/log/influxdb"
+influxdb_admin_port: 8083
+influxdb_port: 8086
 influxdb_databases:
   - host: localhost
 {% raw %}
@@ -300,7 +300,7 @@ telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['a
 # If you wish to install telegraf and point it at a specific target, or list of targets telegraf
 # should send metrics to set the telegraf_influxdb_targets as a list containing all targets.
 telegraf_influxdb_targets:
-      - "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ influxdb_relay_port }}"
+      - "{{ influxdb_protocol|default('http') }}://{{ influxdb_host|default(internal_lb_vip_address) }}:{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"
 {% endraw %}
 
 # Global tags
@@ -376,7 +376,7 @@ sensu_api_host: "{{ internal_lb_vip_address }}"
 sensu_api_password: "{{ sensu_admin_password_secret }}"
 {% endraw %}
 
-uchiwa_dc_name: OpenNext
+uchiwa_dc_name: OpenStack
 uchiwa_path: "/etc/uchiwa"
 uchiwa_users:
   - username: admin
