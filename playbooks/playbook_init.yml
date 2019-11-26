@@ -76,6 +76,7 @@
     - name: Collect list of rabbitmq vhosts
       shell: "rabbitmqctl list_vhosts"
       register: rabbitmq_vhosts
+      change_when: false
     - name: attribute permissions for monitoring user on rabbitmq vhosts
       shell: 'rabbitmqctl set_permissions -p {{ item }} monitoring "^$" ".*" "^$" '
       with_items: "{{ rabbitmq_vhosts.stdout_lines | select('match', '^(/)') | list }}"

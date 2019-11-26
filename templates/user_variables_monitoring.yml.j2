@@ -106,7 +106,9 @@ onpc_grafana_dashboards:
 ## InfluxDB variables
 #
 influxdb_relay_enabled: false
+{% raw %}
 influxdb_relay_port: "{{ (influxdb_relay_enabled | bool == true) | ternary('8096', '8086') }}"
+{% endraw %}
 influxdb_logs_dir: "/var/log/influxdb" 
 influxdb_databases:
   - host: localhost
@@ -214,9 +216,9 @@ kapacitor_handlers: [
 {% endraw %}
 ]
 
-# TODO PP: Disabled 'cinder_volume_alert' because in current state, it's not indicative of
-# of a problem. What need to be evaluated instead is the total size of backend storage size
-# available in cinder storage pools. See
+# Note PP: Disabled 'cinder_volume_alert' because total backend size is not indicative of
+# a potential problem. What needs to be evaluated instead is the total size of backend
+# storage size available in cinder storage pools. See
 # https://developer.openstack.org/api-ref/block-storage/v3/?expanded=list-all-back-end-storage-pools-detail#list-all-back-end-storage-pools
 #
 kapacitor_tasks: [
@@ -285,7 +287,7 @@ telegraf_agent_flush_interval: "{{ telegraf_agent_interval * 2 }}"
 # TODO: make this more dynamic
 telegraf_plugins_list: [ outputs, galera, haproxy, influxdb, listener, memcached, rabbitmq, swift, system, ceph ]
 {%- raw %}
-telegraf_prefix: "{{ '/opt/telegraf' if telegraf_agent_version is version_compare('0.10.0', '<') else '/etc/telegraf' }}"
+telegraf_prefix: "/etc/telegraf"
 telegraf_plugins_prefix: "{{telegraf_prefix}}/telegraf.d"
 telegraf_agent_hostname: "{{ ansible_hostname if inventory_hostname in groups['all_containers'] else inventory_hostname }}"
 
