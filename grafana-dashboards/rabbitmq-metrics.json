@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.2.4"
+      "version": "5.4.3"
     },
     {
       "type": "panel",
@@ -53,7 +53,7 @@
   "gnetId": 1443,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1538586144623,
+  "iteration": 1574779768321,
   "links": [],
   "panels": [
     {
@@ -1118,6 +1118,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Activity Overview",
       "tooltip": {
@@ -1314,6 +1315,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Messaging stats",
       "tooltip": {
@@ -1508,6 +1510,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Messages throughput",
       "tooltip": {
@@ -1907,6 +1910,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Messages Delivery Stats by vhost",
       "tooltip": {
@@ -2179,6 +2183,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Messages Rates Stats by vhost",
       "tooltip": {
@@ -2312,6 +2317,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Fanout Exchanges Rates",
       "tooltip": {
@@ -2432,6 +2438,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Topic Exchanges Rates",
       "tooltip": {
@@ -2552,6 +2559,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Direct Exchanges Rates",
       "tooltip": {
@@ -2855,6 +2863,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Memory",
       "tooltip": {
@@ -3066,6 +3075,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Disk",
       "tooltip": {
@@ -3323,6 +3333,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "CPU",
       "tooltip": {
@@ -3539,6 +3550,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Network",
       "tooltip": {
@@ -3777,6 +3789,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Load",
       "tooltip": {
@@ -3977,6 +3990,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Kernel",
       "tooltip": {
@@ -4296,6 +4310,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Processes",
       "tooltip": {
@@ -4493,6 +4508,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Packets Drop Rate",
       "tooltip": {
@@ -4774,6 +4790,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Netstat",
       "tooltip": {
@@ -4957,6 +4974,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Network Errors",
       "tooltip": {
@@ -5516,6 +5534,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_INFLUXDB}",
+        "definition": "",
         "hide": 0,
         "includeAll": false,
         "label": "Container",
@@ -5525,6 +5544,7 @@
         "query": "SHOW TAG VALUES FROM \"rabbitmq_node\" WITH KEY = \"host\"",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
@@ -5566,5 +5586,5 @@
   "timezone": "browser",
   "title": "RabbitMQ Metrics",
   "uid": "THxZ-dmmz",
-  "version": 5
+  "version": 1
 }

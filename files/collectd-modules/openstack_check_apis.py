@@ -60,6 +60,8 @@ class APICheckPlugin(openstack.CollectdPlugin):
             {'path': '/healthcheck', 'expect': [200], 'name': 'swift'},
         'swift_s3':
             { 'path': '/healthcheck', 'expect': [200], 'name': 'swift-s3'},
+        'radosgw':
+            { 'path': '/healthcheck', 'expect': [200], 'name': 'radosgw'},
         'placement':
             { 'path': '', 'expect': [200], 'name': 'placement', 'auth': True},
         'magnum':

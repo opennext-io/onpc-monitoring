@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.2.4"
+      "version": "5.4.3"
     },
     {
       "type": "panel",
@@ -53,7 +53,7 @@
   "gnetId": 1177,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1540831353746,
+  "iteration": 1574779385550,
   "links": [],
   "panels": [
     {
@@ -315,7 +315,7 @@
       "valueName": "current"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -323,200 +323,7 @@
         "y": 4
       },
       "id": 49,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_INFLUXDB}",
-          "editable": true,
-          "error": false,
-          "fill": 1,
-          "grid": {},
-          "gridPos": {
-            "h": 5,
-            "w": 12,
-            "x": 12,
-            "y": 1
-          },
-          "id": 27,
-          "interval": "",
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "sort": "current",
-            "sortDesc": false,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "Table Locks Immediate",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "none"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "hide": false,
-              "measurement": "mysql",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "select derivative(mean(\"value\"),1s) from \"mysql_value\" WHERE \"type_instance\" = 'Table_locks_immediate' AND \"type\" = 'counter' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": false,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "table_locks_immediate"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  },
-                  {
-                    "params": [
-                      "1s"
-                    ],
-                    "type": "derivative"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "host",
-                  "operator": "=~",
-                  "value": "/^$host$/"
-                }
-              ]
-            },
-            {
-              "alias": "Table Locks Waited",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "hide": false,
-              "measurement": "mysql",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "select derivative(mean(\"value\"),1s) from \"mysql_value\" WHERE \"type_instance\" = 'Table_locks_waited' AND \"type\" = 'counter' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
-              "rawQuery": false,
-              "refId": "B",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "table_locks_waited"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  },
-                  {
-                    "params": [
-                      "1s"
-                    ],
-                    "type": "derivative"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "host",
-                  "operator": "=~",
-                  "value": "/^$host$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "MySQL Table Locks",
-          "tooltip": {
-            "msResolution": true,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
+      "panels": [],
       "title": "Row title",
       "type": "row"
     },
@@ -665,6 +472,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Connections",
       "tooltip": {
@@ -705,6 +513,199 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_INFLUXDB}",
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 27,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "Table Locks Immediate",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "mysql",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select derivative(mean(\"value\"),1s) from \"mysql_value\" WHERE \"type_instance\" = 'Table_locks_immediate' AND \"type\" = 'counter' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "table_locks_immediate"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              },
+              {
+                "params": [
+                  "1s"
+                ],
+                "type": "derivative"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            }
+          ]
+        },
+        {
+          "alias": "Table Locks Waited",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "mysql",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "select derivative(mean(\"value\"),1s) from \"mysql_value\" WHERE \"type_instance\" = 'Table_locks_waited' AND \"type\" = 'counter' AND \"instance\" = 'status' AND \"host\" =~ /^$host$/ AND $timeFilter GROUP BY time($interval) fill(null)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "table_locks_waited"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              },
+              {
+                "params": [
+                  "1s"
+                ],
+                "type": "derivative"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "host",
+              "operator": "=~",
+              "value": "/^$host$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "MySQL Table Locks",
+      "tooltip": {
+        "msResolution": true,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ops",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "aliasColors": {
         "Threads connected": "#EAB839",
         "Threads running": "#E24D42"
@@ -721,7 +722,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 10
       },
       "id": 4,
       "interval": "1m",
@@ -855,6 +856,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "(Stacked) MySQL Active Threads",
       "tooltip": {
@@ -1043,6 +1045,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Network Traffic",
       "tooltip": {
@@ -1096,7 +1099,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 16
       },
       "id": 28,
       "legend": {
@@ -1285,6 +1288,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Temporary Objects",
       "tooltip": {
@@ -1338,7 +1342,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 24
       },
       "id": 29,
       "legend": {
@@ -1628,6 +1632,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "(Stacked) MySQL Select Types",
       "tooltip": {
@@ -1681,7 +1686,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 30
       },
       "id": 31,
       "legend": {
@@ -1919,6 +1924,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "(Stacked) MySQL Sorts",
       "tooltip": {
@@ -1972,7 +1978,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 30
       },
       "id": 26,
       "legend": {
@@ -2054,6 +2060,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Slow Queries",
       "tooltip": {
@@ -2107,7 +2114,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 36
       },
       "id": 30,
       "legend": {
@@ -2241,6 +2248,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Aborted Connections",
       "tooltip": {
@@ -2286,7 +2294,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 42
       },
       "id": 45,
       "panels": [],
@@ -2308,7 +2316,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 43
       },
       "id": 41,
       "legend": {
@@ -2755,6 +2763,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Command Counters",
       "tooltip": {
@@ -2808,7 +2817,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 50
       },
       "id": 42,
       "legend": {
@@ -3247,6 +3256,7 @@
       ],
       "thresholds": [],
       "timeFrom": "24h",
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Command Counters  24 hours",
       "tooltip": {
@@ -3300,7 +3310,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 57
       },
       "id": 43,
       "legend": {
@@ -3689,6 +3699,7 @@
       ],
       "thresholds": [],
       "timeFrom": "24h",
+      "timeRegions": [],
       "timeShift": null,
       "title": "(Stacked) MySQL Handler 24 hours",
       "tooltip": {
@@ -3742,7 +3753,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 64
       },
       "id": 39,
       "legend": {
@@ -4131,6 +4142,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "(Stacked) MySQL Handler",
       "tooltip": {
@@ -4176,7 +4188,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 70
       },
       "id": 46,
       "panels": [],
@@ -4198,7 +4210,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 66
+        "y": 71
       },
       "id": 37,
       "legend": {
@@ -4320,6 +4332,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Query Cache Memory",
       "tooltip": {
@@ -4373,7 +4386,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 66
+        "y": 71
       },
       "id": 38,
       "legend": {
@@ -4659,6 +4672,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Query Cache Activity",
       "tooltip": {
@@ -4704,7 +4718,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 72
+        "y": 77
       },
       "id": 47,
       "panels": [],
@@ -4726,7 +4740,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 73
+        "y": 78
       },
       "id": 35,
       "legend": {
@@ -4805,6 +4819,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL File Openings",
       "tooltip": {
@@ -4858,7 +4873,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 73
+        "y": 78
       },
       "id": 36,
       "legend": {
@@ -4937,6 +4952,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Table Openings",
       "tooltip": {
@@ -4990,7 +5006,7 @@
         "h": 7,
         "w": 6,
         "x": 12,
-        "y": 73
+        "y": 78
       },
       "id": 33,
       "legend": {
@@ -5065,6 +5081,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Open Files",
       "tooltip": {
@@ -5118,7 +5135,7 @@
         "h": 7,
         "w": 6,
         "x": 18,
-        "y": 73
+        "y": 78
       },
       "id": 34,
       "legend": {
@@ -5192,6 +5209,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "MySQL Open Tables",
       "tooltip": {
@@ -5246,6 +5264,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_INFLUXDB}",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Host",
@@ -5255,6 +5274,7 @@
         "query": "SHOW TAG VALUES FROM \"mysql\" WITH KEY = \"host\"",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": null,
         "tags": [],
@@ -5325,12 +5345,13 @@
         ],
         "query": "10s,30s,1m,5m,15m,1h,6h,1d",
         "refresh": 2,
+        "skipUrlSync": false,
         "type": "interval"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -5360,5 +5381,5 @@
   "timezone": "browser",
   "title": "MySQL Metrics",
   "uid": "XvX7eKziz",
-  "version": 3
+  "version": 2
 }

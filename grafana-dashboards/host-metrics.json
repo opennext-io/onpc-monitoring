@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": 1443,
   "graphTooltip": 0,
-  "id": 20,
-  "iteration": 1552997080533,
+  "id": 8,
+  "iteration": 1574766708446,
   "links": [],
   "panels": [
     {
@@ -66,6 +66,13 @@
         "customFormat": "HH:mm:ss",
         "fontSize": "40px",
         "fontWeight": "bold"
+      },
+      "timezone": null,
+      "timezoneSettings": {
+        "fontSize": "12px",
+        "fontWeight": "normal",
+        "showTimezone": false,
+        "zoneFormat": "offsetAbbv"
       },
       "title": "Clock",
       "type": "grafana-clock-panel"
@@ -1495,7 +1502,7 @@
         "y": 5
       },
       "hideTimeOverride": true,
-      "id": 47,
+      "id": 56,
       "interval": "",
       "links": [],
       "mappingType": 1,
@@ -1551,7 +1558,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT last(\"used_percent\") FROM \"disk\" WHERE \"host\" =~ /^$host$/ AND \"path\" = '/var/log' AND $timeFilter fill(null)",
+          "query": "SELECT last(\"used_percent\") FROM \"disk\" WHERE \"host\" =~ /^$host$/ AND \"path\" = '/var' AND $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1575,7 +1582,7 @@
       "thresholds": "50,80",
       "timeFrom": "1m",
       "timeShift": null,
-      "title": "System log partition",
+      "title": "Var partition",
       "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1716,7 +1723,7 @@
         "rgba(245, 54, 54, 0.9)"
       ],
       "datasource": "InfluxDB",
-      "decimals": 2,
+      "decimals": null,
       "format": "percent",
       "gauge": {
         "maxValue": 100,
@@ -1813,6 +1820,125 @@
       "timeFrom": "1m",
       "timeShift": null,
       "title": "OpenStack log partition",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(244, 126, 30, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "datasource": "InfluxDB",
+      "decimals": null,
+      "format": "percent",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": true,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 5
+      },
+      "hideTimeOverride": true,
+      "id": 55,
+      "interval": "",
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "repeatDirection": "h",
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "alias": "$path",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT last(\"used_percent\") FROM \"disk\" WHERE \"host\" =~ /^$host$/ AND \"path\" = '/var/lib/nova/instances' AND $timeFilter fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "50,80",
+      "timeFrom": "1m",
+      "timeShift": null,
+      "title": "Instances partition",
       "transparent": false,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -5355,8 +5481,9 @@
       {
         "allValue": null,
         "current": {
-          "text": "opennext04",
-          "value": "opennext04"
+          "tags": [],
+          "text": "compute-01",
+          "value": "compute-01"
         },
         "datasource": "InfluxDB",
         "definition": "",
@@ -5479,5 +5606,5 @@
   "timezone": "browser",
   "title": "Hosts Metrics",
   "uid": "UQTN6aziz",
-  "version": 37
+  "version": 2
 }

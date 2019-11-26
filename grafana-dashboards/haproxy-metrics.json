@@ -1,4 +1,46 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB",
+      "label": "InfluxDB",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "5.4.3"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": "5.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "5.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": "5.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": "5.0.0"
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -16,8 +58,8 @@
   "editable": true,
   "gnetId": 1234,
   "graphTooltip": 0,
-  "id": 32,
-  "iteration": 1552044703690,
+  "id": null,
+  "iteration": 1574778589982,
   "links": [],
   "panels": [
     {
@@ -43,7 +85,7 @@
         "#eab839",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "HTTP 5xx request errors 1 minute rate of change over the last 15 minutes",
       "format": "percent",
       "gauge": {
@@ -162,7 +204,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of connections awaiting assignment to a backend server over the last 15 minutes",
       "format": "short",
       "gauge": {
@@ -273,7 +315,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of backend which status is different than 'UP'",
       "format": "short",
       "gauge": {
@@ -391,7 +433,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "The average requests queue time 1 minute derivative over the last 15 minutes.",
       "format": "ms",
       "gauge": {
@@ -508,7 +550,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": 0,
       "description": "Frontend requests errors 1m rate of change over the last15 minutes.",
       "format": "percent",
@@ -620,7 +662,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": 0,
       "description": "Frontend denied requests 1m rate of change over the last 15 minutes.",
       "format": "percent",
@@ -732,7 +774,7 @@
         "#e5ac0e",
         "#bf1b00"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of frontends which status is different than 'OPEN'",
       "format": "short",
       "gauge": {
@@ -859,7 +901,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": null,
       "fill": 1,
       "gridPos": {
@@ -981,7 +1023,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of HTTP requests / sec",
       "fill": 1,
       "gridPos": {
@@ -1137,7 +1179,7 @@
     },
     {
       "columns": [],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "A status different than 'OPEN' should be acted upon",
       "fontSize": "100%",
       "gridPos": {
@@ -1266,7 +1308,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of HTTP responses / sec",
       "fill": 1,
       "gridPos": {
@@ -1755,7 +1797,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of bytes sent  /sec",
       "fill": 1,
       "gridPos": {
@@ -1878,7 +1920,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of sessions created per second",
       "fill": 1,
       "gridPos": {
@@ -2037,7 +2079,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of bytes received / sec",
       "fill": 1,
       "gridPos": {
@@ -2167,7 +2209,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Requests denied because of security concerns.\n- For tcp this is because of a matched tcp\n  request content rule.\n- For http this is because of a matched http\n  request or tarpit rule.",
       "fill": 1,
       "gridPos": {
@@ -2335,7 +2377,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Request errors. Some of the possible causes are:\n- early termination from the client, before the\n  request has been sent.\n- read error from the client\n   - client timeout\n   - client closed connection\n   - various bad requests from the client.\n   - request was tarpitted.",
       "fill": 1,
       "gridPos": {
@@ -2518,7 +2560,7 @@
     },
     {
       "columns": [],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "A status different than 'UP' should be acted upon",
       "fontSize": "100%",
       "gridPos": {
@@ -2678,7 +2720,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": null,
       "fill": 1,
       "gridPos": {
@@ -2802,7 +2844,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
         "h": 9,
@@ -3290,7 +3332,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of bytes received by the backends / sec",
       "fill": 1,
       "gridPos": {
@@ -3413,7 +3455,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Average backend response time (in ms) for the last 1,024 requests",
       "fill": 1,
       "gridPos": {
@@ -3578,7 +3620,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of bytes sent / sec by the backends",
       "fill": 1,
       "gridPos": {
@@ -3701,7 +3743,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
         "h": 6,
@@ -3866,7 +3908,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
       "gridPos": {
         "h": 6,
@@ -4030,7 +4072,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of times a connection was retried",
       "fill": 1,
       "gridPos": {
@@ -4196,7 +4238,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of times a request was redispatched to a different backend",
       "fill": 1,
       "gridPos": {
@@ -4362,7 +4404,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Number of requests that encountered an error attempting to connect to a backend server",
       "fill": 1,
       "gridPos": {
@@ -4485,7 +4527,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Rate of requests whose responses yielded an error",
       "fill": 1,
       "gridPos": {
@@ -4651,7 +4693,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Responses denied due to security raisons (ACL-restricted)",
       "fill": 1,
       "gridPos": {
@@ -4816,7 +4858,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "description": "Current number of requests unassigned in queue",
       "fill": 1,
       "gridPos": {
@@ -4987,11 +5029,8 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "InfluxDB",
+        "current": {},
+        "datasource": "${DS_INFLUXDB}",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -5012,11 +5051,8 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "InfluxDB",
+        "current": {},
+        "datasource": "${DS_INFLUXDB}",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -5037,11 +5073,8 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "InfluxDB",
+        "current": {},
+        "datasource": "${DS_INFLUXDB}",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -5177,5 +5210,5 @@
   "timezone": "browser",
   "title": "HAProxy Metrics",
   "uid": "ayi5vDzik",
-  "version": 2
+  "version": 1
 }

@@ -23,7 +23,7 @@
 {% else %}
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs"]
-  mount_points = ["/","/var","/var/lib/nova/instances","/var/log","/var/lib/lxc","/openstack", "/srv/swift[1-9].img"]
+  mount_points = ["/","/var","/var/lib/nova/instances","/var/log/audit","/var/lib/lxc","/openstack", "/openstack/log", "/srv/swift[1-9].img"]
 [[inputs.cpu]]
   percpu = true
   totalcpu = true

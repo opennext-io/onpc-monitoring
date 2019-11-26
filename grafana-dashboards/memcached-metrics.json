@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.2.4"
+      "version": "5.4.3"
     },
     {
       "type": "panel",
@@ -53,7 +53,7 @@
   "gnetId": 325,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1524572908339,
+  "iteration": 1574779295091,
   "links": [],
   "panels": [
     {
@@ -75,12 +75,6 @@
         "show": false,
         "thresholdLabels": false,
         "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 0
       },
       "height": "55px",
       "id": 11,
@@ -685,6 +679,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Commands rate",
       "tooltip": {
@@ -718,7 +713,11 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
@@ -818,6 +817,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Eviction Rate",
       "tooltip": {
@@ -851,7 +851,11 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "30s",
@@ -866,6 +870,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_INFLUXDB}",
+        "definition": "",
         "hide": 0,
         "includeAll": false,
         "label": "Hosts",
@@ -875,6 +880,7 @@
         "query": "SHOW TAG VALUES FROM \"memcached\" WITH KEY = \"host\"",
         "refresh": 1,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
@@ -915,5 +921,5 @@
   "timezone": "browser",
   "title": "Memcached Metrics",
   "uid": "muQoS3kmk",
-  "version": 7
+  "version": 1
 }
