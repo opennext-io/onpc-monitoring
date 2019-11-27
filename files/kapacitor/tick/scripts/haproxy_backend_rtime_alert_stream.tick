@@ -17,9 +17,9 @@
 // Enable: kapacitor enable haproxy_backend_rtime_alert_stream
 
 // Parameters
-var info = 100
-var warn = 300
-var crit = 900
+var info = 300 
+var warn = 900
+var crit = 2700 
 var infoSig = 2
 var warnSig = 2.5
 var critSig = 3
