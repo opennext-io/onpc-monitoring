@@ -50,7 +50,7 @@
         name: "{{ packages }}"
         state: "latest"
       register: _install_pip_packages
-      until: _install_pip_packages
+      until: _install_pip_packages is succeeded
       retries: 5
       delay: 2
       vars:

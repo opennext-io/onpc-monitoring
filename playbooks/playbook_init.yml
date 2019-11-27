@@ -31,7 +31,7 @@
         password: "{{ monitoring_user_password_secret }}"
         insecure: "{{ keystone_service_adminuri_insecure }}"
       register: add_service
-      until: add_service is success
+      until: add_service is succeeded
       retries: 5
       delay: 10
       no_log: true
@@ -49,7 +49,7 @@
         role_name: "{{ monitoring_user_role_name }}"
         insecure: "{{ keystone_service_adminuri_insecure }}"
       register: add_service
-      until: add_service is success
+      until: add_service is succeeded
       retries: 5
       delay: 10
       no_log: true
