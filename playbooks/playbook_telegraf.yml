@@ -30,10 +30,10 @@
           - src: "/openstack/log/{{ inventory_hostname }}-telegraf"
             dest: "{{ telegraf_logs_dir }}"
     - include_tasks: /opt/openstack-ansible/playbooks/common-tasks/package-cache-proxy.yml
-    - include_tasks: tasks/create_telegraf_ceph_key.yml
-      when:
-        - "'ceph-mon' in group_names"
-        - "groups['ceph-mon'] | length > 1"
+#    - include_tasks: tasks/create_telegraf_ceph_key.yml
+#      when:
+#        - "'ceph-mon' in group_names"
+#        - "groups['ceph-mon'] | length > 0"
   
   roles:
     - role: telegraf
@@ -49,7 +49,6 @@
    - include_tasks: ../tasks/create_telegraf_ceph_key.yml
      when:
        - "'ceph-mon' in group_names"
-       - "groups['ceph-mon'] | length > 1"
      tags: [telegraf-ceph]
   
    - name: telegraf-configure | Plugins configuration
@@ -57,9 +56,9 @@
        src: "../templates/telegraf/{{ item }}.conf.j2"
        dest: "{{ telegraf_plugins_prefix }}/{{ item }}.conf"
      with_items: "{{ telegraf_plugins_list }}"
-     notify: Telegraf restart
+     notify: telegraf restart
      tags: [telegraf-plugins, always]
   
   handlers:
-    - name: Telegraf restart
+    - name: telegraf restart
       service: name=telegraf state=restarted
