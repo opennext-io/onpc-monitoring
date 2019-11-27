@@ -31,7 +31,7 @@ stream
     .message('{{ .ID }}: [{{ .Level }}] Health status of Ceph cluster is "{{ "stat" }}"')
     .info(lambda: "stat" =~ /^HEALTH_OK.*$/)  
     .warn(lambda: "stat" =~ /^HEALTH_WARN.*$/)
-    .crit(lambda: "stat" =~ /^HEALTH_ERR.*$/ )
+    .crit(lambda: "stat" =~ /^HEALTH_ERR.*$/)
     .topic('ceph')
 //  .log('/var/log/kapacitor/ceph_health_status_alert.log')
     
