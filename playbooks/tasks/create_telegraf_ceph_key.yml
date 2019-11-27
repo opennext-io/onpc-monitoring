@@ -71,7 +71,7 @@
 
 - name: Add group permissions to ceph-mon socket
   file:
-    dest: "/var/run/ceph/ceph-mon.{{ inventory_hostname }}.asok"
+    dest: "/var/run/ceph/ceph-mon.{{ ansible_hostname  }}.asok"
     state: touch
     mode: "g+rwx"
     modification_time: preserve
