@@ -65,10 +65,14 @@
     dest: "/etc/ceph/ceph.{{ telegraf_cephx.name }}.keyring"
     state: touch
     mode: "g+r"
+    modification_time: preserve
+    access_time: preserve
 
-- name: Add group write permission to Ceph socket
+
+- name: Add group permissions to ceph-mon socket
   file:
     dest: "/var/run/ceph/ceph-mon.{{ inventory_hostname }}.asok"
     state: touch
-    mode: "g+w"
-   
+    mode: "g+rwx"
+    modification_time: preserve
+    access_time: preserve
