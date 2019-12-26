@@ -3,6 +3,6 @@
 
 {% if inventory_hostname in groups['haproxy'] and (haproxy_stats_enabled | bool) %}
 [[inputs.haproxy]]
-  servers = ["https://{{haproxy_username}}:{{ haproxy_stats_password }}@{{ haproxy_stats_bind_address }}:{{ haproxy_stats_port }}/haproxy?stats"]
+  servers = ["http{% if haproxy_ssl | bool %}s{% endif %}://{{haproxy_username}}:{{ haproxy_stats_password }}@{{ haproxy_stats_bind_address }}:{{ haproxy_stats_port }}/haproxy?stats"]
   insecure_skip_verify = true
 {% endif %}
