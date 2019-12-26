@@ -46,7 +46,7 @@
   
   post_tasks:
     # Use post tasks to install plugins
-   - include_tasks: ../tasks/create_telegraf_ceph_key.yml
+   - include_tasks: ./tasks/create_telegraf_ceph_key.yml
      when:
        - "'ceph-mon' in group_names"
      tags: [telegraf-ceph]
