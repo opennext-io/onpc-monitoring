@@ -68,7 +68,7 @@
   environment: "{{ deployment_environment_variables | default({}) }}"
 
   vars:
-    - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_consoleauth:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
+    - nova_compute_hosts: "nova_compute:!nova_conductor:!nova_scheduler:!nova_api_os_compute:!nova_api_placement:!nova_api_metadata:!nova_console"
 
   pre_tasks:
     - include_tasks: "/opt/openstack-ansible/playbooks/common-tasks/os-{{ container_tech | default('lxc') }}-container-setup.yml"
